@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Introduction {
 
-    public final static void print(){
+    public static void print(){
         System.out.println("\n");
         System.out.println("\n");
         System.out.println("\n");
