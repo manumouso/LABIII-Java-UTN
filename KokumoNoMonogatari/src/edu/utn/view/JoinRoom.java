@@ -30,14 +30,13 @@ public class JoinRoom extends Stage{
                         System.out.println("\n");
                         System.out.print("\t\t\tIngrese la ip:");
                         String ip=scanner.next();
-                        System.out.print("\t\t\t[2].ENVIAR SOLICITUD");
+                        System.out.println("\n");
+                        System.out.print("\t\t\t[2].ENVIAR SOLICITUD-> ");
                         String send=scanner.next();
-                        switch (send){
-                            case "2":
-                                System.out.println("\t\t\t"+ip);
-                                break;
-                            default:
-                                break;
+                        if ("2".equals(send)) {
+                            System.out.println("\n");
+                            System.out.println("\t\t\t" + ip);
+                            option=0;
                         }
                     }
                     default -> {
