@@ -1,6 +1,6 @@
 package edu.utn.view;
 
-import java.io.IOException;
+
 
 public abstract class Stage implements Menu {
 
@@ -24,6 +24,26 @@ public abstract class Stage implements Menu {
         System.out.println("\t\t\t*Carrera: TSSI-UTN-FRBA\n");
         System.out.println("\t\t\t*Fecha: 7/5/2021\n");
         System.out.println("     ***********************************************************************/\n");
+    }
+
+    @Override
+    public void clean(){
+        try{
+            String operatingSystem = System.getProperty("os.name");
+
+            if(operatingSystem.contains("Windows")){
+                ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "cls");
+                Process startProcess = pb.inheritIO().start();
+                startProcess.waitFor();
+            } else {
+                ProcessBuilder pb = new ProcessBuilder("clear");
+                Process startProcess = pb.inheritIO().start();
+
+                startProcess.waitFor();
+            }
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 
 

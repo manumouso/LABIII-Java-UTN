@@ -14,7 +14,7 @@ public class PrimaryStage extends Stage{
             int option;
             do
             {
-                //ACA NECESITO UNA FUNCION QUE LIMPIE LA PANTALLA
+                super.clean();
                 super.header();
                 System.out.println("\n\t\t\t\tMENU PRINCIPAL\n");
                 System.out.println("\n\t\t\t[1].CREAR PARTIDA\n");

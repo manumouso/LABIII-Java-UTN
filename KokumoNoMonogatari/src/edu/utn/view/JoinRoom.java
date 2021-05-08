@@ -10,7 +10,7 @@ public class JoinRoom extends Stage{
             int option;
             do
             {
-                //ACA NECESITO UNA FUNCION QUE LIMPIE LA PANTALLA
+                super.clean();
                 super.header();
                 System.out.println("\n\t\t\t\tUNIRSE PARTIDA\n");
                 System.out.println("\n\t\t\t[1].INGRESAR IP\n");

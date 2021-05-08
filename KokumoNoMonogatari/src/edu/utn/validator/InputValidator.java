@@ -1,4 +1,4 @@
-package edu.utn.view;
+package edu.utn.validator;
 
 public class InputValidator {
 
