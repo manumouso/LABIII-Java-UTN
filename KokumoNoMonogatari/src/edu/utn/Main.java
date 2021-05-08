@@ -9,7 +9,7 @@ public class Main {
         Introduction.print();
         PrimaryStage primaryStage = new PrimaryStage();
         primaryStage.menu();
-        primaryStage.footer();
+
     }
 
 

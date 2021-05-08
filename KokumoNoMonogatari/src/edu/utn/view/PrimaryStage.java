@@ -28,7 +28,8 @@ public class PrimaryStage extends Stage{
                 switch (option) {
                     case 0 -> {
                         System.out.println("\n");
-                        System.out.println("\t\t\tTermino el programa. ( ^_^)/\n");
+                        System.out.println("\t\t\tAdios Ninja. ( ^_^)/\n");
+                        super.footer();
                     }
                     case 1 -> {
 
