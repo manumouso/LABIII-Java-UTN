@@ -1,31 +1,86 @@
 package edu.utn.view;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 
 public class Main extends Application {
-    Button button;
+    Stage window;
+    Scene entry,createGame,joinGame,gameView;
     @Override
     public void start(Stage primaryStage) throws Exception{
-        primaryStage.setTitle("Kokumo No Monogatari");
+        window=primaryStage;
+        window.setTitle("Kokumo No Monogatari");
+        window.setOnCloseRequest(e->{
+            e.consume();
+            quitGame();
+        });
+
+        Label welcome= new Label("Bienvenido Ninja");
+        Button createButton= new Button();
+        createButton.setText("Crear Partida");
+        //createButton.setOnAction(e->window.setScene(createGame));
+
+        //principal
+        Button joinButton= new Button();
+        joinButton.setText("Unirse Partida");
+        joinButton.setOnAction(e->window.setScene(joinGame));
+        Button quitButton= new Button();
+        quitButton.setText("Salir");
+        quitButton.setOnAction(e->quitGame());
+
+        //joinGame
+        Label ipLabel = new Label("Ingrese ip");
+        TextField ipInput = new TextField();
+        ipInput.setPromptText("123.12.10.23.200.20");
+        Button sendButton = new Button();
+        sendButton.setText("Enviar");
+        Button returnButton = new Button();
+        returnButton.setText("Volver");
+        returnButton.setOnAction(e->window.setScene(entry));
+
+        //principal
+        VBox layout = new VBox(20);
+        layout.getChildren().addAll(welcome,createButton,joinButton,quitButton);
+        layout.setAlignment(Pos.CENTER);
+
+        //joinGame
+        GridPane gridPane = new GridPane();
+        gridPane.setPadding(new Insets(10,10,10,10));
+        gridPane.setVgap(8);
+        gridPane.setHgap(10);
+
+        GridPane.setConstraints(ipLabel,0,0);
+        GridPane.setConstraints(ipInput,1,0);
+        GridPane.setConstraints(sendButton,1,1);
+        GridPane.setConstraints(returnButton,0,1);
+
+        gridPane.getChildren().addAll(ipLabel,ipInput,sendButton,returnButton);
+        gridPane.setAlignment(Pos.CENTER);
 
 
-        button= new Button();
-        button.setText("CREAR PARTIDA");
+        BorderPane borderPane =new BorderPane();
+        borderPane.setCenter(gridPane);
 
-        button.setOnAction(e-> System.out.println("partida creada"));
 
-        StackPane layout = new StackPane();
-        layout.getChildren().add(button);
-        primaryStage.setScene(new Scene(layout, 300, 275));
-        primaryStage.show();
+
+        joinGame = new Scene(borderPane,300,300);
+
+        entry= new Scene(layout,300,300);
+        window.setScene(entry);
+        window.show();
     }
 
-
+    private void quitGame(){
+        window.close();
+    }
     public static void main(String[] args) {
         launch(args);
     }
