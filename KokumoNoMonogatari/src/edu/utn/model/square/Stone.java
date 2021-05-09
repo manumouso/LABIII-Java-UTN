@@ -2,15 +2,21 @@ package edu.utn.model.square;
 
 import edu.utn.model.Player;
 
-public class Stone extends Obstacle{
+public class Stone extends Land {
+
+
+    public Stone(int x, int y) {
+        super(x, y);
+    }
+
     @Override
-    public void action(Player player) {
+    public void playerStandsOn(Player player) {
 
     }
 
     @Override
     public String name() {
-        return null;
+        return "Piedra";
     }
 
     @Override

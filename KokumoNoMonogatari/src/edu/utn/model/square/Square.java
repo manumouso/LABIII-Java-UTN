@@ -4,7 +4,9 @@ import edu.utn.model.Player;
 
 public interface Square {
 
-   void action(Player player);
+   void playerStandsOn(Player player);
    String name();
    void fill();
+   int getX();
+   int getY();
 }

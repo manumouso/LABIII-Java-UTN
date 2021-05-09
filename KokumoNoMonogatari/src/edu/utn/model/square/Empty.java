@@ -2,9 +2,10 @@ package edu.utn.model.square;
 
 import edu.utn.model.Player;
 
-public class Tree extends Land {
+public class Empty extends Land{
 
-    public Tree(int x, int y) {
+
+    public Empty(int x, int y) {
         super(x, y);
     }
 
@@ -15,7 +16,7 @@ public class Tree extends Land {
 
     @Override
     public String name() {
-        return "Arbol";
+        return "Vacio";
     }
 
     @Override
