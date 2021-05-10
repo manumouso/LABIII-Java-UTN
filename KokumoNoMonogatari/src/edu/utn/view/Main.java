@@ -18,6 +18,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         window=primaryStage;
         window.setTitle("Kokumo No Monogatari");
+
         window.setOnCloseRequest(e->{
             e.consume();
             quitGame();
