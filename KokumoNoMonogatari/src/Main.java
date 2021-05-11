@@ -22,27 +22,28 @@ public class Main extends Application {
             quitGame();
         });
 
-        Label welcome= new Label("Bienvenido Ninja");
+        Label welcome= new Label("Welcome Ninja");
         Button createButton= new Button();
-        createButton.setText("Crear Partida");
+        createButton.setText("Create Game");
         //createButton.setOnAction(e->window.setScene(createGame));
 
         //principal
         Button joinButton= new Button();
-        joinButton.setText("Unirse Partida");
+        joinButton.setText("Join Game");
         joinButton.setOnAction(e->window.setScene(joinGame));
         Button quitButton= new Button();
-        quitButton.setText("Salir");
+        quitButton.setText("Quit");
         quitButton.setOnAction(e->quitGame());
 
         //joinGame
-        Label ipLabel = new Label("Ingrese ip");
+        Label ipLabel = new Label("Enter IP adress");
         TextField ipInput = new TextField();
         ipInput.setPromptText("123.12.10.23.200.20");
+        ipInput.setMaxWidth(145);
         Button sendButton = new Button();
-        sendButton.setText("Enviar");
+        sendButton.setText("Send");
         Button returnButton = new Button();
-        returnButton.setText("Volver");
+        returnButton.setText("Go Back");
         returnButton.setOnAction(e->window.setScene(entry));
 
         //principal
@@ -74,6 +75,7 @@ public class Main extends Application {
 
         entry= new Scene(layout,300,300);
         window.setScene(entry);
+        window.setResizable(false);
         window.show();
     }
 
