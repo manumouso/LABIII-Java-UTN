@@ -12,7 +12,7 @@ public class NinjaTrap extends Land {
     }
 
     @Override
-    public void playerStandsOn(Player player) {
+    public void ninjaStandsOn(Player player) {
 
     }
 

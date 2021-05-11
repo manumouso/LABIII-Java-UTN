@@ -5,7 +5,7 @@ import javafx.scene.paint.Paint;
 
 public interface Square {
 
-   void playerStandsOn(Player player);
+   void ninjaStandsOn(Player player);
    String name();
    Paint color();
    int getX();

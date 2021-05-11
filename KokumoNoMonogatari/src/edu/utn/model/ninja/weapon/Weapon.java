@@ -1,4 +1,6 @@
 package edu.utn.model.ninja.weapon;
 
-public abstract class Weapon {
+import edu.utn.model.ninja.Attack;
+
+public abstract class Weapon implements Attack {
 }

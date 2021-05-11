@@ -1,4 +1,6 @@
 package edu.utn.model.ninja.element.tota;
 
-public abstract class KekkeiTota {
+import edu.utn.model.ninja.Attack;
+
+public abstract class KekkeiTota implements Attack {
 }

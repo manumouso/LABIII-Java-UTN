@@ -1,9 +1,11 @@
 package edu.utn.model.ninja.element.tota;
 
 
+import edu.utn.model.Player;
 import edu.utn.model.ninja.element.Earth;
 import edu.utn.model.ninja.element.Fire;
 import edu.utn.model.ninja.element.Wind;
+import javafx.scene.paint.Paint;
 
 public class Dust extends KekkeiTota {
     //earth,fire,wind
@@ -34,5 +36,20 @@ public class Dust extends KekkeiTota {
 
     public void setWind(Wind wind) {
         this.wind = wind;
+    }
+
+    @Override
+    public void ninjaAttack(Player player) {
+
+    }
+
+    @Override
+    public String name() {
+        return null;
+    }
+
+    @Override
+    public Paint color() {
+        return null;
     }
 }

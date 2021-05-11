@@ -1,4 +1,6 @@
 package edu.utn.model.ninja.element;
 
-public abstract class Chakra {
+import edu.utn.model.ninja.Attack;
+
+public abstract class Chakra implements Attack {
 }
