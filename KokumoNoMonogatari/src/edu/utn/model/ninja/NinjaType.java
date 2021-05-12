@@ -2,8 +2,8 @@ package edu.utn.model.ninja;
 
 public enum NinjaType {
 
-    NINJUTSU(0,0,200,"This ninja stands out for having great jutsus"),TAIJUTSU(200,0,0,"This ninja stands out for having powerful attacks")
-    ,GENJUTSU(0,200,0,"This ninja stands out for having solid defense"),BALANCED(50,50,50,"This ninja trains every skill to face adversity");
+    NINJUTSU(0,0,300,"This ninja stands out for having great jutsus"),TAIJUTSU(300,0,0,"This ninja stands out for having powerful attacks")
+    ,GENJUTSU(0,300,0,"This ninja stands out for having solid defense"),BALANCED(100,100,100,"This ninja trains every skill to face adversity");
 
 
     private int extraAttackPoints;
