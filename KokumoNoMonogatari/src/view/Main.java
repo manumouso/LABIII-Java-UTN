@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -19,7 +20,7 @@ public class Main extends Application {
 
         window=primaryStage;
         window.setTitle("Kokumo No Monogatari");
-
+        window.getIcons().add(new Image("resource/image/kokumo.jpg"));
         window.setOnCloseRequest(e->{
             e.consume();
             quitGame();
@@ -74,11 +75,11 @@ public class Main extends Application {
 
 
 
-        joinGame = new Scene(borderPane,300,300);
+        joinGame = new Scene(borderPane,470,450);
 
-        entry= new Scene(layout,300,300);
+        entry= new Scene(layout,470,450);
         window.setScene(entry);
-
+        window.setResizable(false);
         window.show();
     }
 
