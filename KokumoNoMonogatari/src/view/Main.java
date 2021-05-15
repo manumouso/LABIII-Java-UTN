@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    static Stage window;
+    Stage window;
     @Override
     public void start(Stage primaryStage) throws Exception {
         window=primaryStage;
@@ -59,7 +59,7 @@ public class Main extends Application {
         window.show();
     }
 
-    public static void quitGame(){
+    private void quitGame(){
         window.close();
     }
 

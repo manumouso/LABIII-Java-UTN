@@ -6,7 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
-import view.Main;
+
 
 public class AccessController {
 
@@ -32,6 +32,7 @@ public class AccessController {
     }
 
     public void quitGame(){
-        Main.quitGame();
+        Stage stage = (Stage) quitButton.getScene().getWindow();
+        stage.close();
     }
 }
