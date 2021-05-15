@@ -19,8 +19,8 @@ public class Main extends Application {
         window=primaryStage;
         // getting loader and a pane for the first scene.
         // loader will then give a possibility to get related controller
-        FXMLLoader accessPaneLoader = new FXMLLoader(getClass().getResource("Access.fxml"));
-        Parent accessPane = accessPaneLoader.load();
+        FXMLLoader accessPageLoader = new FXMLLoader(getClass().getResource("Access.fxml"));
+        Parent accessPane = accessPageLoader.load();
         Scene accessScene = new Scene(accessPane, 550, 350);
 
         // getting loader and a pane for the second scene
@@ -34,7 +34,7 @@ public class Main extends Application {
         Scene joinScene= new Scene(joinPane, 550, 350);
 
         // injecting second scene into the controller of the first scene
-        AccessController firstPaneController = (AccessController) accessPaneLoader.getController();
+        AccessController firstPaneController = (AccessController) accessPageLoader.getController();
         firstPaneController.setCreateScene(createScene);
 
         //injecting the third scene into the controller of the first scene
