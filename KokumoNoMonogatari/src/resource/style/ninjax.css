@@ -1,0 +1,21 @@
+.root{
+    -fx-background-color: #e9c46a;
+}
+.label{
+    -fx-text-fill: #293241;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+
+}
+.button{
+    -fx-background-color: #264653;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-radius: 4;
+}
+#joinButton{
+    -fx-background-color: #2a9d8f;
+}
+#quitButton{
+    -fx-background-color: #e76f51;
+}
+

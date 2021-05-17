@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
@@ -9,11 +10,14 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AccessController">
    <top>
-      <VBox BorderPane.alignment="CENTER">
+      <VBox prefHeight="65.0" prefWidth="492.0" BorderPane.alignment="CENTER">
          <children>
             <HBox alignment="CENTER">
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" text="Welcome Ninja (^o^)y" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" text="Welcome Ninja (^o^)y" textAlignment="CENTER">
+                     <font>
+                        <Font size="23.0" />
+                     </font></Label>
                </children>
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="40.0" />
@@ -25,18 +29,12 @@
    <padding>
       <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
    </padding>
-   <left>
-      <Region prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-   </left>
-   <right>
-      <Region prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-   </right>
    <center>
       <VBox alignment="CENTER" spacing="30.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="createButton" mnemonicParsing="false" onAction="#openCreateScene" text="Create Game" />
-            <Button fx:id="joinButton" mnemonicParsing="false" onAction="#openJoinScene" text="Join Game" />
-            <Button fx:id="quitButton" mnemonicParsing="false" onAction="#quitGame" text="Quit Game" />
+            <Button fx:id="createButton" mnemonicParsing="false" onAction="#openCreateScene" prefHeight="50.0" prefWidth="130.0" text="Create Game" />
+            <Button fx:id="joinButton" mnemonicParsing="false" onAction="#openJoinScene" prefHeight="50.0" prefWidth="130.0" text="Join Game" />
+            <Button fx:id="quitButton" mnemonicParsing="false" onAction="#quitGame" prefHeight="50.0" prefWidth="130.0" text="Quit Game" />
          </children>
          <BorderPane.margin>
             <Insets />

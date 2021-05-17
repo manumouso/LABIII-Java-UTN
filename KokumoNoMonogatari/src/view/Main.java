@@ -22,7 +22,7 @@ public class Main extends Application {
             // loader will then give a possibility to get related controller
             FXMLLoader accessPageLoader = new FXMLLoader(getClass().getResource("Access.fxml"));
             Parent accessPane = accessPageLoader.load();
-            Scene accessScene = new Scene(accessPane, 550, 350);
+            Scene accessScene = new Scene(accessPane, 510, 388);
 
             // getting loader and a pane for the second scene
             FXMLLoader createPageLoader = new FXMLLoader(getClass().getResource("Create.fxml"));
@@ -55,6 +55,7 @@ public class Main extends Application {
                 e.consume();
                 quitGame();
             });
+            accessScene.getStylesheets().add("/resource/style/Ninjax.css");
             window.setScene(accessScene);
             window.setResizable(false);
             window.show();
