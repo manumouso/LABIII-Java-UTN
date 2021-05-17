@@ -65,7 +65,10 @@ public class Main extends Application {
     }
 
     private void quitGame(){
-        window.close();
+        Boolean answer= ConfirmBox.display("Quit","Are you sure you want to exit?");
+        if(answer){
+            window.close();
+        }
     }
 
     public static void main(String[] args) {

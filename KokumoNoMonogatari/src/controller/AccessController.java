@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import view.ConfirmBox;
 
 
 public class AccessController {
@@ -32,7 +33,10 @@ public class AccessController {
     }
 
     public void quitGame(){
-        Stage stage = (Stage) quitButton.getScene().getWindow();
-        stage.close();
+        Boolean answer= ConfirmBox.display("Quit","Are you sure you want to exit?");
+        if(answer){
+            Stage stage = (Stage) quitButton.getScene().getWindow();
+            stage.close();
+        }
     }
 }
