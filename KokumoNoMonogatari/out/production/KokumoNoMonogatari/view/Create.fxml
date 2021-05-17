@@ -27,7 +27,7 @@
                   <Insets right="5.0" />
                </padding>
             </HBox>
-            <Button fx:id="createButton" alignment="CENTER" mnemonicParsing="false" prefHeight="48.0" prefWidth="168.0" text="Create Server">
+            <Button fx:id="createButton" alignment="CENTER" mnemonicParsing="false" onAction="#clickedCreateServer" prefHeight="48.0" prefWidth="168.0" text="Create Server">
                <VBox.margin>
                   <Insets bottom="30.0" left="30.0" top="40.0" />
                </VBox.margin>
