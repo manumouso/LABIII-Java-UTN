@@ -1,11 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.JoinController">
-   <children>
-      <Button fx:id="goBackButton" layoutX="262.0" layoutY="148.0" mnemonicParsing="false" onAction="#openAccessScene" prefHeight="46.0" prefWidth="60.0" text="Pipi" />
-   </children>
-</AnchorPane>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="655.0" prefWidth="873.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.JoinController">
+   <center>
+      <VBox prefHeight="677.0" prefWidth="459.0" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <TextArea fx:id="messagesTxtArea" prefHeight="495.0" prefWidth="474.0" />
+            <TextField fx:id="inputTxtField" />
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="2.0" right="10.0" top="5.0" />
+         </padding>
+         <BorderPane.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </BorderPane.margin>
+      </VBox>
+   </center>
+   <left>
+      <VBox prefHeight="677.0" prefWidth="408.0" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER" prefHeight="68.0" prefWidth="554.0" spacing="10.0">
+               <children>
+                  <Label prefHeight="56.0" prefWidth="134.0" text="Enter IP Address:" />
+                  <TextField fx:id="ipTxtField" prefHeight="39.0" prefWidth="232.0">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+               <padding>
+                  <Insets right="5.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="68.0" prefWidth="554.0" spacing="10.0">
+               <children>
+                  <Label prefHeight="56.0" prefWidth="134.0" text="Enter Port:" />
+                  <TextField fx:id="portTxtField" prefHeight="39.0" prefWidth="232.0">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+               <padding>
+                  <Insets right="5.0" />
+               </padding>
+            </HBox>
+            <Button fx:id="joinButton" alignment="CENTER" mnemonicParsing="false" prefHeight="48.0" prefWidth="168.0" text="Join Server">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets bottom="30.0" left="80.0" top="40.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="goBackButton" alignment="CENTER" mnemonicParsing="false" onAction="#openAccessScene" prefHeight="49.0" prefWidth="168.0" text="Go Back">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets bottom="30.0" left="80.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+         <BorderPane.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" />
+         </BorderPane.margin>
+      </VBox>
+   </left>
+   <top>
+      <Region prefHeight="60.0" prefWidth="800.0" BorderPane.alignment="CENTER" />
+   </top>
+</BorderPane>

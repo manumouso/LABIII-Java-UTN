@@ -27,12 +27,12 @@ public class Main extends Application {
             // getting loader and a pane for the second scene
             FXMLLoader createPageLoader = new FXMLLoader(getClass().getResource("Create.fxml"));
             Parent createPane = createPageLoader.load();
-            Scene createScene = new Scene(createPane, 550, 350);
+            Scene createScene = new Scene(createPane, 810, 610);
 
             //getting loader and a pane for the third scene
             FXMLLoader joinPageLoader = new FXMLLoader(getClass().getResource("Join.fxml"));
             Parent joinPane = joinPageLoader.load();
-            Scene joinScene= new Scene(joinPane, 550, 350);
+            Scene joinScene= new Scene(joinPane, 883, 665);
 
             // injecting second scene into the controller of the first scene
             AccessController firstPaneController = (AccessController) accessPageLoader.getController();
