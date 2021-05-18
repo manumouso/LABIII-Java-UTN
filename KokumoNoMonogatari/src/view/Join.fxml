@@ -49,7 +49,7 @@
                   <Insets right="5.0" />
                </padding>
             </HBox>
-            <Button fx:id="joinButton" alignment="CENTER" mnemonicParsing="false" prefHeight="48.0" prefWidth="168.0" text="Join Server">
+            <Button fx:id="joinButton" alignment="CENTER" mnemonicParsing="false" onAction="#clickedJoinServer" prefHeight="48.0" prefWidth="168.0" text="Join Server">
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
