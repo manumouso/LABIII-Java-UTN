@@ -26,11 +26,5 @@ public abstract class Stage implements Menu {
         System.out.println("     ***********************************************************************/\n");
     }
 
-    @Override
-    public void clean(){
-
-        for(int i=0; i<5;i++) System.out.println("\n");
-    }
-
 
 }

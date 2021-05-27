@@ -2,56 +2,70 @@ package edu.utn.entity;
 
 import edu.utn.entity.square.*;
 
+//SINGLETON
+public class Board implements Size {
 
-import java.util.ArrayList;
-import java.util.List;
+    private static Board boardInstance;
+    private Square[][] squares;
 
-public class Board {
+    public Square[][] getSquares() {
+        return squares;
+    }
 
-    public List<Square> squares;
+    private Board(){
+        squares=new Square[MAX_ROW][MAX_COLUMN];
+        generateBoard();
 
-    public Board(){
-        squares=new ArrayList<>();
-        addRow1();
-        addRow2();
-        addRow3();
-        addRow4();
-        addRow5();
     }
-    public void addRow1(){
-        squares.add(new Empty(0,0));
-        squares.add(new Stone(0,1));
-        squares.add(new Empty(0,2));
-        squares.add(new Tree(0,3));
-        squares.add(new Empty(0,4));
+
+    public static Board getInstance(){
+        if(boardInstance ==null){
+            boardInstance = new Board();
+        }
+        return boardInstance;
     }
-    public void addRow2(){
-        squares.add(new Tree(1,0));
-        squares.add(new Stone(1,1));
-        squares.add(new Empty(1,2));
-        squares.add(new NinjaTrap(1,3));
-        squares.add(new Empty(1,4));
+
+    private void generateBoard(){
+
+        for(int i=0;i<MAX_ROW;i++){
+            for(int j=0;j<MAX_COLUMN;j++){
+                int squareNumber = (int)Math.floor(Math.random()*MAX_COLUMN+1);
+                String function="addSquare"+squareNumber;
+                switch (function){
+                    case "addSquare2":
+                        addSquare2(i,j);
+                        break;
+                    case "addSquare3":
+                        addSquare3(i,j);
+                        break;
+                    case "addSquare4":
+                        addSquare4(i,j);
+                        break;
+                    case "addSquare5":
+                        addSquare5(i,j);
+                        break;
+                    default:
+                        addSquare1(i,j);
+                        break;
+                }
+            }
+        }
+
     }
-    public void addRow3(){
-        squares.add(new Stone(2,0));
-        squares.add(new Stone(2,1));
-        squares.add(new Empty(2,2));
-        squares.add(new Tree(2,3));
-        squares.add(new Empty(2,4));
+    private void addSquare1(int a, int b){
+        squares[a][b]=new Empty();
     }
-    public void addRow4(){
-        squares.add(new Empty(3,0));
-        squares.add(new NinjaTrap(3,1));
-        squares.add(new Tree(3,2));
-        squares.add(new Tree(3,3));
-        squares.add(new Empty(3,4));
+    private void addSquare2(int a, int b){
+        squares[a][b]=new Stone();
     }
-    public void addRow5(){
-        squares.add(new NinjaTrap(4,0));
-        squares.add(new Stone(4,1));
-        squares.add(new Empty(4,2));
-        squares.add(new Tree(4,3));
-        squares.add(new NinjaTrap(4,4));
+    private void addSquare3(int a, int b){
+        squares[a][b]=new Tree();
+    }
+    private void addSquare4(int a, int b){
+        squares[a][b]=new NinjaTrap();
+    }
+    private void addSquare5(int a, int b){
+        squares[a][b]=new Empty();
     }
 
 }

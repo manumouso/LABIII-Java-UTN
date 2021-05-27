@@ -1,52 +1,40 @@
 package edu.utn.entity;
 
+
 import edu.utn.entity.square.Empty;
+import edu.utn.entity.square.Square;
 
-public class AttackBoard extends Board{
+//SINGLETON
+public class AttackBoard implements Size {
 
-    @Override
-    public void addRow1() {
-        squares.add(new Empty(0,0));
-        squares.add(new Empty(0,0));
-        squares.add(new Empty(0,0));
-        squares.add(new Empty(0,0));
-        squares.add(new Empty(0,0));
+    private static AttackBoard attackBoardInstance;
+    private Square[][] squares;
+
+    public Square[][] getSquares() {
+        return squares;
+    }
+
+    private AttackBoard(){
+        squares=new Square[MAX_ROW][MAX_COLUMN];
+        generateBoard();
 
     }
-    @Override
-    public void addRow2() {
-        squares.add(new Empty(0,0));
-        squares.add(new Empty(0,0));
-        squares.add(new Empty(0,0));
-        squares.add(new Empty(0,0));
-        squares.add(new Empty(0,0));
 
+    public static AttackBoard getInstance(){
+        if(attackBoardInstance==null){
+            attackBoardInstance = new AttackBoard();
+        }
+        return attackBoardInstance;
     }
-    @Override
-    public void addRow3() {
-        squares.add(new Empty(0,0));
-        squares.add(new Empty(0,0));
-        squares.add(new Empty(0,0));
-        squares.add(new Empty(0,0));
-        squares.add(new Empty(0,0));
 
-    }
-    @Override
-    public void addRow4() {
-        squares.add(new Empty(0,0));
-        squares.add(new Empty(0,0));
-        squares.add(new Empty(0,0));
-        squares.add(new Empty(0,0));
-        squares.add(new Empty(0,0));
+    private void generateBoard(){
 
-    }
-    @Override
-    public void addRow5() {
-        squares.add(new Empty(0,0));
-        squares.add(new Empty(0,0));
-        squares.add(new Empty(0,0));
-        squares.add(new Empty(0,0));
-        squares.add(new Empty(0,0));
+        for(int i=0;i<MAX_ROW;i++){
+            for(int j=0;j<MAX_COLUMN;j++){
+                squares[i][j]=new Empty();
+            }
+        }
+
     }
 
 

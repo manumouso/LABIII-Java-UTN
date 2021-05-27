@@ -1,9 +1,5 @@
 package edu.utn.view;
 
-import edu.utn.Main;
-import edu.utn.entity.AttackBoard;
-import edu.utn.entity.Board;
-
 import java.util.Scanner;
 
 public class PrimaryStage extends Stage{
@@ -16,7 +12,7 @@ public class PrimaryStage extends Stage{
             int option;
             do
             {
-                super.clean();
+
                 super.header();
                 System.out.println("\n\t\t\t\tMENU PRINCIPAL\n");
                 System.out.println("\n\t\t\t[1].CREAR PARTIDA\n");
@@ -34,9 +30,9 @@ public class PrimaryStage extends Stage{
                         super.footer();
                     }
                     case 1 -> {
-                        BoardView boardView = new BoardView(new Board(),new AttackBoard());
-                        boardView.printBoard(0,boardView.getBoard());
-                        boardView.printBoard(0,boardView.getAttackBoard());
+                        BoardView boardView = new BoardView();
+                        boardView.printBoard();
+                        boardView.printAttackBoard();
                         System.out.print("\t\t\tIngrese un caracter para continuar-> ");
                         scanner.next();
 
