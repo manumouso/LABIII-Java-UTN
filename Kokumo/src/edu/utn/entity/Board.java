@@ -31,22 +31,11 @@ public class Board implements Size {
             for(int j=0;j<MAX_COLUMN;j++){
                 int squareNumber = (int)Math.floor(Math.random()*MAX_COLUMN+1);
                 String function="addSquare"+squareNumber;
-                switch (function){
-                    case "addSquare2":
-                        addSquare2(i,j);
-                        break;
-                    case "addSquare3":
-                        addSquare3(i,j);
-                        break;
-                    case "addSquare4":
-                        addSquare4(i,j);
-                        break;
-                    case "addSquare5":
-                        addSquare5(i,j);
-                        break;
-                    default:
-                        addSquare1(i,j);
-                        break;
+                switch (function) {
+                    case "addSquare2" -> addSquare2(i, j);
+                    case "addSquare3" -> addSquare3(i, j);
+                    case "addSquare4" -> addSquare4(i, j);
+                    default -> addSquare1(i, j);
                 }
             }
         }
@@ -64,8 +53,6 @@ public class Board implements Size {
     private void addSquare4(int a, int b){
         squares[a][b]=new NinjaTrap();
     }
-    private void addSquare5(int a, int b){
-        squares[a][b]=new Empty();
-    }
+
 
 }
