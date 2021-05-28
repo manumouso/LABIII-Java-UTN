@@ -22,7 +22,7 @@ public abstract class Stage implements Menu {
         System.out.println("\t\t\t*Email: manumouso91@gmail.com\n");
         System.out.println("\t\t\t*Materias: PROG/LAB III\n");
         System.out.println("\t\t\t*Carrera: TSSI-UTN-FRBA\n");
-        System.out.println("\t\t\t*Fecha: 19/5/2021\n");
+        System.out.println("\t\t\t*Fecha: 27/5/2021\n");
         System.out.println("     ***********************************************************************/\n");
     }
 
