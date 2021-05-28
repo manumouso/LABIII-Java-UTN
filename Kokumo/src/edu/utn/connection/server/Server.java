@@ -38,6 +38,7 @@ public class Server {
     public void startConnection() throws IOException {
         getServer().createContext("/attack",new Attack());
         getServer().createContext("/move",new Move());
+        getServer().setExecutor(null);
         getServer().start();
     }
     public void closeConnection() throws IOException {
