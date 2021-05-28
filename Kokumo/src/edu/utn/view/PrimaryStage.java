@@ -33,6 +33,7 @@ public class PrimaryStage extends Stage{
                         BoardView boardView = new BoardView();
                         boardView.printBoard();
                         boardView.printAttackBoard();
+                        boardView.advanceTest();
                         System.out.print("\t\t\tIngrese un caracter para continuar-> ");
                         scanner.next();
 

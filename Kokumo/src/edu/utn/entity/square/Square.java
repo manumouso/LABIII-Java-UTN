@@ -7,5 +7,6 @@ public interface Square {
 
    void ninjaStandsOn(Player player);
    String name();
-
+   boolean hasNinja();
+   void setHasNinja(boolean hasNinja);
 }

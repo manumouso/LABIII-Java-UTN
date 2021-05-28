@@ -1,22 +1,23 @@
 package edu.utn.entity.ninja;
 
 
-import edu.utn.entity.square.Square;
+import edu.utn.entity.Board;
 
-import java.util.List;
 
-public class Ninja {
+public abstract class Ninja implements Movement {
 
     private String name;
     private int lifePoints;
-    private int attackPoints;
-    private int defensePoints;
-    private int magicPoints;
-    private NinjaType ninjaType;
-    private Square currentSquare;
-    private List<Attack> attacks;
+    private NinjaPosition ninjaPosition;
+    private Attack attack;
+    private Direction direction;
 
-
+    public Ninja(String name, int lifePoints, NinjaPosition ninjaPosition, Attack attack) {
+        this.name = name;
+        this.lifePoints = lifePoints;
+        this.ninjaPosition = ninjaPosition;
+        this.attack = attack;
+    }
 
     public String getName() {
         return name;
@@ -34,51 +35,59 @@ public class Ninja {
         this.lifePoints = lifePoints;
     }
 
-    public int getAttackPoints() {
-        return attackPoints;
+    public NinjaPosition getNinjaPosition() {
+        return ninjaPosition;
     }
 
-    public void setAttackPoints(int attackPoints) {
-        this.attackPoints = attackPoints;
+    public void setNinjaPosition(NinjaPosition ninjaPosition) {
+        this.ninjaPosition = ninjaPosition;
     }
 
-    public int getDefensePoints() {
-        return defensePoints;
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 
-    public void setDefensePoints(int defensePoints) {
-        this.defensePoints = defensePoints;
+    public Direction getDirection() {
+        return direction;
     }
 
-    public int getMagicPoints() {
-        return magicPoints;
+    public Attack getAttack() {
+        return attack;
     }
 
-    public void setMagicPoints(int magicPoints) {
-        this.magicPoints = magicPoints;
+    @Override
+    public void move() {
+        NinjaPosition current = getNinjaPosition();
+        NinjaPosition next = getNinjaPosition().next(getDirection());
+        if (!isDestroyed(next) && !isOccupied(next)){
+            this.ninjaPosition = next;
+            Board.getInstance().getSquares()[current.getI()][current.getJ()].setHasNinja(false);
+            Board.getInstance().getSquares()[next.getI()][next.getJ()].setHasNinja(true);
+        }
+        else{
+            Board.getInstance().getSquares()[current.getI()][current.getJ()].setHasNinja(true);
+            this.ninjaPosition =current;
+        }
     }
 
-    public NinjaType getNinjaType() {
-        return ninjaType;
+    private boolean isDestroyed(NinjaPosition position){
+        int i= position.getI();
+        int j= position.getJ();
+        if (Board.getInstance().getSquares()[i][j].name().equals("Destroyed")){
+            System.out.println("Ese casillero fue destruido, no puedes posicionarte ahi");
+            return true;
+        }
+        else return false;
     }
 
-    public void setNinjaType(NinjaType ninjaType) {
-        this.ninjaType = ninjaType;
-    }
-
-    public Square getCurrentSquare() {
-        return currentSquare;
-    }
-
-    public void setCurrentSquare(Square currentSquare) {
-        this.currentSquare = currentSquare;
-    }
-
-    public List<Attack> getAttacks() {
-        return attacks;
-    }
-
-    public void setAttacks(List<Attack> attacks) {
-        this.attacks = attacks;
+    private boolean isOccupied(NinjaPosition position){
+        int i= position.getI();
+        int j= position.getJ();
+        if(Board.getInstance().getSquares()[i][j].hasNinja()){
+            System.out.println("Ese casillero esta ocupado por un ninja aliado, no puedes posicionarte ahi");
+            return true;
+        }
+        Board.getInstance().getSquares()[i][j].setHasNinja(true);
+        return false;
     }
 }
