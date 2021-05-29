@@ -2,6 +2,7 @@ package edu.utn.entity.ninja;
 
 
 import edu.utn.entity.Board;
+import edu.utn.validator.PositionValidator;
 
 
 public abstract class Ninja implements Movement {
@@ -13,11 +14,12 @@ public abstract class Ninja implements Movement {
     private Attack attack;
     private Direction direction;
 
-    public Ninja(String name, int lifePoints, int attackPoints,NinjaPosition ninjaPosition, Attack attack) {
+    public Ninja(String name, int lifePoints, int attackPoints, NinjaPosition ninjaPosition, Attack attack) {
         this.name = name;
         this.lifePoints = lifePoints;
         this.attackPoints=attackPoints;
         this.ninjaPosition = ninjaPosition;
+        Board.getInstance().getSquares()[ninjaPosition.getI()][ninjaPosition.getJ()].setHasNinja(true);
         Board.getInstance().getSquares()[ninjaPosition.getI()][ninjaPosition.getJ()].ninjaStandsOn(this);
         this.checkLifePoints();
         this.attack = attack;
@@ -72,38 +74,22 @@ public abstract class Ninja implements Movement {
         if(!ninjaDead()){
             NinjaPosition current = getNinjaPosition();
             NinjaPosition next = getNinjaPosition().next(getDirection());
-            //evaluar que next sea una pos VALIDA dentro del tablero->validator
-            if (!isDestroyed(next) && !isOccupied(next)){
-                this.ninjaPosition = next;
-                Board.getInstance().getSquares()[current.getI()][current.getJ()].setHasNinja(false);
-                Board.getInstance().getSquares()[next.getI()][next.getJ()].setHasNinja(true);
-                Board.getInstance().getSquares()[next.getI()][next.getJ()].ninjaStandsOn(this);
-                this.checkLifePoints();
+            if(PositionValidator.validPosition(next)){
+                if (!PositionValidator.isDestroyed(next) && !PositionValidator.isOccupied(next)){
+                    this.ninjaPosition = next;
+                    Board.getInstance().getSquares()[current.getI()][current.getJ()].setHasNinja(false);
+                    Board.getInstance().getSquares()[next.getI()][next.getJ()].setHasNinja(true);
+                    Board.getInstance().getSquares()[next.getI()][next.getJ()].ninjaStandsOn(this);
+                    this.checkLifePoints();
+                }
+            }else{
+                Board.getInstance().getMessages().getErrorMap().put(-3,"Invalid move, trying to leave the board");
             }
+        }else{
+            Board.getInstance().getMessages().getErrorMap().put(-4,"Dead ninjas can't move");
         }
     }
 
-    private boolean isDestroyed(NinjaPosition position){
-        int i= position.getI();
-        int j= position.getJ();
-        if (Board.getInstance().getSquares()[i][j].name().equals("Destroyed")){
-            Board.getInstance().getMessages().getErrorMap().put(-1,"That square was destroyed, you can't position yourself there");
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    private boolean isOccupied(NinjaPosition position){
-        int i= position.getI();
-        int j= position.getJ();
-        if(Board.getInstance().getSquares()[i][j].hasNinja()){
-            Board.getInstance().getMessages().getErrorMap().put(-2,"That square is occupied by an allied ninja, you can't position yourself there");
-            return true;
-        }else{
-            return false;
-        }
-    }
     private boolean ninjaDead(){
         return getName().equals("dead");
     }

@@ -1,5 +1,7 @@
 package edu.utn.view;
 
+import edu.utn.entity.Player;
+
 import java.util.Scanner;
 
 public class PrimaryStage extends Stage{
@@ -30,10 +32,8 @@ public class PrimaryStage extends Stage{
                     }
                     case 1 -> {
                         BoardView boardView = new BoardView();
-                        boardView.printBoard();
-                        boardView.advanceTest();
-                        boardView.advanceTest2();
-                        boardView.advanceTest3();
+                        boardView.printBoard(/*new Player()*/);
+                        boardView.printAttackBoard();
                         boardView.printMessages();
                         boardView.printMovementErrors();
                         boardView.cleanBoard();

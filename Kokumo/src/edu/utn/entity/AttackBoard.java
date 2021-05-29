@@ -17,6 +17,9 @@ public class AttackBoard implements Size {
     }
 
     public Message getMessages() {
+        if(messages==null){
+            messages= new Message();
+        }
         return messages;
     }
 

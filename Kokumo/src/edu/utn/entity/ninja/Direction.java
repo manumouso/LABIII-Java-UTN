@@ -34,7 +34,7 @@ public class Direction {
         int nextI = position.getI() + this.valueI;
         int nextJ = position.getJ() + this.valueJ;
 
-        return new NinjaPosition(nextI, nextJ,true);
+        return new NinjaPosition(nextI, nextJ);
     }
 
     public static Direction getNorth() {
