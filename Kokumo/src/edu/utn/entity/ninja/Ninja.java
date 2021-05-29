@@ -8,14 +8,18 @@ public abstract class Ninja implements Movement {
 
     private String name;
     private int lifePoints;
+    private int attackPoints;
     private NinjaPosition ninjaPosition;
     private Attack attack;
     private Direction direction;
 
-    public Ninja(String name, int lifePoints, NinjaPosition ninjaPosition, Attack attack) {
+    public Ninja(String name, int lifePoints, int attackPoints,NinjaPosition ninjaPosition, Attack attack) {
         this.name = name;
         this.lifePoints = lifePoints;
+        this.attackPoints=attackPoints;
         this.ninjaPosition = ninjaPosition;
+        Board.getInstance().getSquares()[ninjaPosition.getI()][ninjaPosition.getJ()].ninjaStandsOn(this);
+        this.checkLifePoints();
         this.attack = attack;
     }
 
@@ -33,6 +37,14 @@ public abstract class Ninja implements Movement {
 
     public void setLifePoints(int lifePoints) {
         this.lifePoints = lifePoints;
+    }
+
+    public int getAttackPoints() {
+        return attackPoints;
+    }
+
+    public void setAttackPoints(int attackPoints) {
+        this.attackPoints = attackPoints;
     }
 
     public NinjaPosition getNinjaPosition() {
@@ -57,16 +69,16 @@ public abstract class Ninja implements Movement {
 
     @Override
     public void move() {
-        NinjaPosition current = getNinjaPosition();
-        NinjaPosition next = getNinjaPosition().next(getDirection());
-        if (!isDestroyed(next) && !isOccupied(next)){
-            this.ninjaPosition = next;
-            Board.getInstance().getSquares()[current.getI()][current.getJ()].setHasNinja(false);
-            Board.getInstance().getSquares()[next.getI()][next.getJ()].setHasNinja(true);
-        }
-        else{
-            Board.getInstance().getSquares()[current.getI()][current.getJ()].setHasNinja(true);
-            this.ninjaPosition =current;
+        if(!ninjaDead()){
+            NinjaPosition current = getNinjaPosition();
+            NinjaPosition next = getNinjaPosition().next(getDirection());
+            if (!isDestroyed(next) && !isOccupied(next)){
+                this.ninjaPosition = next;
+                Board.getInstance().getSquares()[current.getI()][current.getJ()].setHasNinja(false);
+                Board.getInstance().getSquares()[next.getI()][next.getJ()].setHasNinja(true);
+                Board.getInstance().getSquares()[next.getI()][next.getJ()].ninjaStandsOn(this);
+                this.checkLifePoints();
+            }
         }
     }
 
@@ -74,20 +86,31 @@ public abstract class Ninja implements Movement {
         int i= position.getI();
         int j= position.getJ();
         if (Board.getInstance().getSquares()[i][j].name().equals("Destroyed")){
-            System.out.println("Ese casillero fue destruido, no puedes posicionarte ahi");
+            //add to a list
+            //System.out.println("That square was destroyed, you can't position yourself there");
             return true;
+        }else{
+            return false;
         }
-        else return false;
     }
 
     private boolean isOccupied(NinjaPosition position){
         int i= position.getI();
         int j= position.getJ();
         if(Board.getInstance().getSquares()[i][j].hasNinja()){
-            System.out.println("Ese casillero esta ocupado por un ninja aliado, no puedes posicionarte ahi");
+            //add to a list
+            //System.out.println("That square is occupied by an allied ninja, you can't position yourself there");
             return true;
+        }else{
+            return false;
         }
-        Board.getInstance().getSquares()[i][j].setHasNinja(true);
-        return false;
+    }
+    private boolean ninjaDead(){
+        return getName().equals("dead");
+    }
+    public void checkLifePoints(){
+        if(getLifePoints()<=0){
+            setName("dead");
+        }
     }
 }

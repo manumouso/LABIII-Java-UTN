@@ -12,10 +12,10 @@ public class JoinRoom extends Stage{
             {
 
                 super.header();
-                System.out.println("\n\t\t\t\tUNIRSE PARTIDA\n");
-                System.out.println("\n\t\t\t[1].INGRESAR IP\n");
-                System.out.println("\t\t\t[0].SALIR\n");
-                System.out.print("\n\t\t\tSeleccione una opcion-> ");
+                System.out.println("\n\t\t\t\tJOIN GAME");
+                System.out.println("\n\t\t\t[1].ENTER IP");
+                System.out.println("\t\t\t[0].GO BACK");
+                System.out.print("\n\t\t\tSelect an option-> ");
                 Scanner scanner =new Scanner(System.in);
                 String number = scanner.next();
                 option = Integer.parseInt(number);
@@ -24,14 +24,14 @@ public class JoinRoom extends Stage{
                 switch (option) {
                     case 0 -> {
                         System.out.println("\n");
-                        System.out.println("\t\t\tAl menu principal. ( ^_^)/\n");
+                        System.out.println("\t\t\tTo the main menu. ( ^_^)/\n");
                     }
                     case 1 -> {
                         System.out.println("\n");
-                        System.out.print("\t\t\tIngrese la ip:");
+                        System.out.print("\t\t\tEnter the IP address:");
                         String ip=scanner.next();
                         System.out.println("\n");
-                        System.out.print("\t\t\t[2].ENVIAR SOLICITUD-> ");
+                        System.out.print("\t\t\t[2].SEND REQUEST-> ");
                         String send=scanner.next();
                         if ("2".equals(send)) {
                             System.out.println("\n");
@@ -41,10 +41,10 @@ public class JoinRoom extends Stage{
                     }
                     default -> {
                         System.out.println("\n");
-                        System.out.println("\t\t\tIngrese un numero valido [1]\n");
-                        System.out.println("\t\t\t[0]->Finalizar\n");
+                        System.out.println("\t\t\tEnter a valid number [1]");
+                        System.out.println("\t\t\t[0]->Go Back");
                         System.out.println("\n");
-                        System.out.print("\t\t\tIngrese un caracter para continuar-> ");
+                        System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
                     }
                 }

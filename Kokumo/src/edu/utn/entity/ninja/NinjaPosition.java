@@ -9,12 +9,12 @@ public class NinjaPosition {
     public NinjaPosition(int i, int j) {
         this.i = i;
         this.j = j;
+        //chequear que la pos no este ocupada cuando cree a los otros ninja!!!
         Board.getInstance().getSquares()[this.i][this.j].setHasNinja(true);
     }
-    //sobrecarga porque sino tenia un bug, cuando queria mover al ninja
-    //lo movia usando el constructor de arriba para crear una nueva pos
-    //pero por como venia la ejecucion detectaba como ocupado el casillero
-    //entonces esta solucion:
+    //this overload fix the bug that happened when i tried to check if de next position of the ninja
+    //is destroyed or occupied in the Ninja.move() function, and the ninja hasnt positionated there yet
+    //but it appeared as if the square was occupied by how the first constructor created the new position
     public NinjaPosition(int i, int j,boolean movementFlag) {
         this.i = i;
         this.j = j;

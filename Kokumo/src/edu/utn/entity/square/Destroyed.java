@@ -1,11 +1,12 @@
 package edu.utn.entity.square;
 
-import edu.utn.entity.Player;
+
+import edu.utn.entity.ninja.Ninja;
 
 public class Destroyed extends Land{
 
     @Override
-    public void ninjaStandsOn(Player player) {
+    public void ninjaStandsOn(Ninja ninja) {
 
     }
 

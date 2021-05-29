@@ -7,15 +7,15 @@ public class Introduction {
     public static void print(){
 
         System.out.println("\n     ======================================================================\n");
-        System.out.println("\t\t\t Puede que mi rostro haya cambiado,");
-        System.out.println("\t\t\t han ocurrido muchas cosas, y hay muchos secretos,");
-        System.out.println("\t\t\t muchos han sido olvidados,");
-        System.out.println("\t\t\t simplemente los han abandonado.");
-        System.out.println("\t\t\t Si sigues los pasos de aquella persona,");
-        System.out.println("\t\t\t te espera un camino dificil,");
-        System.out.println("\t\t\t si asi lo quiere el destino, nos volveremos a ver");
+        System.out.println("\t\t\t My face may have changed,");
+        System.out.println("\t\t\t many things have happened, and there are many secrets,");
+        System.out.println("\t\t\t many have been forgotten,");
+        System.out.println("\t\t\t they have simply abandoned them.");
+        System.out.println("\t\t\t If you follow in the footsteps of that person,");
+        System.out.println("\t\t\t a difficult path awaits you,");
+        System.out.println("\t\t\t if fate wants it, we will see each other again");
         System.out.println("\n");
-        System.out.print("\t\t\t Ingrese un caracter para continuar-> ");
+        System.out.print("\t\t\t Enter a character to continue-> ");
         Scanner scanner =new Scanner(System.in);
         scanner.next();
 

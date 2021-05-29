@@ -2,14 +2,25 @@ package edu.utn.entity;
 
 import edu.utn.entity.square.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 //SINGLETON
 public class Board implements Size {
 
     private static Board boardInstance;
     private Square[][] squares;
+    private List<String> messages;
 
     public Square[][] getSquares() {
         return squares;
+    }
+
+    public List<String> getMessages() {
+        if(messages== null){
+            messages=new ArrayList<>();
+        }
+        return messages;
     }
 
     private Board(){

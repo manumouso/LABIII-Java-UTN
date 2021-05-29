@@ -1,12 +1,15 @@
 package edu.utn.entity.square;
 
 
-import edu.utn.entity.Player;
+
+import edu.utn.entity.Board;
+import edu.utn.entity.ninja.Ninja;
 
 public class Empty extends Land {
 
     @Override
-    public void ninjaStandsOn(Player player) {
+    public void ninjaStandsOn(Ninja ninja) {
+        Board.getInstance().getMessages().add("The ninja is on an empty square. Ninja name: "+ ninja.getName());
 
     }
 

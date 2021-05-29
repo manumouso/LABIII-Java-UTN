@@ -1,12 +1,14 @@
 package edu.utn.entity.square;
 
 
-import edu.utn.entity.Player;
+import edu.utn.entity.ninja.Ninja;
+
 
 public interface Square {
 
-   void ninjaStandsOn(Player player);
+   void ninjaStandsOn(Ninja ninja);
    String name();
    boolean hasNinja();
    void setHasNinja(boolean hasNinja);
+
 }
