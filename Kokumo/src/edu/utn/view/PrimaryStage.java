@@ -31,11 +31,12 @@ public class PrimaryStage extends Stage{
                     case 1 -> {
                         BoardView boardView = new BoardView();
                         boardView.printBoard();
-                        boardView.printAttackBoard();
                         boardView.advanceTest();
                         boardView.advanceTest2();
                         boardView.advanceTest3();
                         boardView.printMessages();
+                        boardView.printMovementErrors();
+                        boardView.cleanBoard();
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
 

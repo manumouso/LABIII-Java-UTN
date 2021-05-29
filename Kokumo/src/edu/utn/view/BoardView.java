@@ -8,13 +8,16 @@ import edu.utn.entity.ninja.*;
 
 public class BoardView {
 
-
+    //este ninja vuela vuela, porque BoardView tiene que ser un atributo del menu donde lo llame
+    //pero si hago esto ahora, explota por los aires, porque falta validar la pos ninja antes de
+    //intentar acceder a esa posicion del tablero; en este caso, el ninja al crearse una y otra vez
+    //tiene mov validos, pero si hago al boarview atributo se crea una sola vez, recuerda sus posiciones anteriores
+    //se mueve fuera del tablero y explota, solucion: validaciones futuras dentro tablero->validaator
     Ninja ninja= new NinjaCommander("NC", 2, 1,new NinjaPosition(2, 2), new Attack() {
         @Override
         public void ninjaAttack() {
             System.out.println("I attacked");
         }
-
         @Override
         public String name() {
             return "Ninja commander special move";
@@ -51,12 +54,28 @@ public class BoardView {
     }
 
     public void printMessages(){
-        for(String message:Board.getInstance().getMessages()){
+        for(String message:Board.getInstance().getMessages().getMessageList()){
             System.out.println("\t\t     "+message);
         }
         System.out.println("\n");
     }
+    public void printMovementErrors(){
+        for(String error: Board.getInstance().getMessages().getErrorMap().values()){
+            System.out.println("\t\t     "+error);
+        }
+        System.out.println("\n");
+    }
 
+    public void cleanBoard(){
+        for(int i=0;i<Size.MAX_ROW;i++){
+            for(int j=0;j<Size.MAX_COLUMN;j++){
+                Board.getInstance().getSquares()[i][j].setHasNinja(false);
+            }
+        }
+        Board.getInstance().getMessages().getMessageList().clear();
+        Board.getInstance().getMessages().getErrorMap().clear();
+    }
+    //estas pruebas vuelan
     public void advanceTest(){
         ninja.setDirection(Direction.getSouthWest());
         ninja.move();

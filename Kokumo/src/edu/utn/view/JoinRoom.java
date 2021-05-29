@@ -37,6 +37,8 @@ public class JoinRoom extends Stage{
                             System.out.println("\n");
                             System.out.println("\t\t\t" + ip);
                             option=0;
+                        }else{
+                            System.out.println("\t\t\tSend confirmation failed. Try again");
                         }
                     }
                     default -> {

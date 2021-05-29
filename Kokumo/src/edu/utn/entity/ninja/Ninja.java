@@ -72,6 +72,7 @@ public abstract class Ninja implements Movement {
         if(!ninjaDead()){
             NinjaPosition current = getNinjaPosition();
             NinjaPosition next = getNinjaPosition().next(getDirection());
+            //evaluar que next sea una pos VALIDA dentro del tablero->validator
             if (!isDestroyed(next) && !isOccupied(next)){
                 this.ninjaPosition = next;
                 Board.getInstance().getSquares()[current.getI()][current.getJ()].setHasNinja(false);
@@ -86,8 +87,7 @@ public abstract class Ninja implements Movement {
         int i= position.getI();
         int j= position.getJ();
         if (Board.getInstance().getSquares()[i][j].name().equals("Destroyed")){
-            //add to a list
-            //System.out.println("That square was destroyed, you can't position yourself there");
+            Board.getInstance().getMessages().getErrorMap().put(-1,"That square was destroyed, you can't position yourself there");
             return true;
         }else{
             return false;
@@ -98,8 +98,7 @@ public abstract class Ninja implements Movement {
         int i= position.getI();
         int j= position.getJ();
         if(Board.getInstance().getSquares()[i][j].hasNinja()){
-            //add to a list
-            //System.out.println("That square is occupied by an allied ninja, you can't position yourself there");
+            Board.getInstance().getMessages().getErrorMap().put(-2,"That square is occupied by an allied ninja, you can't position yourself there");
             return true;
         }else{
             return false;
@@ -108,7 +107,7 @@ public abstract class Ninja implements Movement {
     private boolean ninjaDead(){
         return getName().equals("dead");
     }
-    public void checkLifePoints(){
+    private void checkLifePoints(){
         if(getLifePoints()<=0){
             setName("dead");
         }

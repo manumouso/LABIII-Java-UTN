@@ -9,7 +9,7 @@ public class NinjaTrap extends Land {
     @Override
     public void ninjaStandsOn(Ninja ninja) {
         ninja.setLifePoints(ninja.getLifePoints()-1);
-        Board.getInstance().getMessages().add("Oh you stepped on a trap, your ninja lose 1 life point. Ninja name: "+ ninja.getName()+" Life points: "+ninja.getLifePoints());
+        Board.getInstance().getMessages().getMessageList().add("Oh you stepped on a trap, your ninja lose 1 life point. Ninja name: "+ ninja.getName()+" Life points: "+ninja.getLifePoints());
     }
 
     @Override
