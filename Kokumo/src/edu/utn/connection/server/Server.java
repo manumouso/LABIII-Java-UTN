@@ -10,30 +10,29 @@ import java.net.InetSocketAddress;
 
 public class Server {
 
-    private int port;
+
     private String IP;
+    private int port;
     private HttpServer server;
 
-    public Server(int port, String IP) {
-        this.port = port;
+    public Server(String IP, int port) {
         this.IP = IP;
+        this.port = port;
     }
 
-    public HttpServer getServer() throws IOException {
+    private HttpServer getServer() throws IOException {
         if(server==null){
             server=HttpServer.create(new InetSocketAddress(IP,port),0);
         }
         return server;
     }
 
-    public int getPort() {
-        return port;
-    }
-
     public String getIP() {
         return IP;
     }
-
+    public int getPort() {
+        return port;
+    }
 
     public void startConnection() throws IOException {
         getServer().createContext("/attack",new Attack());

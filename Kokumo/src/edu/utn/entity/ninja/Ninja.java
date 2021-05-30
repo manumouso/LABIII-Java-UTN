@@ -6,6 +6,9 @@ import edu.utn.entity.Player;
 import edu.utn.message.Message;
 import edu.utn.validator.PositionValidator;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+
 
 public abstract class Ninja implements Movement,Attack {
 
@@ -94,7 +97,12 @@ public abstract class Ninja implements Movement,Attack {
             Board.getInstance().getMessages().getErrorMap().put(-4,"Dead ninjas can't move");
         }
     }
-    
+    public JsonObject toJsonObject() {
+        return Json.createObjectBuilder()
+                .add("ninjaName", this.name)
+                .add("lifePoints", this.lifePoints)
+                .build();
+    }
 
    //EN CONSTRUCCION :
    //esto puede ir a un controller, y que el ataque del ninja sea llamar
