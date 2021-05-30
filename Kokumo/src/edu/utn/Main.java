@@ -15,9 +15,8 @@ public class Main {
 //        primaryStage.menu();
 
         try{
-            //inputs, now hidden, for testing: real IP, and PORT
-            int num=0;
-            Server server = new Server("****",num);
+
+            Server server = new Server("",0);
             server.startConnection();
 
         }catch (IOException e){

@@ -9,10 +9,12 @@ import edu.utn.json.Constants;
 import edu.utn.json.JsonController;
 
 import javax.json.Json;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+
 
 public class Attack implements HttpHandler {
     @Override
@@ -23,12 +25,19 @@ public class Attack implements HttpHandler {
             String requestBody = JsonController.streamToString(exchange.getRequestBody());
             JsonObject object = JsonController.stringJsonToJsonObject(requestBody);
 
-            String position = object.getString("position");
+            //ACA LEVANTO LA FUTURA CLASE CON LO QUE TIENE EL JSON
+            JsonArray position = object.getJsonArray("position");//.getString("position");
             String attackPoints = object.getString("attackPoints");
 
-            System.out.println(position);
+            //ACA LLAMO a funcion ATACAR que le paso el objeto que cree arriba
+            System.out.println(position.get(0));
             System.out.println(attackPoints);
 
+            //funcion atacacar me devuelve la lista de mensajes
+            //y en que pos destrui el/los cuadraditos
+            //En esta misma respuesta puedo meterle el ATAQUE del server
+            //para no tener que levantar server en el cliente con la desventaja que el turno siempre arranca
+            //client y cuando llegue la rta, voy a tener que mandar un request oculto con la rta del ataque
             JsonObject res;
 
             //hardcode ninja

@@ -3,6 +3,7 @@ package edu.utn.entity.ninja;
 
 import edu.utn.entity.Board;
 import edu.utn.entity.Player;
+import edu.utn.entity.square.Destroyed;
 import edu.utn.message.Message;
 import edu.utn.validator.PositionValidator;
 
@@ -132,6 +133,7 @@ public abstract class Ninja implements Movement,Attack {
                 }
             }else{
                 message.getMessageList().add(i,"You destroyed a square");
+                Board.getInstance().getSquares()[attackPosition[i].getI()][attackPosition[i].getJ()]=new Destroyed();
             }
             i++;
         }
