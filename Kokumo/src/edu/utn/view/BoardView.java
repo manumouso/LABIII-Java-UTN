@@ -13,16 +13,7 @@ public class BoardView {
     //A LAS FUNCIONES QUE IMPRIMEN LOS TABLEROS LES TENGO QUE inyectar los ninja de alguna manera
     //tal vez validiendome de la funcion has ninja, tomo esos i,j, comparo contra la lista de ninjas del jugador
     //aproximacion abajo
-    Ninja ninja= new NinjaCommander("NC", 2, 1,new NinjaPosition(2, 2), new Attack() {
-        @Override
-        public void ninjaAttack() {
-            System.out.println("I attacked");
-        }
-        @Override
-        public String name() {
-            return "Ninja commander special move";
-        }
-    });
+    Ninja ninja= new NinjaCommander("NC", 2, 1,new NinjaPosition(2, 2));
 
     public void printBoard(/*Player player*/){
         System.out.println("\n\t\t\t\tNINJA BOARD\n");

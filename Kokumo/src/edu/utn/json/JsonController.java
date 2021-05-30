@@ -44,7 +44,6 @@ public class JsonController {
         }
     }
 
-
     public static JsonObject stringJsonToJsonObject(String json) {
         JsonReader jsonReader = Json.createReader(new StringReader(json));
         JsonObject object = jsonReader.readObject();
