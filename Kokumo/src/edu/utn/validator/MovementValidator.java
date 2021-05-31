@@ -1,9 +1,9 @@
 package edu.utn.validator;
 
-import edu.utn.entity.Board;
-import edu.utn.entity.Size;
-import edu.utn.entity.ninja.Movement;
-import edu.utn.entity.ninja.NinjaPosition;
+import edu.utn.model.Board;
+import edu.utn.model.Size;
+import edu.utn.model.ninja.Movement;
+import edu.utn.model.ninja.NinjaPosition;
 
 public class MovementValidator {
 

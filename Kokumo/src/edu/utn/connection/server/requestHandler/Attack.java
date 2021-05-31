@@ -2,9 +2,9 @@ package edu.utn.connection.server.requestHandler;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import edu.utn.entity.ninja.Ninja;
-import edu.utn.entity.ninja.NinjaCommander;
-import edu.utn.entity.ninja.NinjaPosition;
+import edu.utn.model.ninja.Ninja;
+import edu.utn.model.ninja.NinjaCommander;
+import edu.utn.model.ninja.NinjaPosition;
 import edu.utn.json.Constants;
 import edu.utn.json.JsonController;
 

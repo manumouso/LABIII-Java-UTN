@@ -2,7 +2,7 @@ package edu.utn.json;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import edu.utn.entity.ninja.Ninja;
+import edu.utn.model.ninja.Ninja;
 
 import java.io.*;
 import java.util.HashMap;
@@ -40,7 +40,8 @@ public class JsonController {
         }
     }
     //lo voy a redefinir cuando cree bien el modelo de la clase que va a viajar json
-    //lista de ninjas no es representativo del json
+    //lista de ninjas no es representativo del json, ADAPATAR A que me genere los JSON ARRAY:
+    //: attack pos, attack points y msgs
     public static JsonArray mapListToJsonArray(List<Ninja> ninjas) {
 
         List<JsonObject> jsonList = ninjas.stream().map(n -> n.toJsonObject()).collect(Collectors.toList());

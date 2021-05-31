@@ -1,7 +1,5 @@
 package edu.utn.view;
 
-import edu.utn.entity.Player;
-
 import java.util.Scanner;
 
 public class PrimaryStage extends Stage{

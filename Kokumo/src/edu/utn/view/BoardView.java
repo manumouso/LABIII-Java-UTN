@@ -1,10 +1,9 @@
 package edu.utn.view;
 
-import edu.utn.entity.AttackBoard;
-import edu.utn.entity.Board;
-import edu.utn.entity.Player;
-import edu.utn.entity.Size;
-import edu.utn.entity.ninja.*;
+import edu.utn.model.AttackBoard;
+import edu.utn.model.Board;
+import edu.utn.model.Size;
+import edu.utn.model.ninja.*;
 
 
 
