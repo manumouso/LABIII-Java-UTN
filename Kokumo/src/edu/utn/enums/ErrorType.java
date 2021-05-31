@@ -1,4 +1,4 @@
-package edu.utn.error;
+package edu.utn.enums;
 
 //agregar todos los mensajes, con su numero de error que esten sueltos por el codigo, desp
 //consumirlos de aca
