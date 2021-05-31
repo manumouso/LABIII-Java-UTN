@@ -5,7 +5,8 @@ import edu.utn.entity.Board;
 import edu.utn.entity.Player;
 import edu.utn.entity.square.Destroyed;
 import edu.utn.message.Message;
-import edu.utn.validator.PositionValidator;
+import edu.utn.validator.AttackValidator;
+import edu.utn.validator.MovementValidator;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -18,6 +19,7 @@ public abstract class Ninja implements Movement,Attack {
     private int attackPoints;
     private NinjaPosition ninjaPosition;
     private Direction direction;
+    private int movementCounter;
 
     public Ninja(String name, int lifePoints, int attackPoints, NinjaPosition ninjaPosition) {
         this.name = name;
@@ -69,10 +71,18 @@ public abstract class Ninja implements Movement,Attack {
         return direction;
     }
 
+    public int getMovementCounter() {
+        return movementCounter;
+    }
+
+    public void setMovementCounter(int movementCounter) {
+        this.movementCounter = movementCounter;
+    }
+
     private boolean ninjaDead(){
         return getName().equals("dead");
     }
-    private void checkLifePoints(){
+    public void checkLifePoints(){
         if(getLifePoints()<=0){
             setName("dead");
         }
@@ -80,22 +90,21 @@ public abstract class Ninja implements Movement,Attack {
 
     @Override
     public void move() {
-        if(!ninjaDead()){
+        if (!MovementValidator.ninjaDead(getName()) && !MovementValidator.tryingConsecutiveMove(getMovementCounter(),getName())) {
             NinjaPosition current = getNinjaPosition();
             NinjaPosition next = getNinjaPosition().next(getDirection());
-            if(PositionValidator.validPosition(next)){
-                if (!PositionValidator.isDestroyed(next) && !PositionValidator.isOccupied(next)){
+            if (MovementValidator.validPosition(next)) {
+                if (!MovementValidator.isDestroyed(next) && !MovementValidator.isOccupied(next)) {
                     this.ninjaPosition = next;
                     Board.getInstance().getSquares()[current.getI()][current.getJ()].setHasNinja(false);
                     Board.getInstance().getSquares()[next.getI()][next.getJ()].setHasNinja(true);
                     Board.getInstance().getSquares()[next.getI()][next.getJ()].ninjaStandsOn(this);
                     this.checkLifePoints();
+                    //this.movementCounter++; por ahora COMENTADO, PORQUE NO DECIDI EL PUNTO DEL PROGRAMA
+                    //DONDE ESTE CONTADOR VUELVE A CERO, Y EVITA QUE SE HAGAN MOV CONSECUTIVOS
+                    //seguramente despues de atacar
                 }
-            }else{
-                Board.getInstance().getMessages().getErrorMap().put(-3,"Invalid move, trying to leave the board");
             }
-        }else{
-            Board.getInstance().getMessages().getErrorMap().put(-4,"Dead ninjas can't move");
         }
     }
     public JsonObject toJsonObject() {
@@ -106,6 +115,7 @@ public abstract class Ninja implements Movement,Attack {
     }
 
    //EN CONSTRUCCION :
+    //MODULARIZAR LAS VALIDACIONES A ATTACK VALIDATOR
    //esto puede ir a un controller, y que el ataque del ninja sea llamar
    //a la construccion del objeto Json, empaquetar y mandarlo, y esto es la logica de negocio
    //que tengo que meter solo en server
@@ -143,4 +153,17 @@ public abstract class Ninja implements Movement,Attack {
         //un punto intermedio hasta que vuelva rta, si la rta nunca vuelve, entonces que repita el turno
         //si es que la conexion sigue activa
    }
+   public void cleanNinjaAttack(Player player) {
+        //probablemente estos los reciba por parametro
+        // arrays y list representativos del body: que saco y meto en json(aca saco)
+        NinjaPosition[] attackPosition = new NinjaPosition[3];//sino ataca lo que llega pueden ser (-1;-1)
+        Integer[] attackPoints = new Integer[3];
+        Message message = new Message();
+        int i = 0;
+        for (Ninja ninja : player.getNinjas()) {
+            AttackValidator.hitNinja(ninja/*,aca necesito pasarle lo json*/);
+            i++;
+        }
+   }
+
 }

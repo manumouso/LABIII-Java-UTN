@@ -9,6 +9,7 @@ public class Player {
 
     private int id;
     private String name;
+    private State state;
     private List<Ninja> ninjas;
 
     public int getId() {
@@ -27,6 +28,14 @@ public class Player {
         this.name = name;
     }
 
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+    }
+
     public List<Ninja> getNinjas() {
         return ninjas;
     }
@@ -34,4 +43,5 @@ public class Player {
     public void setNinjas(List<Ninja> ninjas) {
         this.ninjas = ninjas;
     }
+
 }

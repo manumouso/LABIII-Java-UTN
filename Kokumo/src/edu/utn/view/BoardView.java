@@ -94,4 +94,39 @@ public class BoardView {
         }
     }
 
+//estas pruebas vuelan
+//    public void advanceTest(){
+//        ninja.setDirection(Direction.getSouthWest());
+//        ninja.move();
+//        printBoard();
+//
+//    }
+//    public void advanceTest2(){
+//        ninja.setDirection(Direction.getSouthWest());
+//        ninja.move();
+//        printBoard();
+//    }
+//    public void advanceTest3(){
+//        ninja.setDirection(Direction.getNorth());
+//        ninja.move();
+//        printBoard();
+//    }
+//    public void advanceTest4(){
+//        ninja.setDirection(Direction.getWest());
+//        ninja.move();
+//        printBoard();
+//    }
+//
+//    public void advanceTest5(){
+//        ninja.setDirection(Direction.getEast());
+//        ninja.move();
+//        printBoard();
+//    }
+//
+//    public void advanceTest6(){
+//        ninja.setDirection(Direction.getEast());
+//        ninja.move();
+//        printBoard();
+//    }
+
 }

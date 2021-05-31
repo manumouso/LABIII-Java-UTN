@@ -32,8 +32,15 @@ public class PrimaryStage extends Stage{
                     }
                     case 1 -> {
                         BoardView boardView = new BoardView();
-                        boardView.printBoard(/*new Player()*/);
                         boardView.printAttackBoard();
+                        boardView.printBoard(/*new Player()*/);
+
+//                        boardView.advanceTest();
+//                        boardView.advanceTest2();
+//                        boardView.advanceTest3();
+//                        boardView.advanceTest4();
+//                        boardView.advanceTest5();
+//                        boardView.advanceTest6();
                         boardView.printMessages();
                         boardView.printMovementErrors();
                         boardView.cleanBoard();
