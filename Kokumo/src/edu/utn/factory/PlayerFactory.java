@@ -1,15 +1,25 @@
 package edu.utn.factory;
 
+import edu.utn.model.Move;
 import edu.utn.model.Player;
 import edu.utn.model.State;
-import edu.utn.model.ninja.Ninja;
-
-import java.util.List;
+import edu.utn.model.Wait;
 
 public class PlayerFactory {
 
-    public Player createPlayer(int id, String name, State state, List<Ninja> ninjas){
+    public Player createPlayer(){
 
-        return new Player(id,name,state,ninjas);
+        State state =createWait();
+        return new Player(state);
+    }
+
+    public State createWait(){
+
+        return new Wait();
+    }
+
+    public State createMove(){
+
+        return new Move();
     }
 }

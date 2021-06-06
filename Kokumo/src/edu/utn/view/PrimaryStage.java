@@ -36,7 +36,7 @@ public class PrimaryStage extends Stage{
                         MessagePrinter messagePrinter = new MessagePrinter();
                         BoardPrinter boardPrinter = new BoardPrinter();
                         boardPrinter.printAttackBoard();
-                        boardPrinter.printBoard(/*new Player()*/);
+                        //boardPrinter.printBoard(new Player());
 
 //                        boardView.advanceTest();
 //                        boardView.advanceTest2();
@@ -44,7 +44,7 @@ public class PrimaryStage extends Stage{
 //                        boardView.advanceTest4();
 //                        boardView.advanceTest5();
 //                        boardView.advanceTest6();
-                        messagePrinter.printMessages(gameManager);
+                        //messagePrinter.printMessages(manager.getMessage().getMessageList());
                         boardPrinter.clearBoards(gameManager);
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();

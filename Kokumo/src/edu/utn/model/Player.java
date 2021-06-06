@@ -3,28 +3,17 @@ package edu.utn.model;
 
 import edu.utn.model.ninja.Ninja;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
 
-    private int id;
     private String name;
     private State state;
     private List<Ninja> ninjas;
 
-    public Player(int id, String name, State state, List<Ninja> ninjas) {
-        this.id = id;
-        this.name = name;
+    public Player(State state) {
         this.state = state;
-        this.ninjas = ninjas;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -44,6 +33,9 @@ public class Player {
     }
 
     public List<Ninja> getNinjas() {
+        if(ninjas==null){
+            ninjas=new ArrayList<>();
+        }
         return ninjas;
     }
 

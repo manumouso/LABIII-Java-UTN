@@ -1,12 +1,13 @@
 package edu.utn.view;
 
-import edu.utn.manager.GameManager;
+
+import java.util.List;
 
 public class MessagePrinter {
 
-    public void printMessages(GameManager gameManager){
-        for(String error: gameManager.getMessage().getMessageList()){
-            System.out.println("\t\t     "+error);
+    public void printMessages(List<String> messages){
+        for(String msg: messages){
+            System.out.println("\t\t     "+msg);
         }
         System.out.println("\n");
     }

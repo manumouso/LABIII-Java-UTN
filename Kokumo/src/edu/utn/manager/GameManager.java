@@ -3,15 +3,20 @@ package edu.utn.manager;
 import edu.utn.controller.BoardController;
 import edu.utn.controller.MovementController;
 import edu.utn.controller.NinjaController;
+import edu.utn.controller.PlayerController;
 import edu.utn.factory.MenuFactory;
 import edu.utn.factory.NinjaFactory;
+import edu.utn.factory.PlayerFactory;
 import edu.utn.message.Message;
 import edu.utn.enums.MessageType;
+import edu.utn.model.Player;
 import edu.utn.model.ninja.Direction;
 import edu.utn.model.ninja.Ninja;
 import edu.utn.model.ninja.NinjaPosition;
 import edu.utn.validator.MovementValidator;
+import edu.utn.view.BoardPrinter;
 import edu.utn.view.Introduction;
+import edu.utn.view.MessagePrinter;
 import edu.utn.view.PrimaryStage;
 
 import java.util.List;
@@ -19,6 +24,11 @@ import java.util.List;
 public class GameManager {
 
     private BoardController boardController;
+    private BoardPrinter boardPrinter;
+    private MessagePrinter messagePrinter;
+    private Player player;
+    private PlayerFactory playerFactory;
+    private PlayerController playerController;
     private NinjaFactory ninjaFactory;
     private MovementController movementController;
     private NinjaController ninjaController;
@@ -31,6 +41,42 @@ public class GameManager {
             boardController = new BoardController();
         }
         return boardController;
+    }
+
+    private BoardPrinter getBoardPrinter() {
+        if(boardPrinter==null){
+            boardPrinter= new BoardPrinter();
+        }
+        return boardPrinter;
+    }
+
+    private MessagePrinter getMessagePrinter() {
+        if(messagePrinter==null){
+            messagePrinter= new MessagePrinter();
+        }
+        return messagePrinter;
+    }
+
+    private Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    private PlayerFactory getPlayerFactory() {
+        if(playerFactory==null){
+            playerFactory= new PlayerFactory();
+        }
+        return playerFactory;
+    }
+
+    private PlayerController getPlayerController() {
+        if(playerController==null){
+            playerController= new PlayerController();
+        }
+        return playerController;
     }
 
     private NinjaFactory getNinjaFactory() {
@@ -61,7 +107,7 @@ public class GameManager {
         return menuFactory;
     }
 
-    public Message getMessage() {
+    private Message getMessage() {
         if(message==null){
             message=new Message();
         }
@@ -80,9 +126,38 @@ public class GameManager {
         primaryStage.menu(this);
     }
 
+    public void printMessages(){
+        MessagePrinter messagePrinter=getMessagePrinter();
+        messagePrinter.printMessages(getMessage().getMessageList());
+    }
+
+    public void printBoard(boolean playersBoard){
+        BoardPrinter boardPrinter=getBoardPrinter();
+        if(playersBoard){
+            boardPrinter.printBoard(getPlayer());
+        }else{
+            boardPrinter.printAttackBoard();
+        }
+    }
     public void clearBoards(){
         BoardController boardController = getBoardController();
         boardController.clearBoards();
+    }
+
+    public Player createPlayer(){
+        PlayerFactory playerFactory= getPlayerFactory();
+        return playerFactory.createPlayer();
+    }
+
+    public void setPlayerName(String name){
+        PlayerController playerController = getPlayerController();
+        playerController.setName(getPlayer(),name);
+    }
+
+    public void addNinjaToPlayer(Ninja ninja){
+        PlayerController playerController=getPlayerController();
+        playerController.addNinja(getPlayer(),ninja);
+
     }
 
     public Ninja createNinja(int i,int j,boolean commander){
