@@ -12,6 +12,13 @@ public class Player {
     private State state;
     private List<Ninja> ninjas;
 
+    public Player(int id, String name, State state, List<Ninja> ninjas) {
+        this.id = id;
+        this.name = name;
+        this.state = state;
+        this.ninjas = ninjas;
+    }
+
     public int getId() {
         return id;
     }

@@ -10,11 +10,13 @@ import edu.utn.validator.AttackValidator;
 
 public class AttackController {
 
-    //EN CONSTRUCCION :
-    //MODULARIZAR LAS VALIDACIONES A ATTACK VALIDATOR
-    //esto puede ir a un controller, y que el ataque del ninja sea llamar
-    //a la construccion del objeto Json, empaquetar y mandarlo, y esto es la logica de negocio
-    //que tengo que meter solo en server
+    private NinjaController ninjaController;
+    public NinjaController getNinjaController() {
+        if(ninjaController==null){
+            ninjaController=new NinjaController();
+        }
+        return ninjaController;
+    }
 
     public void ninjaAttack(Player player){
         //probablemente estos los reciba por parametro
@@ -22,23 +24,24 @@ public class AttackController {
         NinjaPosition[] attackPosition=new NinjaPosition[3];//sino ataca lo que llega pueden ser (-1;-1)
         Integer[] attackPoints = new Integer[3];
         Message message=new Message();
+
         int i=0;
         for(Ninja ninja: player.getNinjas()){
             if(ninja.getNinjaPosition().getI()==attackPosition[i].getI() && ninja.getNinjaPosition().getJ()==attackPosition[i].getJ()){
                 ninja.setLifePoints(ninja.getLifePoints()-attackPoints[i]);
                 String previousName= ninja.getName();
-                ninja.checkLifePoints();
+                getNinjaController().checkLifePoints(ninja);
                 if(ninja.isDead()){
                     if(previousName.equals("NC")){
-                        message.getMessageMap().put(i,"You WIN, killed: "+player.getName()+"'s ninja commander");
+                        //message.getMessageMap().put(i,"You WIN, killed: "+player.getName()+"'s ninja commander");
                     }else{
-                        message.getMessageMap().put(i,"You killed one: "+player.getName()+"'s ninja warrior");
+                        //message.getMessageMap().put(i,"You killed one: "+player.getName()+"'s ninja warrior");
                     }
                 }else{
-                    message.getMessageMap().put(i,"You hurt a ninja");
+                    //message.getMessageMap().put(i,"You hurt a ninja");
                 }
             }else{
-                message.getMessageMap().put(i,"You destroyed a square");
+                //message.getMessageMap().put(i,"You destroyed a square");
                 Board.getInstance().getSquares()[attackPosition[i].getI()][attackPosition[i].getJ()]=new Destroyed();
             }
             i++;

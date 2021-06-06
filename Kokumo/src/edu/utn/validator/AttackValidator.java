@@ -14,7 +14,7 @@ public class AttackValidator {
         if(true){
             ninja.setLifePoints(ninja.getLifePoints()/*-attackPoints[i]*/);
             String previousName= ninja.getName();
-            ninja.checkLifePoints();
+            //ninja.checkLifePoints();
             ninjaDead(ninja.getName(),previousName);
 
         }else{

@@ -7,7 +7,7 @@ import edu.utn.model.square.Empty;
 import edu.utn.model.square.NinjaTrap;
 import edu.utn.model.square.Stone;
 import edu.utn.model.square.Tree;
-import edu.utn.view.BoardView;
+import edu.utn.view.BoardPrinter;
 
 public class BoardFactory {
 
@@ -49,8 +49,8 @@ public class BoardFactory {
         }
     }
 
-    public BoardView createBoardView(){
+    public BoardPrinter createBoardView(){
 
-        return new BoardView();
+        return new BoardPrinter();
     }
 }

@@ -84,9 +84,9 @@ public class JsonModel {
         String msg3 = messages.getString(2);
         //libertad de mensajes
         Message message =new Message();
-        message.getMessageMap().put(201,msg1);
-        message.getMessageMap().put(202,msg2);
-        message.getMessageMap().put(203,msg3);
+        message.getMessageList().add(msg1);
+        message.getMessageList().add(msg2);
+        message.getMessageList().add(msg3);
 
         return message;
     }

@@ -1,12 +1,5 @@
 package edu.utn.model.ninja;
 
-
-import edu.utn.model.Board;
-import edu.utn.model.Player;
-import edu.utn.model.square.Destroyed;
-import edu.utn.message.Message;
-import edu.utn.validator.AttackValidator;
-
 import javax.json.Json;
 import javax.json.JsonObject;
 
@@ -85,14 +78,6 @@ public abstract class Ninja {
         this.movementCounter = movementCounter;
     }
 
-    private boolean ninjaDead(){
-        return isDead();
-    }
-    public void checkLifePoints(){
-        if(getLifePoints()<=0){
-            setDead(true);
-        }
-    }
 
     public JsonObject toJsonObject() {
         return Json.createObjectBuilder()

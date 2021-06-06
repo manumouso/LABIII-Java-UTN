@@ -1,10 +1,12 @@
 package edu.utn.view;
 
+import edu.utn.manager.GameManager;
+
 import java.util.Scanner;
 
-public class JoinRoom extends Stage{
+public class ClientRoom extends Stage{
     @Override
-    public void menu() {
+    public void menu(GameManager manager) {
         try {
 
             int option;

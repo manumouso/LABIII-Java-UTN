@@ -6,29 +6,38 @@ import edu.utn.model.ninja.Ninja;
 import edu.utn.model.ninja.NinjaPosition;
 
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+
 
 //pasarle LOS MENSAJES AL MANAGER
 public class MovementController {
 
-    private Map<Integer,String> message;
+    private List<String> standOnMessages;
+    private NinjaController ninjaController;
 
-    public Map<Integer, String> getMessage() {
-        if(message==null){
-            message= new HashMap<>();
+    public List<String> getStandOnMessages() {
+        if(standOnMessages==null){
+            standOnMessages=new ArrayList<>();
         }
-        return message;
+        return standOnMessages;
+    }
+
+    public NinjaController getNinjaController() {
+        if(ninjaController==null){
+            ninjaController=new NinjaController();
+        }
+        return ninjaController;
     }
 
     public void ninjaStandsOn(Ninja ninja){
         Board.getInstance().getSquares()[ninja.getNinjaPosition().getI()][ninja.getNinjaPosition().getJ()].setHasNinja(true);
         Board.getInstance().getSquares()[ninja.getNinjaPosition().getI()][ninja.getNinjaPosition().getJ()].ninjaStandsOn(ninja);
-        ninja.checkLifePoints();
+        getNinjaController().checkLifePoints(ninja);
         addStandOnMessages(Board.getInstance().getSquares()[ninja.getNinjaPosition().getI()][ninja.getNinjaPosition().getJ()].name());
     }
 
-    public NinjaPosition calculateNextPosition(Ninja ninja){
+    public NinjaPosition getNextPosition(Ninja ninja){
 
         return ninja.getNinjaPosition().next(ninja.getDirection());
     }
@@ -45,20 +54,21 @@ public class MovementController {
 
         switch (name){
             case "Empty":
-                getMessage().put(MessageType.EMPTY.getMessageNumber(), MessageType.EMPTY.getMessage());
+                getStandOnMessages().add(MessageType.EMPTY.getMessage());
                 break;
             case "Trap":
-                getMessage().put(MessageType.TRAP.getMessageNumber(), MessageType.TRAP.getMessage());
+                getStandOnMessages().add(MessageType.TRAP.getMessage());
                 break;
             case "Stone":
-                getMessage().put(MessageType.STONE.getMessageNumber(), MessageType.STONE.getMessage());
+                getStandOnMessages().add(MessageType.STONE.getMessage());
                 break;
             case "Tree":
-                getMessage().put(MessageType.TREE.getMessageNumber(), MessageType.TREE.getMessage());
+                getStandOnMessages().add(MessageType.TREE.getMessage());
                 break;
             default:
                 break;
         }
     }
+
 
 }

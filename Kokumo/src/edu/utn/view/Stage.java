@@ -1,6 +1,7 @@
 package edu.utn.view;
 
 
+import edu.utn.manager.GameManager;
 
 public abstract class Stage implements Menu {
 
@@ -12,7 +13,7 @@ public abstract class Stage implements Menu {
         System.out.println("     ======================================================================\n");
     }
 
-    public abstract void menu();
+    public abstract void menu(GameManager manager);
 
     @Override
     public void footer() {

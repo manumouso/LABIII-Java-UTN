@@ -1,18 +1,18 @@
 package edu.utn.message;
 
 
-import java.util.HashMap;
-
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Message {
 
-    private Map<Integer,String> messageMap;
+    private List<String> messageList;
 
-    public Map<Integer, String> getMessageMap() {
-        if(messageMap==null){
-            messageMap=new HashMap<>();
+
+    public List<String> getMessageList() {
+        if(messageList==null){
+            messageList=new ArrayList<>();
         }
-        return messageMap;
+        return messageList;
     }
 }

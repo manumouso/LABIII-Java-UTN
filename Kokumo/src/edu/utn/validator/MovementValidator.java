@@ -44,4 +44,5 @@ public class MovementValidator {
 
         return ninja.getName().equals(NinjaType.COMMANDER.getName());
     }
+
 }

@@ -8,7 +8,7 @@ import edu.utn.model.ninja.*;
 
 
 
-public class BoardView {
+public class BoardPrinter {
 
     //A LAS FUNCIONES QUE IMPRIMEN LOS TABLEROS LES TENGO QUE inyectar los ninja de alguna manera
     //tal vez validiendome de la funcion has ninja, tomo esos i,j, comparo contra la lista de ninjas del jugador
@@ -44,12 +44,6 @@ public class BoardView {
         System.out.println("\n");
     }
 
-    public void printMessages(GameManager gameManager){
-        for(String error: gameManager.getMessage().getMessageMap().values()){
-            System.out.println("\t\t     "+error);
-        }
-        System.out.println("\n");
-    }
 
     public void clearBoards(GameManager gameManager){
         gameManager.clearBoards();

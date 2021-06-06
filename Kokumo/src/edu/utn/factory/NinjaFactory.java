@@ -10,11 +10,11 @@ import java.util.List;
 public class NinjaFactory {
 
 
-    public Ninja createNinja(String name, int i, int j){
+    public Ninja createNinja(int i, int j, boolean commander){
 
         NinjaPosition position=createPosition(i,j);
 
-        if(name.equals(NinjaType.COMMANDER.getName())){
+        if(commander){
             return new NinjaCommander(NinjaType.COMMANDER.getName(),NinjaType.COMMANDER.getLifePoints(),NinjaType.COMMANDER.getAttackPoints(),position);
         }else{
             return new NinjaWarrior(NinjaType.WARRIOR.getName(),NinjaType.WARRIOR.getLifePoints(),NinjaType.WARRIOR.getAttackPoints(),position);

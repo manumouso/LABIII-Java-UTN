@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class PrimaryStage extends Stage{
     @Override
-    public void menu() {
+    public void menu(GameManager manager) {
 
         try {
 
@@ -33,9 +33,10 @@ public class PrimaryStage extends Stage{
                     }
                     case 1 -> {
                         GameManager gameManager = new GameManager();
-                        BoardView boardView = new BoardView();
-                        boardView.printAttackBoard();
-                        boardView.printBoard(/*new Player()*/);
+                        MessagePrinter messagePrinter = new MessagePrinter();
+                        BoardPrinter boardPrinter = new BoardPrinter();
+                        boardPrinter.printAttackBoard();
+                        boardPrinter.printBoard(/*new Player()*/);
 
 //                        boardView.advanceTest();
 //                        boardView.advanceTest2();
@@ -43,15 +44,15 @@ public class PrimaryStage extends Stage{
 //                        boardView.advanceTest4();
 //                        boardView.advanceTest5();
 //                        boardView.advanceTest6();
-                        boardView.printMessages(gameManager);
-                        boardView.clearBoards(gameManager);
+                        messagePrinter.printMessages(gameManager);
+                        boardPrinter.clearBoards(gameManager);
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
 
                     }
                     case 2 -> {
-                        JoinRoom joinRoom = new JoinRoom();
-                        joinRoom.menu();
+                        ClientRoom clientRoom = new ClientRoom();
+                        clientRoom.menu(manager);
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
                     }
