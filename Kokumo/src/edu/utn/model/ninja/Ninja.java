@@ -12,13 +12,14 @@ import javax.json.Json;
 import javax.json.JsonObject;
 
 
-public abstract class Ninja implements Movement,Attack {
+public abstract class Ninja {
 
     private String name;
     private int lifePoints;
     private int attackPoints;
     private NinjaPosition ninjaPosition;
     private Direction direction;
+    private boolean dead;
     private int movementCounter;
 
     public Ninja(String name, int lifePoints, int attackPoints, NinjaPosition ninjaPosition) {
@@ -26,10 +27,8 @@ public abstract class Ninja implements Movement,Attack {
         this.lifePoints = lifePoints;
         this.attackPoints=attackPoints;
         this.ninjaPosition = ninjaPosition;
-        Board.getInstance().getSquares()[ninjaPosition.getI()][ninjaPosition.getJ()].setHasNinja(true);
-        Board.getInstance().getSquares()[ninjaPosition.getI()][ninjaPosition.getJ()].ninjaStandsOn(this);
-        this.checkLifePoints();
-    }
+        this.dead= false;
+   }
 
     public String getName() {
         return name;
@@ -71,6 +70,14 @@ public abstract class Ninja implements Movement,Attack {
         return direction;
     }
 
+    public boolean isDead() {
+        return dead;
+    }
+
+    public void setDead(boolean dead) {
+        this.dead = dead;
+    }
+
     public int getMovementCounter() {
         return movementCounter;
     }
@@ -80,33 +87,14 @@ public abstract class Ninja implements Movement,Attack {
     }
 
     private boolean ninjaDead(){
-        return getName().equals("dead");
+        return isDead();
     }
     public void checkLifePoints(){
         if(getLifePoints()<=0){
-            setName("dead");
+            setDead(true);
         }
     }
 
-    @Override
-    public void move() {
-        if (!MovementValidator.ninjaDead(getName()) && !MovementValidator.tryingConsecutiveMove(getMovementCounter(),getName())) {
-            NinjaPosition current = getNinjaPosition();
-            NinjaPosition next = getNinjaPosition().next(getDirection());
-            if (MovementValidator.validPosition(next)) {
-                if (!MovementValidator.isDestroyed(next) && !MovementValidator.isOccupied(next)) {
-                    this.ninjaPosition = next;
-                    Board.getInstance().getSquares()[current.getI()][current.getJ()].setHasNinja(false);
-                    Board.getInstance().getSquares()[next.getI()][next.getJ()].setHasNinja(true);
-                    Board.getInstance().getSquares()[next.getI()][next.getJ()].ninjaStandsOn(this);
-                    this.checkLifePoints();
-                    //this.movementCounter++; por ahora COMENTADO, PORQUE NO DECIDI EL PUNTO DEL PROGRAMA
-                    //DONDE ESTE CONTADOR VUELVE A CERO, Y EVITA QUE SE HAGAN MOV CONSECUTIVOS
-                    //seguramente despues de atacar
-                }
-            }
-        }
-    }
     public JsonObject toJsonObject() {
         return Json.createObjectBuilder()
                 .add("ninjaName", this.name)
@@ -119,7 +107,7 @@ public abstract class Ninja implements Movement,Attack {
    //esto puede ir a un controller, y que el ataque del ninja sea llamar
    //a la construccion del objeto Json, empaquetar y mandarlo, y esto es la logica de negocio
    //que tengo que meter solo en server
-   @Override
+
    public void ninjaAttack(Player player){
        //probablemente estos los reciba por parametro
        // arrays y list representativos del body: que saco y meto en json(aca saco)
@@ -134,15 +122,15 @@ public abstract class Ninja implements Movement,Attack {
                 ninja.checkLifePoints();
                 if(ninjaDead()){
                     if(previousName.equals("NC")){
-                        message.getMessageList().add(i,"You WIN, killed: "+player.getName()+"'s ninja commander");
+                        message.getMessageMap().put(i,"You WIN, killed: "+player.getName()+"'s ninja commander");
                     }else{
-                        message.getMessageList().add(i,"You killed one: "+player.getName()+"'s ninja warrior");
+                        message.getMessageMap().put(i,"You killed one: "+player.getName()+"'s ninja warrior");
                     }
                 }else{
-                    message.getMessageList().add(i,"You hurt a ninja");
+                    message.getMessageMap().put(i,"You hurt a ninja");
                 }
             }else{
-                message.getMessageList().add(i,"You destroyed a square");
+                message.getMessageMap().put(i,"You destroyed a square");
                 Board.getInstance().getSquares()[attackPosition[i].getI()][attackPosition[i].getJ()]=new Destroyed();
             }
             i++;

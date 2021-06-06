@@ -1,5 +1,7 @@
 package edu.utn.view;
 
+import edu.utn.manager.GameConstants;
+import edu.utn.manager.GameManager;
 import edu.utn.model.AttackBoard;
 import edu.utn.model.Board;
 import edu.utn.model.Size;
@@ -16,9 +18,9 @@ public class BoardView {
 
     public void printBoard(/*Player player*/){
         System.out.println("\n\t\t\t\tNINJA BOARD\n");
-        for(int i=0;i< Size.MAX_ROW;i++){
+        for(int i = 0; i< GameConstants.MAX_ROW; i++){
             System.out.println("\t\t================================================================================");
-            for(int j=0; j< Size.MAX_COLUMN;j++){
+            for(int j=0; j< GameConstants.MAX_COLUMN;j++){
                 if(Board.getInstance().getSquares()[i][j].hasNinja()){
                     hasNinja(i,j/*,player*/);
                 }else{
@@ -32,9 +34,9 @@ public class BoardView {
     }
     public void printAttackBoard(){
         System.out.println("\n\t\t\t\tATTACK BOARD\n");
-        for(int i=0;i< Size.MAX_ROW;i++){
+        for(int i=0;i< GameConstants.MAX_ROW;i++){
             System.out.println("\t\t================================================================================");
-            for(int j=0; j< Size.MAX_COLUMN;j++){
+            for(int j=0; j< GameConstants.MAX_COLUMN;j++){
                 System.out.print("\t\t     "+AttackBoard.getInstance().getSquares()[i][j].name());
             }
             System.out.print("\n");
@@ -43,27 +45,15 @@ public class BoardView {
         System.out.println("\n");
     }
 
-    public void printMessages(){
-        for(String message:Board.getInstance().getMessages().getMessageList()){
-            System.out.println("\t\t     "+message);
-        }
-        System.out.println("\n");
-    }
-    public void printMovementErrors(){
-        for(String error: Board.getInstance().getMessages().getErrorMap().values()){
+    public void printMessages(GameManager gameManager){
+        for(String error: gameManager.getMessage().getMessageMap().values()){
             System.out.println("\t\t     "+error);
         }
         System.out.println("\n");
     }
 
-    public void cleanBoard(){
-        for(int i=0;i<Size.MAX_ROW;i++){
-            for(int j=0;j<Size.MAX_COLUMN;j++){
-                Board.getInstance().getSquares()[i][j].setHasNinja(false);
-            }
-        }
-        Board.getInstance().getMessages().getMessageList().clear();
-        Board.getInstance().getMessages().getErrorMap().clear();
+    public void clearBoards(GameManager gameManager){
+        gameManager.clearBoards();
     }
 
     private void hasNinja(int i,int j/*,Player player*/){
@@ -76,8 +66,10 @@ public class BoardView {
 //            }
 //        }
 
-        if(Board.getInstance().getSquares()[i][j].name().equals("Trap") || Board.getInstance().getSquares()[i][j].name().equals("Empty")) {
-            System.out.print("\t\t     **"+" "+ninja.getName());
+        if(isTrap(i,j)) {
+            System.out.print("\t\t     **" + " " + ninja.getName());
+        }else if(isEmpty(i,j)){
+            System.out.print("\t\t       " + " " + ninja.getName());
         }else{
             System.out.print("\t\t  "+Board.getInstance().getSquares()[i][j].name()+" "+ninja.getName());
         }
@@ -85,12 +77,22 @@ public class BoardView {
     }
 
     private void noNinja(int i, int j){
-        if(Board.getInstance().getSquares()[i][j].name().equals("Trap") || Board.getInstance().getSquares()[i][j].name().equals("Empty")) {
+        if(isTrap(i,j) || isEmpty(i,j)) {
             System.out.print("\t\t     *****");
         }else{
             System.out.print("\t\t     "+Board.getInstance().getSquares()[i][j].name());
 
         }
+    }
+
+    private boolean isTrap(int i, int j){
+
+        return Board.getInstance().getSquares()[i][j].name().equals("Trap");
+    }
+
+    private boolean isEmpty(int i, int j){
+
+        return Board.getInstance().getSquares()[i][j].name().equals("Empty");
     }
 
 //estas pruebas vuelan

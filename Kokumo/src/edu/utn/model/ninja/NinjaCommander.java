@@ -8,8 +8,4 @@ public class NinjaCommander extends Ninja{
         super(name, lifePoints, attackPoints, ninjaPosition);
     }
 
-    @Override
-    public String attackName() {
-        return "Commander Attack";
-    }
 }

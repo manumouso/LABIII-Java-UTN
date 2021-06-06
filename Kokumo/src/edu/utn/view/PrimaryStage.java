@@ -1,5 +1,8 @@
 package edu.utn.view;
 
+
+import edu.utn.manager.GameManager;
+
 import java.util.Scanner;
 
 public class PrimaryStage extends Stage{
@@ -29,6 +32,7 @@ public class PrimaryStage extends Stage{
                         super.footer();
                     }
                     case 1 -> {
+                        GameManager gameManager = new GameManager();
                         BoardView boardView = new BoardView();
                         boardView.printAttackBoard();
                         boardView.printBoard(/*new Player()*/);
@@ -39,9 +43,8 @@ public class PrimaryStage extends Stage{
 //                        boardView.advanceTest4();
 //                        boardView.advanceTest5();
 //                        boardView.advanceTest6();
-                        boardView.printMessages();
-                        boardView.printMovementErrors();
-                        boardView.cleanBoard();
+                        boardView.printMessages(gameManager);
+                        boardView.clearBoards(gameManager);
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
 

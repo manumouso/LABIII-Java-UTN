@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Introduction {
 
-    public static void print(){
+    public void print(){
 
         System.out.println("\n     ======================================================================\n");
         System.out.println("\t\t\t My face may have changed,");

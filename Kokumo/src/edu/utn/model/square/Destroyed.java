@@ -12,6 +12,6 @@ public class Destroyed extends Land{
 
     @Override
     public String name() {
-        return "Destroyed";
+        return SquareType.DESTROYED.getName();
     }
 }

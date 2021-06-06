@@ -1,20 +1,18 @@
 package edu.utn.model.square;
 
-
-import edu.utn.model.Board;
+import edu.utn.manager.GameConstants;
 import edu.utn.model.ninja.Ninja;
 
 public class NinjaTrap extends Land {
 
     @Override
     public void ninjaStandsOn(Ninja ninja) {
-        ninja.setLifePoints(ninja.getLifePoints()-1);
-        Board.getInstance().getMessages().getMessageList().add("Oh you stepped on a trap, your ninja lose 1 life point. Ninja name: "+ ninja.getName()+" Life points: "+ninja.getLifePoints());
+        ninja.setLifePoints(ninja.getLifePoints()- GameConstants.TRAP_HIT_POINTS);
     }
 
     @Override
     public String name() {
-        return "Trap";
+        return SquareType.NINJA_TRAP.getName();
     }
 
 

@@ -5,20 +5,23 @@ import edu.utn.model.square.Empty;
 import edu.utn.model.square.Square;
 import edu.utn.message.Message;
 
+import java.util.ArrayList;
+import java.util.List;
+
 //SINGLETON
 public class AttackBoard implements Size {
 
     private static AttackBoard attackBoardInstance;
     private Square[][] squares;
-    private Message messages;
+    private List<String> messages;
 
     public Square[][] getSquares() {
         return squares;
     }
 
-    public Message getMessages() {
-        if(messages==null){
-            messages= new Message();
+    public List<String> getMessages() {
+        if(messages == null){
+            messages=new ArrayList<>();
         }
         return messages;
     }

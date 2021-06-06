@@ -18,7 +18,7 @@ public class AttackValidator {
             ninjaDead(ninja.getName(),previousName);
 
         }else{
-            Board.getInstance().getMessages().getMessageList().add("You destroyed a square");
+            Board.getInstance().getMessages().add("You destroyed a square");
             //Board.getInstance().getSquares()[attackPosition[i].getI()][attackPosition[i].getJ()]=new Destroyed();
 
         }
@@ -28,12 +28,12 @@ public class AttackValidator {
     public static void ninjaDead(String name, String previousName){
         if(name.equals("dead")){
             if(previousName.equals("NC")){
-                Board.getInstance().getMessages().getMessageList().add("You Killed the ninja commander. WINNER");
+                Board.getInstance().getMessages().add("You Killed the ninja commander.");
             }else{
-                Board.getInstance().getMessages().getMessageList().add("You Killed a ninja warrior");
+                Board.getInstance().getMessages().add("You Killed a ninja warrior");
             }
         }else{
-            Board.getInstance().getMessages().getMessageList().add("You hurt a ninja");
+            Board.getInstance().getMessages().add("You hurt a ninja");
         }
     }
 }
