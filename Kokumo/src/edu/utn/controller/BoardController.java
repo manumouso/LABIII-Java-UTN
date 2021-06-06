@@ -14,7 +14,6 @@ public class BoardController {
                 AttackBoard.getInstance().getSquares()[i][j]=new Empty();
             }
         }
-        Board.getInstance().getMessages().clear();
-        AttackBoard.getInstance().getMessages().clear();
+
     }
 }

@@ -1,6 +1,6 @@
 package edu.utn.controller;
 
-import edu.utn.message.MessageType;
+import edu.utn.enums.MessageType;
 import edu.utn.model.Board;
 import edu.utn.model.ninja.Ninja;
 import edu.utn.model.ninja.NinjaPosition;
@@ -41,7 +41,7 @@ public class MovementController {
         //seguramente despues de atacar
     }
 
-    public void addStandOnMessages(String name){
+    private void addStandOnMessages(String name){
 
         switch (name){
             case "Empty":

@@ -1,4 +1,4 @@
-package edu.utn.model.ninja;
+package edu.utn.enums;
 
 public enum NinjaType {
 

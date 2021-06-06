@@ -1,4 +1,4 @@
-package edu.utn.model.square;
+package edu.utn.enums;
 
 public enum SquareType {
 

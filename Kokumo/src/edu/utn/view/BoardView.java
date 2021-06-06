@@ -4,7 +4,6 @@ import edu.utn.manager.GameConstants;
 import edu.utn.manager.GameManager;
 import edu.utn.model.AttackBoard;
 import edu.utn.model.Board;
-import edu.utn.model.Size;
 import edu.utn.model.ninja.*;
 
 

@@ -1,6 +1,7 @@
 package edu.utn.model.square;
 
 
+import edu.utn.enums.SquareType;
 import edu.utn.manager.GameConstants;
 import edu.utn.model.ninja.Ninja;
 

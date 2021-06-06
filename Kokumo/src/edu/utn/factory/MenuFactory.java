@@ -31,10 +31,4 @@ public class MenuFactory {
 
     }
 
-    public void startGame(MenuFactory menuFactory){
-        Introduction intro = menuFactory.createIntro();
-        intro.print();
-        PrimaryStage primaryStage = menuFactory.createPrimaryStage();
-        primaryStage.menu();
-    }
 }

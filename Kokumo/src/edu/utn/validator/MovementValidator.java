@@ -3,8 +3,8 @@ package edu.utn.validator;
 import edu.utn.manager.GameConstants;
 import edu.utn.model.Board;
 import edu.utn.model.ninja.Ninja;
-import edu.utn.model.ninja.NinjaType;
-import edu.utn.model.square.SquareType;
+import edu.utn.enums.NinjaType;
+import edu.utn.enums.SquareType;
 
 import java.util.List;
 

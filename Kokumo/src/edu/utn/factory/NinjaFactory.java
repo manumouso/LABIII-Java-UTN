@@ -1,5 +1,6 @@
 package edu.utn.factory;
 
+import edu.utn.enums.NinjaType;
 import edu.utn.model.ninja.*;
 
 import java.util.ArrayList;

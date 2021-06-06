@@ -1,4 +1,4 @@
-package edu.utn.message;
+package edu.utn.enums;
 
 public enum MessageType {
 
