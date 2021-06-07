@@ -17,8 +17,8 @@ public class PrimaryStage extends Stage{
 
                 super.header();
                 System.out.println("\n\t\t\t\tMAIN MENU");
-                System.out.println("\n\t\t\t[1].CREATE GAME");
-                System.out.println("\t\t\t[2].JOIN GAME");
+                System.out.println("\n\t\t\t[1].CREATE GAME-SERVER");
+                System.out.println("\t\t\t[2].JOIN GAME-CLIENT");
                 System.out.println("\t\t\t[0].QUIT GAME");
                 System.out.print("\n\t\t\tSelect an option-> ");
                 Scanner scanner =new Scanner(System.in);
@@ -32,27 +32,13 @@ public class PrimaryStage extends Stage{
                         super.footer();
                     }
                     case 1 -> {
-                        GameManager gameManager = new GameManager();
-                        MessagePrinter messagePrinter = new MessagePrinter();
-                        BoardPrinter boardPrinter = new BoardPrinter();
-                        boardPrinter.printAttackBoard();
-                        //boardPrinter.printBoard(new Player());
-
-//                        boardView.advanceTest();
-//                        boardView.advanceTest2();
-//                        boardView.advanceTest3();
-//                        boardView.advanceTest4();
-//                        boardView.advanceTest5();
-//                        boardView.advanceTest6();
-                        //messagePrinter.printMessages(manager.getMessage().getMessageList());
-                        boardPrinter.clearBoards(gameManager);
+                        manager.toServerRoom();
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
 
                     }
                     case 2 -> {
-                        ClientRoom clientRoom = new ClientRoom();
-                        clientRoom.menu(manager);
+                        manager.toClientRoom();
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
                     }

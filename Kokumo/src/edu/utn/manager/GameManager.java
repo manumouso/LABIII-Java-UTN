@@ -1,10 +1,13 @@
 package edu.utn.manager;
 
+import edu.utn.connection.server.Server;
 import edu.utn.controller.BoardController;
 import edu.utn.controller.MovementController;
 import edu.utn.controller.NinjaController;
 import edu.utn.controller.PlayerController;
+import edu.utn.enums.NetworkType;
 import edu.utn.factory.MenuFactory;
+import edu.utn.factory.NetworkFactory;
 import edu.utn.factory.NinjaFactory;
 import edu.utn.factory.PlayerFactory;
 import edu.utn.message.Message;
@@ -14,15 +17,15 @@ import edu.utn.model.ninja.Direction;
 import edu.utn.model.ninja.Ninja;
 import edu.utn.model.ninja.NinjaPosition;
 import edu.utn.validator.MovementValidator;
-import edu.utn.view.BoardPrinter;
-import edu.utn.view.Introduction;
-import edu.utn.view.MessagePrinter;
-import edu.utn.view.PrimaryStage;
+import edu.utn.validator.NetworkValidator;
+import edu.utn.view.*;
 
 import java.util.List;
 
 public class GameManager {
 
+    private Server server;
+    private NetworkFactory networkFactory;
     private BoardController boardController;
     private BoardPrinter boardPrinter;
     private MessagePrinter messagePrinter;
@@ -35,6 +38,21 @@ public class GameManager {
     private MenuFactory menuFactory;
     private Message message;
 
+
+    public Server getServer() {
+        return server;
+    }
+
+    public void setServer(Server server) {
+        this.server = server;
+    }
+
+    public NetworkFactory getNetworkFactory() {
+        if(networkFactory==null){
+            networkFactory=new NetworkFactory();
+        }
+        return networkFactory;
+    }
 
     private BoardController getBoardController() {
         if(boardController==null){
@@ -124,6 +142,49 @@ public class GameManager {
         intro.print();
         PrimaryStage primaryStage = menuFactory.createPrimaryStage();
         primaryStage.menu(this);
+    }
+
+    public void toServerRoom(){
+        ServerRoom serverRoom = menuFactory.createServerRoom();
+        serverRoom.menu(this);
+    }
+
+    public Server createServer(String IP, int port){
+        NetworkFactory networkFactory = getNetworkFactory();
+        if(validIP(IP)){
+            if(validPort(port)){
+                Server server =networkFactory.createServer(IP,port);
+                getMessage().getMessageList().add(NetworkType.SERVER.getMessage());
+                return server;
+            }
+        }
+        return null;
+    }
+
+    private boolean validIP(String IP){
+        if(NetworkValidator.validIP(IP)){
+            return true;
+        }
+        getMessage().getMessageList().add(NetworkType.IP.getMessage());
+        return false;
+    }
+
+    private boolean validPort(int port){
+        if(NetworkValidator.validPort(port)){
+            return true;
+        }
+        getMessage().getMessageList().add(NetworkType.PORT.getMessage());
+        return false;
+    }
+
+    public void toClientRoom(){
+        ClientRoom clientRoom = menuFactory.createClientRoom();
+        clientRoom.menu(this);
+    }
+
+    public void toPlayerRoom(){
+        PlayerRoom playerRoom= menuFactory.createPlayerRoom();
+        playerRoom.menu(this);
     }
 
     public void printMessages(){

@@ -34,7 +34,7 @@ public class PlayerRoom extends Stage{
                 System.out.println("\n\t\t\t[1].ENTER NAME");
                 System.out.println("\t\t\t[2].PLACE YOUR NINJAS");
                 System.out.println("\t\t\t[3].VIEW NINJAS BOARD");
-                System.out.println("\t\t\t[0].QUIT GAME");
+                System.out.println("\t\t\t[0].GO BACK");
                 System.out.print("\n\t\t\tSelect an option-> ");
                 Scanner scanner =new Scanner(System.in);
                 String number = scanner.next();
@@ -43,8 +43,8 @@ public class PlayerRoom extends Stage{
                 switch (option) {
                     case 0 -> {
                         System.out.println("\n");
-                        System.out.println("\t\t\tBye Ninja. ( ^_^)/\n");
-                        super.footer();
+                        System.out.println("\t\t\tTo the Main Menu. ( ^_^)/\n");
+
                     }
                     case 1 -> {
                         System.out.print("\t\t\tEnter your name-> ");
@@ -66,17 +66,14 @@ public class PlayerRoom extends Stage{
                             manager.addNinjaToPlayer(ninja);
                             ninjaCreated();
                             System.out.println("\t\t\tNinjas placed correctly");
-                            System.out.print("\t\t\tEnter a character to continue-> ");
-                            scanner.next();
                         }else{
                             System.out.println("\t\t\tYou already placed the ninjas correctly");
-                            System.out.print("\t\t\tEnter a character to continue-> ");
-                            scanner.next();
                         }
+                        System.out.print("\t\t\tEnter a character to continue-> ");
+                        scanner.next();
                     }
                     case 3 -> {
                         manager.printBoard(true);
-
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
                     }

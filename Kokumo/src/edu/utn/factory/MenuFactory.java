@@ -1,7 +1,6 @@
 package edu.utn.factory;
 
-import edu.utn.view.Introduction;
-import edu.utn.view.PrimaryStage;
+import edu.utn.view.*;
 
 public class MenuFactory {
 
@@ -15,20 +14,24 @@ public class MenuFactory {
         return new PrimaryStage();
     }
 
-    public void createJoinRoom(){
+    public ServerRoom createServerRoom(){
 
+        return new ServerRoom();
     }
 
-    public void createServerRoom(){
+    public ClientRoom createClientRoom(){
 
+        return new ClientRoom();
     }
 
-    public void createInputRoom(){
+    public PlayerRoom createPlayerRoom(){
 
+        return new PlayerRoom();
     }
 
-    public void createGameRoom(){
+    public GameRoom createGameRoom(){
 
+        return new GameRoom();
     }
 
 }

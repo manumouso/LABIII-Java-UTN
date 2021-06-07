@@ -2,6 +2,7 @@ package edu.utn;
 
 
 import edu.utn.manager.GameManager;
+import edu.utn.validator.NetworkValidator;
 
 
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) {
+
 
         GameManager manager= new GameManager();
         manager.startGame();
