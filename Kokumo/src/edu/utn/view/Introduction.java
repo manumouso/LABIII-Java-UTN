@@ -15,9 +15,9 @@ public class Introduction {
         System.out.println("\t\t\t a difficult path awaits you,");
         System.out.println("\t\t\t if fate wants it, we will see each other again");
         System.out.println("\n");
-        System.out.print("\t\t\t Enter a character to continue-> ");
+        System.out.print("\t\t\t Enter to continue-> ");
         Scanner scanner =new Scanner(System.in);
-        scanner.next();
+        scanner.nextLine();
 
     }
 }
