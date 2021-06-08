@@ -17,8 +17,8 @@ public class PrimaryStage extends Stage{
 
                 super.header();
                 System.out.println("\n\t\t\t\tMAIN MENU");
-                System.out.println("\n\t\t\t[1].CREATE GAME-SERVER");
-                System.out.println("\t\t\t[2].JOIN GAME-CLIENT");
+                System.out.println("\n\t\t\t[1].SERVER MODE");
+                System.out.println("\t\t\t[2].CLIENT MODE");
                 System.out.println("\t\t\t[0].QUIT GAME");
                 System.out.print("\n\t\t\tSelect an option-> ");
                 Scanner scanner =new Scanner(System.in);
