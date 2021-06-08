@@ -6,6 +6,16 @@ import java.util.Scanner;
 
 public class ServerRoom extends Stage{
 
+    public static boolean response;
+
+    public static synchronized boolean isResponse() {
+        return response;
+    }
+
+    public static synchronized void setResponse(boolean response) {
+        ServerRoom.response = response;
+    }
+
     private boolean serverWasCreated;
 
     public boolean serverWasCreated() {
@@ -14,6 +24,16 @@ public class ServerRoom extends Stage{
 
     public void setServerWasCreated(boolean serverWasCreated) {
         this.serverWasCreated = serverWasCreated;
+    }
+
+    private boolean running;
+
+    public boolean isRunning() {
+        return running;
+    }
+
+    public void setRunning(boolean running) {
+        this.running = running;
     }
 
     @Override
@@ -39,11 +59,11 @@ public class ServerRoom extends Stage{
                 switch (option) {
                     case 0 -> {
                         if(serverWasCreated()){
-                            //manager.stopService... LLAMO A LA FUNCION QUE HARA EL STOP SERVER
+                           manager.closeConnection();
                         }
                         System.out.println("\n");
-                        System.out.println("\t\t\tBye Ninja. ( ^_^)/\n");
-                        super.footer();
+                        System.out.print("\t\t\tEnter a character to continue-> ");
+                        scanner.next();
                     }
                     case 1 -> {
                         if(!serverWasCreated()){
@@ -60,11 +80,12 @@ public class ServerRoom extends Stage{
                                     setServerWasCreated(true);
                                 }
                                 manager.printMessages();
+                                manager.clearMessages();
                             }catch (NumberFormatException e){
-                                System.out.println("Port must be a number");
+                                System.out.println("\t\t\tPort must be a number");
                             }
                         }else{
-                            System.out.println("you have already created the server");
+                            System.out.println("\t\t\tyou have already created the server");
                         }
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
@@ -85,15 +106,20 @@ public class ServerRoom extends Stage{
                     }
                     case 4 -> {
                         if(serverWasCreated()){
-                            //manager.startService... LLAMO A UNA FUNCION QUE HARA START SERVER
-                            //MANDO AL PLAYER MENU PARA cree jugador y ninjas
+                            if(!isRunning()){
+                                manager.startConnection();
+                            }
+                            while(!isResponse()){}
+                            System.out.println("\t\t\tConnected to the client");
+                            manager.toPlayerRoom();
+
                         }
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
                     }
                     default -> {
                         System.out.println("\n");
-                        System.out.println("\t\t\tEnter a valid number [1,2]");
+                        System.out.println("\t\t\tEnter a valid number [1,2,3,4]");
                         System.out.println("\t\t\t[0]->Quit Game");
                         System.out.println("\n");
                         System.out.print("\t\t\tEnter a character to continue-> ");

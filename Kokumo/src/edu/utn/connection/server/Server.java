@@ -35,13 +35,22 @@ public class Server {
     }
 
     public void startConnection() throws IOException {
-        getServer().createContext("/attack",new Attack());
-        getServer().createContext("/move",new Move());
-        getServer().setExecutor(null);
-        getServer().start();
+        try {
+            getServer().createContext("/attack",new Attack());
+            getServer().createContext("/move",new Move());
+            getServer().setExecutor(null);
+            getServer().start();
+
+        }catch (IOException e){
+            System.out.println("IO Exception: "+e.getMessage());
+        }catch (Exception e){
+            System.out.println("Exception: "+e.getMessage());
+        }
     }
     public void closeConnection() throws IOException {
-        getServer().stop(60);
+        if(getServer()!=null){
+            getServer().stop(0);
+        }
     }
 
 }

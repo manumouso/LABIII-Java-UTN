@@ -1,7 +1,8 @@
 package edu.utn.model;
 
-import edu.utn.factory.BoardFactory;
+
 import edu.utn.manager.GameConstants;
+import edu.utn.model.square.Empty;
 import edu.utn.model.square.Square;
 
 //SINGLETON
@@ -16,8 +17,7 @@ public class AttackBoard{
 
     private AttackBoard(){
         squares=new Square[GameConstants.MAX_ROW][GameConstants.MAX_COLUMN];
-        BoardFactory boardFactory = new BoardFactory();
-        boardFactory.generateAttackBoard();
+        generateAttackBoard();
     }
 
     public static AttackBoard getInstance(){
@@ -25,6 +25,16 @@ public class AttackBoard{
             attackBoardInstance = new AttackBoard();
         }
         return attackBoardInstance;
+    }
+
+
+    public void generateAttackBoard(){
+
+        for(int i = 0; i< GameConstants.MAX_ROW; i++){
+            for(int j=0;j<GameConstants.MAX_COLUMN;j++){
+                squares[i][j]=new Empty();
+            }
+        }
     }
 
 }

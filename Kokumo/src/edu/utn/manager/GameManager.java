@@ -20,6 +20,7 @@ import edu.utn.validator.MovementValidator;
 import edu.utn.validator.NetworkValidator;
 import edu.utn.view.*;
 
+import java.io.IOException;
 import java.util.List;
 
 public class GameManager {
@@ -75,7 +76,7 @@ public class GameManager {
         return messagePrinter;
     }
 
-    private Player getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
@@ -161,6 +162,14 @@ public class GameManager {
         return null;
     }
 
+    public void startConnection() throws IOException {
+        getServer().startConnection();
+    }
+
+    public void closeConnection() throws IOException {
+        getServer().closeConnection();
+    }
+
     private boolean validIP(String IP){
         if(NetworkValidator.validIP(IP)){
             return true;
@@ -190,6 +199,11 @@ public class GameManager {
     public void printMessages(){
         MessagePrinter messagePrinter=getMessagePrinter();
         messagePrinter.printMessages(getMessage().getMessageList());
+    }
+
+    public void clearMessages(){
+        MessagePrinter messagePrinter = getMessagePrinter();
+        messagePrinter.clearMessages(getMessage().getMessageList());
     }
 
     public void printBoard(boolean playersBoard){

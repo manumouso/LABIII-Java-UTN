@@ -2,6 +2,7 @@ package edu.utn.view;
 
 import edu.utn.manager.GameConstants;
 import edu.utn.manager.GameManager;
+import edu.utn.model.Board;
 import edu.utn.model.ninja.Ninja;
 
 
@@ -25,7 +26,10 @@ public class PlayerRoom extends Stage{
         try {
 
             int option;
-            manager.setPlayer(manager.createPlayer());
+            if(manager.getPlayer()==null){
+                manager.setPlayer(manager.createPlayer());
+            }
+
             do
             {
 
@@ -112,7 +116,7 @@ public class PlayerRoom extends Stage{
                     wrongPosition=false;
                 }
                 manager.printMessages();
-
+                manager.clearMessages();
             }catch (NumberFormatException e){
                 System.out.println("\t\t\tRemember only numbers allowed.");
                 System.out.println("\t\t\tTry again!!!");
