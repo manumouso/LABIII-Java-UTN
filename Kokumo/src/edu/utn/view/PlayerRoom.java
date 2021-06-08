@@ -47,7 +47,7 @@ public class PlayerRoom extends Stage{
                 switch (option) {
                     case 0 -> {
                         System.out.println("\n");
-                        System.out.println("\t\t\tTo the Main Menu. ( ^_^)/\n");
+                        System.out.println("\t\t\tTo the Server Menu. ( ^_^)/\n");
 
                     }
                     case 1 -> {

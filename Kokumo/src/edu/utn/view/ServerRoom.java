@@ -108,6 +108,7 @@ public class ServerRoom extends Stage{
                         if(serverWasCreated()){
                             if(!isRunning()){
                                 manager.startConnection();
+                                setRunning(true);
                             }
                             while(!isResponse()){}
                             System.out.println("\t\t\tConnected to the client");
