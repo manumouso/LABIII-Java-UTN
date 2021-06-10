@@ -117,14 +117,14 @@ public class GameRoom extends Stage{
 
             Scanner scanner = new Scanner(System.in);
             System.out.println("\t\t\tNINJA DIRECTIONS (case insensitive):");
-            System.out.println("\t\t\t[N]= NORTH");
-            System.out.println("\t\t\t[NE]= NORTH EAST");
-            System.out.println("\t\t\t[NW]= NORTH WEST");
-            System.out.println("\t\t\t[S]=SOUTH");
-            System.out.println("\t\t\t[SE]= SOUTH EAST");
-            System.out.println("\t\t\t[SW]= SOUTH WEST");
-            System.out.println("\t\t\t[E]= EAST");
-            System.out.println("\t\t\t[W]= WEST");
+            System.out.println("\t\t\t[N]=[NORTH]");
+            System.out.println("\t\t\t[NE]=[NORTH EAST]");
+            System.out.println("\t\t\t[NW]=[NORTH WEST]");
+            System.out.println("\t\t\t[S]=[SOUTH]");
+            System.out.println("\t\t\t[SE]=[SOUTH EAST]");
+            System.out.println("\t\t\t[SW]=[SOUTH WEST]");
+            System.out.println("\t\t\t[E]=[EAST]");
+            System.out.println("\t\t\t[W]=[WEST]");
             System.out.println(" ");
             Map<String, Direction> directionMap = manager.getDirectionsMap();
 
