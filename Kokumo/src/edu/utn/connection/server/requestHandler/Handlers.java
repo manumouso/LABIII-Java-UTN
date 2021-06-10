@@ -5,7 +5,7 @@ import edu.utn.manager.ServiceManager;
 
 public abstract class Handlers implements HttpHandler {
 
-    public ServiceManager service;
+    protected ServiceManager service;
 
 
     public Handlers() {

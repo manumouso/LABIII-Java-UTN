@@ -27,7 +27,7 @@ public abstract class Stage implements View {
         System.out.println("\t\t\t*Email: manumouso91@gmail.com\n");
         System.out.println("\t\t\t*Subjects: PROG/LAB III\n");
         System.out.println("\t\t\t*Career: TSSI-UTN-FRBA\n");
-        System.out.println("\t\t\t*Date: 27/5/2021\n");
+        System.out.println("\t\t\t*Date: 10/6/2021\n");
         System.out.println("     ***********************************************************************/\n");
     }
 

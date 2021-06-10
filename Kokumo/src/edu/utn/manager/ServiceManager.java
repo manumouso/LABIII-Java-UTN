@@ -23,7 +23,7 @@ public class ServiceManager {
 
     private boolean externalMessage;
 
-    public synchronized boolean isExternalMessage() {
+    public synchronized boolean externalMessageArrived() {
         return externalMessage;
     }
 

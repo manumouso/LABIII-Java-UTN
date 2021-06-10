@@ -118,12 +118,14 @@ public class ServerRoom extends Stage{
                 manager.clearMessages();
             }catch (NumberFormatException e){
                 System.out.println("\t\t\tPort must be a number");
+            }catch (Exception e){
+                System.out.println("Exception: "+ e.getMessage());
             }
         }else{
             System.out.println("\t\t\tyou have already created the server");
 
         }
-        if(!manager.isRunning()){
+        if(manager.serverWasCreated() && !manager.isRunning()){
             manager.startConnection();
             manager.setRunning(true);
             System.out.println("\t\t\tServer Running at IP: "+manager.getServiceManager().getServer().getIP()+" and port: "+manager.getServiceManager().getServer().getPort());
@@ -133,7 +135,7 @@ public class ServerRoom extends Stage{
     private boolean waitToProceed(GameManager manager){
         if(!manager.connectedClient()){
             if(manager.serverWasCreated() && manager.isRunning()){
-                while(!manager.getServiceManager().isExternalMessage()){}
+                while(!manager.getServiceManager().externalMessageArrived()){}
                 manager.setConnectedClient(true);
                 System.out.println("\t\t\tConnected to the client");
             }else{
