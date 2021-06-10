@@ -2,6 +2,7 @@ package edu.utn.connection.server.requestHandler;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import edu.utn.manager.GameManager;
 import edu.utn.model.ninja.Ninja;
 import edu.utn.model.ninja.NinjaCommander;
 import edu.utn.model.ninja.NinjaPosition;
@@ -42,7 +43,7 @@ public class Attack implements HttpHandler {
             JsonObject res;
 
 
-            ServerRoom.setResponse(true);
+           GameManager.setResponse(true);
             //hardcode ninja
             Ninja ninja = new NinjaCommander("comandante",50,10,new NinjaPosition(1,1));
             try {

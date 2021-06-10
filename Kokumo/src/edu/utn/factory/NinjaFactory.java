@@ -4,20 +4,22 @@ import edu.utn.enums.NinjaType;
 import edu.utn.model.ninja.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class NinjaFactory {
 
 
-    public Ninja createNinja(int i, int j, boolean commander){
+    public Ninja createNinja(int i, int j, boolean commander,int m){
 
         NinjaPosition position=createPosition(i,j);
 
         if(commander){
             return new NinjaCommander(NinjaType.COMMANDER.getName(),NinjaType.COMMANDER.getLifePoints(),NinjaType.COMMANDER.getAttackPoints(),position);
         }else{
-            return new NinjaWarrior(NinjaType.WARRIOR.getName(),NinjaType.WARRIOR.getLifePoints(),NinjaType.WARRIOR.getAttackPoints(),position);
+            return new NinjaWarrior(NinjaType.WARRIOR.getName()+m,NinjaType.WARRIOR.getLifePoints(),NinjaType.WARRIOR.getAttackPoints(),position);
         }
 
     }
@@ -37,4 +39,16 @@ public class NinjaFactory {
         return ninjas;
     }
 
+    public Map<String,Direction> createDirectionMap(){
+        Map<String,Direction> directionMap = new HashMap<>();
+        directionMap.put("N",Direction.getNorth());
+        directionMap.put("NE",Direction.getNorthEast());
+        directionMap.put("NW",Direction.getNorthWest());
+        directionMap.put("S",Direction.getSouth());
+        directionMap.put("SE",Direction.getSouthEast());
+        directionMap.put("SW",Direction.getSouthWest());
+        directionMap.put("E",Direction.getEast());
+        directionMap.put("W",Direction.getWest());
+        return directionMap;
+    }
 }

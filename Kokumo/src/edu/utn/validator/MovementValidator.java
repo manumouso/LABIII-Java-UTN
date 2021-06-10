@@ -2,6 +2,7 @@ package edu.utn.validator;
 
 import edu.utn.manager.GameConstants;
 import edu.utn.model.Board;
+import edu.utn.model.Player;
 import edu.utn.model.ninja.Ninja;
 import edu.utn.enums.NinjaType;
 import edu.utn.enums.SquareType;
@@ -10,15 +11,6 @@ import java.util.List;
 
 public class MovementValidator {
 
-    public static boolean ninjaCommanderAlive(List<Ninja> ninjas){
-        int commander=0;
-        for(Ninja ninja:ninjas){
-            if(isCommander(ninja)){
-                commander++;
-            }
-        }
-        return commander==1;
-    }
 
     public static boolean withinLimitsBoard(int i,int j){
 
@@ -44,5 +36,11 @@ public class MovementValidator {
 
         return ninja.getName().equals(NinjaType.COMMANDER.getName());
     }
+
+    public static boolean commanderDead(Player player){
+
+        return player.getNinjas().get(0).isDead();
+    }
+
 
 }

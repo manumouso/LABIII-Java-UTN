@@ -22,10 +22,12 @@ import edu.utn.view.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public class GameManager {
 
     private Server server;
+    public static boolean response;
     private NetworkFactory networkFactory;
     private BoardController boardController;
     private BoardPrinter boardPrinter;
@@ -38,6 +40,7 @@ public class GameManager {
     private NinjaController ninjaController;
     private MenuFactory menuFactory;
     private Message message;
+    private Map<String, Direction> directionsMap;
 
 
     public Server getServer() {
@@ -46,6 +49,14 @@ public class GameManager {
 
     public void setServer(Server server) {
         this.server = server;
+    }
+
+    public static synchronized boolean isResponse() {
+        return response;
+    }
+
+    public static synchronized void setResponse(boolean response) {
+        GameManager.response = response;
     }
 
     public NetworkFactory getNetworkFactory() {
@@ -137,6 +148,13 @@ public class GameManager {
         getMessage().getMessageList().addAll(messages);
     }
 
+    public Map<String, Direction> getDirectionsMap() {
+        if(directionsMap== null){
+            directionsMap=getNinjaFactory().createDirectionMap();
+        }
+        return directionsMap;
+    }
+
     public void startGame(){
         MenuFactory menuFactory= getMenuFactory();
         Introduction intro = menuFactory.createIntro();
@@ -168,6 +186,11 @@ public class GameManager {
 
     public void closeConnection() throws IOException {
         getServer().closeConnection();
+    }
+
+    public void toGameRoom(){
+        GameRoom gameRoom = menuFactory.createGameRoom();
+        gameRoom.menu(this);
     }
 
     private boolean validIP(String IP){
@@ -235,14 +258,15 @@ public class GameManager {
 
     }
 
-    public Ninja createNinja(int i,int j,boolean commander){
+    public Ninja createNinja(int i,int j,boolean commander,int m){
         if(withinLimits(i,j,true)){
             if(freeSquare(i,j)){
                 NinjaFactory ninjaFactory = getNinjaFactory();
-                Ninja ninja =ninjaFactory.createNinja(i,j,commander);
+                Ninja ninja =ninjaFactory.createNinja(i,j,commander,m);
                 MovementController movementController = getMovementController();
                 movementController.ninjaStandsOn(ninja);
                 addAll(movementController.getStandOnMessages());
+                movementController.getStandOnMessages().clear();
                 return ninja;
             }
         }
@@ -250,7 +274,7 @@ public class GameManager {
         return null;
     }
 
-    public void move(Ninja ninja, Direction direction){
+    public boolean move(Ninja ninja, Direction direction){
 
         if(isAlive(ninja)){
             if(movementAllowed(ninja)){
@@ -266,13 +290,23 @@ public class GameManager {
 
                             movementController.move(ninja, current, next);
                             addAll(movementController.getStandOnMessages());
+                            movementController.getStandOnMessages().clear();
+                            return true;
                         }
                     }
                 }
             }
         }
+        return false;
     }
 
+    public boolean commanderAlive(){
+        if(!MovementValidator.commanderDead(getPlayer())){
+            return true;
+        }
+        getMessage().getMessageList().add(MessageType.DEADCOMMANDER.getMessage());
+        return false;
+    }
     private boolean withinLimits(int i,int j,boolean create){
         if(MovementValidator.withinLimitsBoard(i,j)){
             return true;

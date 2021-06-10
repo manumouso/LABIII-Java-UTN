@@ -45,9 +45,7 @@ public class MovementController {
         Board.getInstance().getSquares()[current.getI()][current.getJ()].setHasNinja(false);
         ninja.setNinjaPosition(next);
         ninjaStandsOn(ninja);
-        //ninja.movementCounter++; por ahora COMENTADO, PORQUE NO DECIDI EL PUNTO DEL PROGRAMA
-        //DONDE ESTE CONTADOR VUELVE A CERO, Y EVITA QUE SE HAGAN MOV CONSECUTIVOS
-        //seguramente despues de atacar
+        ninja.setMovementCounter(ninja.getMovementCounter()+1);
     }
 
     private void addStandOnMessages(String name){
