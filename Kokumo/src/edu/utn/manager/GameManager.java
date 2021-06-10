@@ -26,9 +26,11 @@ import java.util.Map;
 
 public class GameManager {
 
-    private Server server;
-    public static boolean response;
-    private NetworkFactory networkFactory;
+    private ServiceManager serviceManager;
+    private RulesManager rules;
+    private PlayerManager playerManager;
+    private Message message;
+
     private BoardController boardController;
     private BoardPrinter boardPrinter;
     private MessagePrinter messagePrinter;
@@ -39,31 +41,25 @@ public class GameManager {
     private MovementController movementController;
     private NinjaController ninjaController;
     private MenuFactory menuFactory;
-    private Message message;
+
     private Map<String, Direction> directionsMap;
 
-
-    public Server getServer() {
-        return server;
+    public GameManager(ServiceManager serviceManager, RulesManager rules, PlayerManager playerManager) {
+        this.serviceManager = serviceManager;
+        this.rules = rules;
+        this.playerManager = playerManager;
     }
 
-    public void setServer(Server server) {
-        this.server = server;
+    public ServiceManager getServiceManager() {
+        return serviceManager;
     }
 
-    public static synchronized boolean isResponse() {
-        return response;
+    public RulesManager getRules() {
+        return rules;
     }
 
-    public static synchronized void setResponse(boolean response) {
-        GameManager.response = response;
-    }
-
-    public NetworkFactory getNetworkFactory() {
-        if(networkFactory==null){
-            networkFactory=new NetworkFactory();
-        }
-        return networkFactory;
+    public PlayerManager getPlayerManager() {
+        return playerManager;
     }
 
     private BoardController getBoardController() {
@@ -167,9 +163,27 @@ public class GameManager {
         ServerRoom serverRoom = menuFactory.createServerRoom();
         serverRoom.menu(this);
     }
+    public void toPlayerRoom(){
+        PlayerRoom playerRoom= menuFactory.createPlayerRoom();
+        playerRoom.menu(this);
+    }
+    public void toGameRoom(){
+        GameRoom gameRoom = menuFactory.createGameRoom();
+        gameRoom.menu(this);
+    }
+
+
+    public void toClientRoom(){
+        ClientRoom clientRoom = menuFactory.createClientRoom();
+        clientRoom.menu(this);
+    }
+
+    public void setServer(String IP,int port){
+        getServiceManager().setServer(createServer(IP,port));
+    }
 
     public Server createServer(String IP, int port){
-        NetworkFactory networkFactory = getNetworkFactory();
+        NetworkFactory networkFactory = getServiceManager().getNetworkFactory();
         if(validIP(IP)){
             if(validPort(port)){
                 Server server =networkFactory.createServer(IP,port);
@@ -181,16 +195,64 @@ public class GameManager {
     }
 
     public void startConnection() throws IOException {
-        getServer().startConnection();
+        getServiceManager().getServer().startConnection(getServiceManager());
     }
 
     public void closeConnection() throws IOException {
-        getServer().closeConnection();
+        getServiceManager().getServer().closeConnection();
     }
 
-    public void toGameRoom(){
-        GameRoom gameRoom = menuFactory.createGameRoom();
-        gameRoom.menu(this);
+    public void setServerState(){
+        getServiceManager().setServerState(createServerState());
+    }
+    public ServerState createServerState(){
+        ServerState serverState = getServiceManager().getServerState();
+        return serverState;
+    }
+    public boolean serverWasCreated() {
+
+        return getServiceManager().getServerState().serverWasCreated();
+    }
+    public void setServerWasCreated(boolean serverWasCreated) {
+
+        getServiceManager().getServerState().setServerWasCreated(serverWasCreated);
+    }
+    public boolean isRunning() {
+        return getServiceManager().getServerState().isRunning();
+    }
+    public void setRunning(boolean running) {
+        getServiceManager().getServerState().setRunning(running);
+    }
+    public boolean connectedClient() {
+        return getServiceManager().getServerState().connectedClient();
+    }
+    public void setConnectedClient(boolean connectedClient) {
+        getServiceManager().getServerState().setConnectedClient(connectedClient);
+    }
+
+    public synchronized void setExternalMessage(boolean action){
+
+        getServiceManager().setExternalMessage(action);
+    }
+
+    public void printMessages(){
+        MessagePrinter messagePrinter=getMessagePrinter();
+        messagePrinter.printMessages(getMessage().getMessageList());
+    }
+
+    public void clearMessages(){
+        MessagePrinter messagePrinter = getMessagePrinter();
+        messagePrinter.clearMessages(getMessage().getMessageList());
+    }
+
+
+    public void printBoard(boolean playersBoard){
+        BoardPrinter boardPrinter=getBoardPrinter();
+        if(playersBoard){
+            boardPrinter.printBoard(getPlayer());
+        }else{
+            boardPrinter.printAttackBoard();
+        }
     }
 
     private boolean validIP(String IP){
@@ -209,37 +271,9 @@ public class GameManager {
         return false;
     }
 
-    public void toClientRoom(){
-        ClientRoom clientRoom = menuFactory.createClientRoom();
-        clientRoom.menu(this);
-    }
-
-    public void toPlayerRoom(){
-        PlayerRoom playerRoom= menuFactory.createPlayerRoom();
-        playerRoom.menu(this);
-    }
-
-    public void printMessages(){
-        MessagePrinter messagePrinter=getMessagePrinter();
-        messagePrinter.printMessages(getMessage().getMessageList());
-    }
-
-    public void clearMessages(){
-        MessagePrinter messagePrinter = getMessagePrinter();
-        messagePrinter.clearMessages(getMessage().getMessageList());
-    }
-
-    public void printBoard(boolean playersBoard){
-        BoardPrinter boardPrinter=getBoardPrinter();
-        if(playersBoard){
-            boardPrinter.printBoard(getPlayer());
-        }else{
-            boardPrinter.printAttackBoard();
-        }
-    }
-    public void clearBoards(){
+    public void clearBoards(boolean ninjasBoard){
         BoardController boardController = getBoardController();
-        boardController.clearBoards();
+        boardController.clearBoards(ninjasBoard);
     }
 
     public Player createPlayer(){
@@ -256,6 +290,10 @@ public class GameManager {
         PlayerController playerController=getPlayerController();
         playerController.addNinja(getPlayer(),ninja);
 
+    }
+    public void clearNinjas(){
+        PlayerController playerController = getPlayerController();
+        playerController.clearNinjas(getPlayer());
     }
 
     public Ninja createNinja(int i,int j,boolean commander,int m){
@@ -277,7 +315,7 @@ public class GameManager {
     public boolean move(Ninja ninja, Direction direction){
 
         if(isAlive(ninja)){
-            if(movementAllowed(ninja)){
+
                 MovementController movementController = getMovementController();
                 NinjaController ninjaController = getNinjaController();
                 ninjaController.setDirection(ninja,direction);
@@ -295,7 +333,7 @@ public class GameManager {
                         }
                     }
                 }
-            }
+
         }
         return false;
     }
@@ -337,7 +375,7 @@ public class GameManager {
         return false;
     }
 
-    private boolean movementAllowed(Ninja ninja){
+    public boolean movementAllowed(Ninja ninja){
         if(!MovementValidator.movedPreviousTurn(ninja.getMovementCounter())){
             return true;
         }

@@ -1,7 +1,6 @@
 package edu.utn.view;
 
 import edu.utn.manager.GameConstants;
-import edu.utn.manager.GameManager;
 import edu.utn.model.AttackBoard;
 import edu.utn.model.Board;
 import edu.utn.model.Player;
@@ -40,12 +39,6 @@ public class BoardPrinter {
         System.out.println("\n");
     }
 
-
-    public void clearBoards(GameManager gameManager){
-        gameManager.clearBoards();
-    }
-
-
     private void hasNinja(int i,int j, Player player){
 
         Ninja ninja=null;
@@ -83,40 +76,5 @@ public class BoardPrinter {
 
         return Board.getInstance().getSquares()[i][j].name().equals("Empty");
     }
-
-//estas pruebas vuelan
-//    public void advanceTest(){
-//        ninja.setDirection(Direction.getSouthWest());
-//        ninja.move();
-//        printBoard();
-//
-//    }
-//    public void advanceTest2(){
-//        ninja.setDirection(Direction.getSouthWest());
-//        ninja.move();
-//        printBoard();
-//    }
-//    public void advanceTest3(){
-//        ninja.setDirection(Direction.getNorth());
-//        ninja.move();
-//        printBoard();
-//    }
-//    public void advanceTest4(){
-//        ninja.setDirection(Direction.getWest());
-//        ninja.move();
-//        printBoard();
-//    }
-//
-//    public void advanceTest5(){
-//        ninja.setDirection(Direction.getEast());
-//        ninja.move();
-//        printBoard();
-//    }
-//
-//    public void advanceTest6(){
-//        ninja.setDirection(Direction.getEast());
-//        ninja.move();
-//        printBoard();
-//    }
 
 }

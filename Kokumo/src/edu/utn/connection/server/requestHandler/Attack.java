@@ -1,14 +1,13 @@
 package edu.utn.connection.server.requestHandler;
 
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import edu.utn.manager.GameManager;
+import edu.utn.manager.ServiceManager;
 import edu.utn.model.ninja.Ninja;
 import edu.utn.model.ninja.NinjaCommander;
 import edu.utn.model.ninja.NinjaPosition;
 import edu.utn.json.Constants;
 import edu.utn.json.JsonController;
-import edu.utn.view.ServerRoom;
+
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -18,7 +17,12 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 
-public class Attack implements HttpHandler {
+public class Attack extends Handlers{
+
+    public Attack(ServiceManager service) {
+        super(service);
+    }
+
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         System.out.println("Me conecte joya");
@@ -42,8 +46,8 @@ public class Attack implements HttpHandler {
             //client y cuando llegue la rta, voy a tener que mandar un request oculto con la rta del ataque
             JsonObject res;
 
-
-           GameManager.setResponse(true);
+            service.setExternalMessage(true);
+            //ServiceManager.setResponse(true);
             //hardcode ninja
             Ninja ninja = new NinjaCommander("comandante",50,10,new NinjaPosition(1,1));
             try {

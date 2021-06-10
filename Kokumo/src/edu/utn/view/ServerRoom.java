@@ -7,25 +7,6 @@ import java.util.Scanner;
 
 public class ServerRoom extends Stage{
 
-    private boolean serverWasCreated;
-
-    public boolean serverWasCreated() {
-        return serverWasCreated;
-    }
-
-    public void setServerWasCreated(boolean serverWasCreated) {
-        this.serverWasCreated = serverWasCreated;
-    }
-
-    private boolean running;
-
-    public boolean isRunning() {
-        return running;
-    }
-
-    public void setRunning(boolean running) {
-        this.running = running;
-    }
 
     private boolean requestSent;
 
@@ -58,11 +39,7 @@ public class ServerRoom extends Stage{
 
                 switch (option) {
                     case 0 -> {
-                        if(serverWasCreated()){
-                           manager.closeConnection();
-                           setServerWasCreated(false);
-                           setRunning(false);
-                        }
+                        goBack(manager);
                         System.out.println("\n");
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
@@ -76,19 +53,16 @@ public class ServerRoom extends Stage{
                     case 2 -> {
                         //PEDIR POR PANTALLA IP, PUERTO: CREAR OBJ SERVER DEL CLIENTE/otro Jugador
                         //MANDARLE UN REQUEST UNITE A MI, JSON PASARLE MI PUERTO MI IP
-                        //sendRequest(manager); construccion
+                        //sendRequest(manager); construccion // request client sendInvitation
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
                     }
                     case 3 -> {
-                        if(serverWasCreated() && isRunning()){
-                            while(!manager.isResponse()){}
-                            System.out.println("\t\t\tConnected to the client");
+                        //aca falta guardarme el objeto server del client/crearlo con la IP Y PUERTO
+                        //cuando cree el requestHandler await en mi Server
+                        if(waitToProceed(manager)){
                             manager.toPlayerRoom();
-                        }else{
-                            System.out.println("\t\t\tFirst create the server");
                         }
-
                         System.out.println("\n");
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
@@ -110,8 +84,23 @@ public class ServerRoom extends Stage{
         }
     }
 
+    private void goBack(GameManager manager) throws IOException {
+        if(manager.serverWasCreated()){
+            if(manager.isRunning()){
+                manager.closeConnection();
+                manager.setRunning(false);
+            }
+            if(manager.connectedClient()){
+                manager.setExternalMessage(false);
+                manager.setConnectedClient(false);
+            }
+            manager.setServerWasCreated(false);
+
+        }
+    }
+
     private void start(GameManager manager) throws IOException {
-        if(!serverWasCreated()){
+        if(!manager.serverWasCreated()){
             Scanner scanner2 =new Scanner(System.in);
             System.out.print("\t\t\tEnter IP-> ");
             String IP=scanner2.next();
@@ -120,9 +109,10 @@ public class ServerRoom extends Stage{
 
             try {
                 int port= Integer.parseInt(PORT);
-                manager.setServer(manager.createServer(IP,port));
-                if(manager.getServer()!=null){
-                    setServerWasCreated(true);
+                manager.setServer(IP,port);
+                if(manager.getServiceManager().getServer()!=null){
+                    manager.setServerState();
+                    manager.setServerWasCreated(true);
                 }
                 manager.printMessages();
                 manager.clearMessages();
@@ -133,11 +123,24 @@ public class ServerRoom extends Stage{
             System.out.println("\t\t\tyou have already created the server");
 
         }
-        if(!isRunning()){
+        if(!manager.isRunning()){
             manager.startConnection();
-            setRunning(true);
-            System.out.println("\t\tServer Running at IP: "+manager.getServer().getIP()+" and port: "+manager.getServer().getPort());
+            manager.setRunning(true);
+            System.out.println("\t\t\tServer Running at IP: "+manager.getServiceManager().getServer().getIP()+" and port: "+manager.getServiceManager().getServer().getPort());
         }
+    }
+
+    private boolean waitToProceed(GameManager manager){
+        if(!manager.connectedClient()){
+            if(manager.serverWasCreated() && manager.isRunning()){
+                while(!manager.getServiceManager().isExternalMessage()){}
+                manager.setConnectedClient(true);
+                System.out.println("\t\t\tConnected to the client");
+            }else{
+                System.out.println("\t\t\tFirst create the server");
+            }
+        }
+        return manager.connectedClient();
     }
 
     private void sendRequest(GameManager manager){
@@ -154,7 +157,7 @@ public class ServerRoom extends Stage{
         }catch (NumberFormatException e){
             System.out.println("\t\t\tPort must be a number");
         }
-        if(serverWasCreated() && isRunning() && requestSent()){
+        if(manager.serverWasCreated() && manager.isRunning() && requestSent()){
 
             System.out.println("\t\t\tConnected to the client");
             manager.toPlayerRoom();

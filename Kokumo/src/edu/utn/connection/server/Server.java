@@ -3,6 +3,7 @@ package edu.utn.connection.server;
 import com.sun.net.httpserver.HttpServer;
 import edu.utn.connection.server.requestHandler.Attack;
 import edu.utn.connection.server.requestHandler.Move;
+import edu.utn.manager.ServiceManager;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -34,17 +35,17 @@ public class Server {
         return port;
     }
 
-    public void startConnection() throws IOException {
+    public void startConnection(ServiceManager service) throws IOException {
         try {
-            getServer().createContext("/attack",new Attack());
+            getServer().createContext("/attack",new Attack(service));
             getServer().createContext("/move",new Move());
             getServer().setExecutor(null);
             getServer().start();
 
         }catch (IOException e){
-            System.out.println("IO Exception: "+e.getMessage());
+            System.out.println("\t\t\tIO Exception: "+e.getMessage());
         }catch (Exception e){
-            System.out.println("Exception: "+e.getMessage());
+            System.out.println("\t\t\tException: "+e.getMessage());
         }
     }
     public void closeConnection() throws IOException {

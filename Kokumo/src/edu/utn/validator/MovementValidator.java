@@ -7,7 +7,6 @@ import edu.utn.model.ninja.Ninja;
 import edu.utn.enums.NinjaType;
 import edu.utn.enums.SquareType;
 
-import java.util.List;
 
 public class MovementValidator {
 

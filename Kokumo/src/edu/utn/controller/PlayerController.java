@@ -14,4 +14,9 @@ public class PlayerController {
 
         player.getNinjas().add(ninja);
     }
+
+    public void clearNinjas(Player player){
+
+        player.getNinjas().clear();
+    }
 }

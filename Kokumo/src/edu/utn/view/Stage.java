@@ -15,6 +15,10 @@ public abstract class Stage implements Menu {
 
     public abstract void menu(GameManager manager);
 
+    protected void print(GameManager manager){
+        manager.printMessages();
+        manager.clearMessages();
+    }
     @Override
     public void footer() {
 

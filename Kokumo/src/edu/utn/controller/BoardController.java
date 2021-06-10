@@ -7,11 +7,14 @@ import edu.utn.model.square.Empty;
 
 public class BoardController {
 
-    public void clearBoards(){
+    public void clearBoards(boolean ninjasBoard){
         for(int i = 0; i< GameConstants.MAX_ROW; i++){
             for(int j=0;j<GameConstants.MAX_COLUMN;j++){
-                Board.getInstance().getSquares()[i][j].setHasNinja(false);
-                AttackBoard.getInstance().getSquares()[i][j]=new Empty();
+                if(ninjasBoard){
+                    Board.getInstance().getSquares()[i][j].setHasNinja(false);
+                }else{
+                    AttackBoard.getInstance().getSquares()[i][j]=new Empty();
+                }
             }
         }
 

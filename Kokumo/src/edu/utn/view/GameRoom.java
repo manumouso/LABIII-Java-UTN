@@ -58,8 +58,7 @@ public class GameRoom extends Stage{
 
                 switch (option) {
                     case 0 -> {
-                        //ESTE GO BACK TIENE QUE guardo el ESTADO de los ninjas en contador en manager con estado de mov/ataques
-                        //entonces estas variables deben ser del manager
+                        goBack(manager);
                         System.out.println("\n");
                         System.out.println("\t\t\tTo the Player Menu. ( ^_^)/\n");
 
@@ -105,49 +104,60 @@ public class GameRoom extends Stage{
             System.out.println(e.getMessage());
         }
     }
+
+    private void goBack(GameManager manager){
+        if(manager.getPlayer().getNinjas().size()>0){
+            manager.clearNinjas();
+        }
+        manager.clearBoards(true);
+        //manager.clearBoards(false);
+    }
     private void moveNinjas(GameManager manager){
         if(manager.commanderAlive()) {
 
             Scanner scanner = new Scanner(System.in);
-            System.out.println("\t\t\tNINJA DIRECTIONS:");
-            System.out.println("\t\t\tN= NORTH");
-            System.out.println("\t\t\tNE= NORTH EAST");
-            System.out.println("\t\t\tNW= NORTH WEST");
-            System.out.println("\t\t\tS=SOUTH");
-            System.out.println("\t\t\tSE= SOUTH EAST");
-            System.out.println("\t\t\tSW= SOUTH WEST");
-            System.out.println("\t\t\tE= EAST");
-            System.out.println("\t\t\tW= WEST");
+            System.out.println("\t\t\tNINJA DIRECTIONS (case insensitive):");
+            System.out.println("\t\t\t[N]= NORTH");
+            System.out.println("\t\t\t[NE]= NORTH EAST");
+            System.out.println("\t\t\t[NW]= NORTH WEST");
+            System.out.println("\t\t\t[S]=SOUTH");
+            System.out.println("\t\t\t[SE]= SOUTH EAST");
+            System.out.println("\t\t\t[SW]= SOUTH WEST");
+            System.out.println("\t\t\t[E]= EAST");
+            System.out.println("\t\t\t[W]= WEST");
+            System.out.println(" ");
             Map<String, Direction> directionMap = manager.getDirectionsMap();
-            int i = 0;
-            for (Ninja ninja : manager.getPlayer().getNinjas()) {
 
-                System.out.print("\t\t\tDo you want to move your ninja: " + ninja.getName()+ ":[y/n]");
-                String answer = scanner.next();
-                if (answer.equals("y") || answer.equals("Y")) {
-                    manager.printBoard(true);
-                    System.out.println("");
-                    System.out.print("\t\t\tEnter the direction ->");
-                    String direction = scanner.next();
-                    if (directionMap.containsKey(direction)) {
+            for (Ninja ninja : manager.getPlayer().getNinjas()) {
+                if(manager.movementAllowed(ninja)){
+                    System.out.print("\t\t\tDo you want to move your ninja-> " + ninja.getName()+ "  [y/n]: ");
+                    String answer = scanner.next();
+                    System.out.println(" ");
+                    if (answer.equals("y") || answer.equals("Y")) {
+                        manager.printBoard(true);
+                        System.out.println(" ");
+                        System.out.print("\t\t\tEnter the direction ->");
+                        String direction=scanner.next();
+                        while(!directionMap.containsKey(direction)){
+                            System.out.println(" ");
+                            System.out.println("\t\t\tWrong Direction try again!!!");
+                            System.out.print("\t\t\tEnter the direction ->");
+                            direction = scanner.next();
+                        }
                         if (manager.move(ninja, directionMap.get(direction))) {
                             setMovedNinjas(getMovedNinjas() + 1);
                         }
                         manager.printBoard(true);
                         System.out.println(" ");
-                        manager.printMessages();
-                        manager.clearMessages();
-                    } else {
-                        System.out.println(" ");
-                        System.out.println("\t\t\tWrong Direction try again!!!");
+                        print(manager);
                     }
+                }else{
+                    print(manager);
                 }
-                i++;
             }
         }else{
-            manager.printMessages();
-            manager.clearMessages();
+            print(manager);
         }
-
     }
+
 }
