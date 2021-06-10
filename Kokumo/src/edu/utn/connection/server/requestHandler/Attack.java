@@ -19,8 +19,8 @@ import java.io.IOException;
 
 public class Attack extends Handlers{
 
-    public Attack(ServiceManager service) {
-        super(service);
+    public Attack(ServiceManager serviceManager) {
+        super(serviceManager);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class Attack extends Handlers{
             //client y cuando llegue la rta, voy a tener que mandar un request oculto con la rta del ataque
             JsonObject res;
 
-            service.setExternalMessage(true);
+            serviceManager.setExternalMessage(true);
             //ServiceManager.setResponse(true);
             //hardcode ninja
             Ninja ninja = new NinjaCommander("comandante",50,10,new NinjaPosition(1,1));

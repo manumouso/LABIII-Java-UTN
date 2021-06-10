@@ -5,14 +5,14 @@ import edu.utn.manager.ServiceManager;
 
 public abstract class Handlers implements HttpHandler {
 
-    protected ServiceManager service;
+    protected ServiceManager serviceManager;
 
 
     public Handlers() {
     }
 
-    public Handlers(ServiceManager service) {
-        this.service = service;
+    public Handlers(ServiceManager serviceManager) {
+        this.serviceManager = serviceManager;
     }
 
 }
