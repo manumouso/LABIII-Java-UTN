@@ -1,8 +1,8 @@
 package edu.utn.enums;
 
 public enum NetworkType {
-    IP("Invalid IP"),PORT("Invalid PORT"),SERVER("Server created correctly"),CLIENT("Client created correctly"),
-    RUNNING("Running");
+    IP("Invalid IP"),PORT("Invalid PORT, must be greater than or equal 8000 and less than or equal to 65000"),SERVER("Server created correctly"),
+    CLIENT("Client created correctly");
 
     private String message;
 
