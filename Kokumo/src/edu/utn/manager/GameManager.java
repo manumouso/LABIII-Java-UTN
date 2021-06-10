@@ -27,7 +27,7 @@ import java.util.Map;
 public class GameManager {
 
     private ServiceManager serviceManager;
-    private RulesManager rules;
+    private RuleManager ruleManager;
     private PlayerManager playerManager;
     private Message message;
 
@@ -44,9 +44,9 @@ public class GameManager {
 
     private Map<String, Direction> directionsMap;
 
-    public GameManager(ServiceManager serviceManager, RulesManager rules, PlayerManager playerManager) {
+    public GameManager(ServiceManager serviceManager, RuleManager ruleManager, PlayerManager playerManager) {
         this.serviceManager = serviceManager;
-        this.rules = rules;
+        this.ruleManager = ruleManager;
         this.playerManager = playerManager;
     }
 
@@ -54,8 +54,8 @@ public class GameManager {
         return serviceManager;
     }
 
-    public RulesManager getRules() {
-        return rules;
+    public RuleManager getRuleManager() {
+        return ruleManager;
     }
 
     public PlayerManager getPlayerManager() {
