@@ -3,7 +3,7 @@ package edu.utn.view;
 
 import edu.utn.manager.GameManager;
 
-public abstract class Stage implements Menu {
+public abstract class Stage implements View {
 
 
     @Override
