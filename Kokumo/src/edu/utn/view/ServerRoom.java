@@ -110,7 +110,7 @@ public class ServerRoom extends Stage{
             try {
                 int port= Integer.parseInt(PORT);
                 manager.setServer(IP,port);
-                if(manager.getServiceManager().getServer()!=null){
+                if(manager.getServer()!=null){
                     manager.setServerState();
                     manager.setServerWasCreated(true);
                 }
@@ -122,7 +122,7 @@ public class ServerRoom extends Stage{
                 System.out.println("Exception: "+ e.getMessage());
             }
         }else{
-            System.out.println("\t\t\tyou have already created the server");
+            System.out.println("\t\t\tYou have already created the server");
 
         }
         if(manager.serverWasCreated() && !manager.isRunning()){
@@ -135,7 +135,7 @@ public class ServerRoom extends Stage{
     private boolean waitToProceed(GameManager manager){
         if(!manager.connectedClient()){
             if(manager.serverWasCreated() && manager.isRunning()){
-                while(!manager.getServiceManager().externalMessageArrived()){}
+                while(!manager.externalMessageReceived()){}
                 manager.setConnectedClient(true);
                 System.out.println("\t\t\tConnected to the client");
             }else{

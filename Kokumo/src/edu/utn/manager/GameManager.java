@@ -206,8 +206,7 @@ public class GameManager {
         getServiceManager().setServerState(createServerState());
     }
     public ServerState createServerState(){
-        ServerState serverState = getServiceManager().getServerState();
-        return serverState;
+        return getServiceManager().getServerState();
     }
     public boolean serverWasCreated() {
 
@@ -217,6 +216,7 @@ public class GameManager {
 
         getServiceManager().getServerState().setServerWasCreated(serverWasCreated);
     }
+
     public boolean isRunning() {
         return getServiceManager().getServerState().isRunning();
     }
@@ -234,7 +234,15 @@ public class GameManager {
 
         getServiceManager().setExternalMessage(action);
     }
+    public synchronized boolean externalMessageReceived(){
 
+        return getServiceManager().externalMessageArrived();
+    }
+
+    public Server getServer(){
+
+        return getServiceManager().getServer();
+    }
     public void printMessages(){
         MessagePrinter messagePrinter=getMessagePrinter();
         messagePrinter.printMessages(getMessage().getMessageList());
