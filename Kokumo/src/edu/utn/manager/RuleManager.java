@@ -185,9 +185,7 @@ public class RuleManager {
         int j= attackPosition.getJ();
         if(RuleValidator.withinLimitsBoard(i,j)){
             if(!RuleValidator.squareDestroyed(i,j)){
-                if(!RuleValidator.ninjaDead(player, i, j)){
-                    return true;
-                }
+                return !RuleValidator.ninjaDead(player, i, j);
             }
         }
         return false;
