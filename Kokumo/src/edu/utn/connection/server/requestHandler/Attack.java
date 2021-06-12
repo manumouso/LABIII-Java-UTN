@@ -1,12 +1,11 @@
 package edu.utn.connection.server.requestHandler;
 
 import com.sun.net.httpserver.HttpExchange;
-import edu.utn.manager.ServiceManager;
-import edu.utn.model.ninja.Ninja;
-import edu.utn.model.ninja.NinjaCommander;
-import edu.utn.model.ninja.NinjaPosition;
+import edu.utn.manager.PlayerManager;
+import edu.utn.manager.RuleManager;
 import edu.utn.json.Constants;
 import edu.utn.json.JsonController;
+import edu.utn.model.ninja.NinjaPosition;
 
 
 import javax.json.Json;
@@ -19,40 +18,32 @@ import java.io.IOException;
 
 public class Attack extends Handlers{
 
-    public Attack(ServiceManager serviceManager) {
-        super(serviceManager);
+    public Attack(RuleManager ruleManager, PlayerManager playerManager) {
+        super(ruleManager,playerManager);
     }
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        System.out.println("Me conecte joya");
+
         String requestMethod = exchange.getRequestMethod();
         if (requestMethod.equalsIgnoreCase(Constants.POST)) {
             String requestBody = JsonController.streamToString(exchange.getRequestBody());
             JsonObject object = JsonController.stringJsonToJsonObject(requestBody);
 
-            //ACA LEVANTO LA FUTURA CLASE CON LO QUE TIENE EL JSON
-            JsonArray position = object.getJsonArray("position");//.getString("position");
+            JsonArray position = object.getJsonArray("position");
             String attackPoints = object.getString("attackPoints");
 
-            //ACA LLAMO a funcion ATACAR que le paso el objeto que cree arriba
-            System.out.println(position.get(0));
-            System.out.println(attackPoints);
+            NinjaPosition attackPosition = new NinjaPosition(position.getInt(0),position.getInt(1));
 
-            //funcion atacacar me devuelve la lista de mensajes
-            //y en que pos destrui el/los cuadraditos
-            //En esta misma respuesta puedo meterle el ATAQUE del server
-            //para no tener que levantar server en el cliente con la desventaja que el turno siempre arranca
-            //client y cuando llegue la rta, voy a tener que mandar un request oculto con la rta del ataque
+            String message = ruleManager.attackReceived(playerManager.getPlayer(), attackPosition,Integer.parseInt(attackPoints));
+
             JsonObject res;
 
-            serviceManager.setExternalMessage(true);
-            //ServiceManager.setResponse(true);
-            //hardcode ninja
-            Ninja ninja = new NinjaCommander("comandante",50,10,new NinjaPosition(1,1));
             try {
+                res=Json.createObjectBuilder()
+                        .add("message",message)
+                        .build();
 
-                res = ninja.toJsonObject();
             }
             catch (Exception ex) {
                 res = Json.createObjectBuilder()

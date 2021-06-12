@@ -10,7 +10,7 @@ import edu.utn.model.Player;
 import edu.utn.model.ninja.Direction;
 import edu.utn.model.ninja.Ninja;
 import edu.utn.model.ninja.NinjaPosition;
-import edu.utn.validator.MovementValidator;
+import edu.utn.validator.RuleValidator;
 
 import java.util.List;
 import java.util.Map;
@@ -23,6 +23,17 @@ public class RuleManager {
     private NinjaController ninjaController;
     private Map<String, Direction> directionsMap;
     private Message message;
+
+    public int messageArrived;
+
+    public synchronized int getMessageArrived() {
+        return messageArrived;
+    }
+
+    public synchronized void setMessageArrived(int messageArrived) {
+        this.messageArrived = messageArrived;
+    }
+
 
     public NinjaFactory getNinjaFactory() {
         if(ninjaFactory==null){
@@ -37,7 +48,7 @@ public class RuleManager {
         return movementController;
     }
 
-    public AttackController getAttackController() {
+    public synchronized AttackController getAttackController() {
         if(attackController==null){
             attackController=new AttackController();
         }
@@ -56,13 +67,14 @@ public class RuleManager {
         }
         return directionsMap;
     }
-    public Message getMessage() {
+    public synchronized Message getMessage() {
         if(message==null){
             message=new Message();
         }
         return message;
     }
-    private void addAll(List<String> messages){
+
+    private synchronized void addAll(List<String> messages){
 
         getMessage().getMessageList().addAll(messages);
     }
@@ -85,8 +97,6 @@ public class RuleManager {
 
     public boolean move(Ninja ninja, Direction direction){
 
-        if(isAlive(ninja)){
-
             MovementController movementController = getMovementController();
             NinjaController ninjaController = getNinjaController();
             ninjaController.setDirection(ninja,direction);
@@ -104,40 +114,38 @@ public class RuleManager {
                     }
                 }
             }
-
-        }
         return false;
     }
 
     public boolean commanderAlive(Player player){
-        if(!MovementValidator.commanderDead(player)){
+        if(!RuleValidator.commanderDead(player)){
             return true;
         }
         getMessage().getMessageList().add(MessageType.DEADCOMMANDER.getMessage());
         return false;
     }
     private boolean withinLimits(int i,int j,boolean create){
-        if(MovementValidator.withinLimitsBoard(i,j)){
+        if(RuleValidator.withinLimitsBoard(i,j)){
             return true;
         }
         getMessage().getMessageList().add(MessageType.CREATE.getMessage());
         return false;
     }
     private boolean withinLimits(int i,int j){
-        if(MovementValidator.withinLimitsBoard(i,j)){
+        if(RuleValidator.withinLimitsBoard(i,j)){
             return true;
         }
         getMessage().getMessageList().add(MessageType.OUTBOUNDARY.getMessage());
         return false;
     }
     private boolean freeSquare(int i,int j){
-        if(!MovementValidator.squareOccupied(i,j)){
+        if(!RuleValidator.squareOccupied(i,j)){
             return true;
         }
         getMessage().getMessageList().add(MessageType.OCCUPIED.getMessage());
         return false;
     }
-    private boolean isAlive(Ninja ninja){
+    public boolean isAlive(Ninja ninja){
         if(!ninja.isDead()){
             return true;
         }
@@ -145,38 +153,59 @@ public class RuleManager {
         return false;
     }
     public boolean movementAllowed(Ninja ninja){
-        if(!MovementValidator.movedPreviousTurn(ninja.getMovementCounter())){
+        if(!RuleValidator.movedPreviousTurn(ninja.getMovementCounter())){
             return true;
         }
         getMessage().getMessageList().add(MessageType.CONSECUTIVE.getMessage());
         return false;
     }
     private boolean squarePassable(int i, int j){
-        if(!MovementValidator.squareDestroyed(i, j)){
+        if(!RuleValidator.squareDestroyed(i, j)){
             return true;
         }
         getMessage().getMessageList().add(MessageType.DESTROYED.getMessage());
         return false;
     }
     public boolean requiredNinjasQuantity(Player player){
-        if(MovementValidator.requiredNinjasQuantity(player)){
+        if(RuleValidator.requiredNinjasQuantity(player)){
             return true;
         }
         return false;
     }
     public boolean lessThanRequiredNinjasQuantity(Player player){
-        if(MovementValidator.lessThanRequiredNinjasQuantity(player)){
+        if(RuleValidator.lessThanRequiredNinjasQuantity(player)){
             return true;
         }
         return false;
     }
 
-    private boolean attackAllowed(){
 
-        return true;
+    private boolean attackAllowed(Player player,NinjaPosition attackPosition,int attackPoints){
+        int i= attackPosition.getI();
+        int j= attackPosition.getJ();
+        if(RuleValidator.withinLimitsBoard(i,j)){
+            if(!RuleValidator.squareDestroyed(i,j)){
+                if(!RuleValidator.ninjaDead(player, i, j)){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
-    public void attack(){
+    public synchronized String attackReceived(Player player, NinjaPosition attackPosition,int attackPoints){
+        String message;
+        if(attackAllowed(player,attackPosition,attackPoints)){
+            message = getAttackController().attackReceived(player, attackPosition,attackPoints);
 
+            addAll(getAttackController().getAttackMessages());
+            getAttackController().getAttackMessages().clear();
+            setMessageArrived(getMessageArrived()+1);
+
+        }else{
+            message="WRONG ATTACK!!! Try again";
+        }
+
+        return message;
     }
 }

@@ -21,7 +21,6 @@ public class GameManager {
     private Message message;
     private MessagePrinter messagePrinter;
 
-
     public GameManager(ServiceManager serviceManager, RuleManager ruleManager, PlayerManager playerManager) {
         this.serviceManager = serviceManager;
         this.ruleManager = ruleManager;
@@ -54,13 +53,13 @@ public class GameManager {
         return boardPrinter;
     }
 
-    private Message getMessage() {
+    private synchronized Message getMessage() {
         if(message==null){
             message=new Message();
         }
         return message;
     }
-    private void addAll(){
+    private synchronized void addAll(){
 
         getMessage().getMessageList().addAll(getRuleManager().getMessage().getMessageList());
         getRuleManager().getMessage().getMessageList().clear();
@@ -123,7 +122,7 @@ public class GameManager {
     }
 
     public void startConnection() throws IOException {
-        getServiceManager().getServer().startConnection(getServiceManager());
+        getServiceManager().getServer().startConnection(getServiceManager(),getRuleManager(),getPlayerManager());
     }
 
     public void closeConnection() throws IOException {
@@ -211,4 +210,11 @@ public class GameManager {
         return false;
     }
 
+    //Algo asi para el turno
+    public synchronized void waitAndPrint(){
+        while (getRuleManager().getMessageArrived()<3){}
+        printMessages();
+        clearMessages();
+        getRuleManager().setMessageArrived(0);
+    }
 }

@@ -47,6 +47,7 @@ public class GameRoom extends Stage{
                 System.out.println("\t\t\t[2].ATTACK");
                 System.out.println("\t\t\t[3].VIEW NINJAS DATA");
                 System.out.println("\t\t\t[4].VIEW BOARDS");
+                System.out.println("\t\t\t[5].WAIT ATTACK AND PRINT");
                 System.out.println("\t\t\t[0].GO BACK");
                 System.out.print("\n\t\t\tSelect an option-> ");
                 Scanner scanner =new Scanner(System.in);
@@ -81,6 +82,12 @@ public class GameRoom extends Stage{
                     case 4 -> {
                         manager.printBoard(true);
                         manager.printBoard(false);
+                        System.out.println("");
+                        System.out.print("\t\t\tEnter a character to continue-> ");
+                        scanner.next();
+                    }
+                    case 5 -> {
+                        manager.waitAndPrint();
                         System.out.println("");
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
@@ -126,7 +133,7 @@ public class GameRoom extends Stage{
             Map<String, Direction> directionMap = manager.getRuleManager().getDirectionsMap();
 
             for (Ninja ninja : manager.getPlayerManager().getPlayer().getNinjas()) {
-                if(manager.getRuleManager().movementAllowed(ninja)){
+                if(manager.getRuleManager().movementAllowed(ninja) && manager.getRuleManager().isAlive(ninja)){
                     System.out.print("\t\t\tDo you want to move your ninja-> " + ninja.getName()+ "  [y/n]: ");
                     String answer = scanner.next();
                     System.out.println(" ");

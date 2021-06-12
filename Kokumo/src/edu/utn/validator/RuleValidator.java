@@ -4,11 +4,10 @@ import edu.utn.manager.GameConstants;
 import edu.utn.model.Board;
 import edu.utn.model.Player;
 import edu.utn.model.ninja.Ninja;
-import edu.utn.enums.NinjaType;
 import edu.utn.enums.SquareType;
 
 
-public class MovementValidator {
+public class RuleValidator {
 
 
     public static boolean withinLimitsBoard(int i,int j){
@@ -26,14 +25,18 @@ public class MovementValidator {
         return Board.getInstance().getSquares()[i][j].hasNinja();
     }
 
+    public static boolean ninjaDead(Player player,int i, int j){
+        boolean dead= false;
+        for(Ninja ninja: player.getNinjas()){
+            if(ninja.getNinjaPosition().getI()==i && ninja.getNinjaPosition().getJ()==j){
+                dead= ninja.isDead();
+            }
+        }
+        return dead;
+    }
     public static boolean movedPreviousTurn(int movementCounter){
 
         return movementCounter> GameConstants.CONSECUTIVE_MOVEMENTS_ALLOWED;
-    }
-
-    public static boolean isCommander(Ninja ninja){
-
-        return ninja.getName().equals(NinjaType.COMMANDER.getName());
     }
 
     public static boolean commanderDead(Player player){

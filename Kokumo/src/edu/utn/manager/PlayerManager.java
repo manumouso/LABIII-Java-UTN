@@ -12,7 +12,7 @@ public class PlayerManager {
     private PlayerFactory playerFactory;
     private PlayerController playerController;
 
-    public Player getPlayer() {
+    public synchronized Player getPlayer() {
         return player;
     }
 
@@ -33,7 +33,6 @@ public class PlayerManager {
         }
         return playerController;
     }
-
 
     public Player createPlayer(){
         PlayerFactory playerFactory= getPlayerFactory();

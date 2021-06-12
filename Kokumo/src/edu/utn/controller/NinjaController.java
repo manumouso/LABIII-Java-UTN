@@ -6,9 +6,10 @@ import edu.utn.model.ninja.NinjaPosition;
 
 public class NinjaController {
 
-    public void checkLifePoints(Ninja ninja){
+    public synchronized void checkLifePoints(Ninja ninja){
         if(ninja.getLifePoints()<=0){
             ninja.setDead(true);
+            ninja.setName(ninja.getName()+"D");
         }
     }
 

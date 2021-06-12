@@ -1,8 +1,5 @@
 package edu.utn.model.ninja;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-
 
 public abstract class Ninja {
 
@@ -26,7 +23,7 @@ public abstract class Ninja {
         return name;
     }
 
-    public void setName(String name) {
+    public synchronized void setName(String name) {
         this.name = name;
     }
 
@@ -66,7 +63,7 @@ public abstract class Ninja {
         return dead;
     }
 
-    public void setDead(boolean dead) {
+    public synchronized void setDead(boolean dead) {
         this.dead = dead;
     }
 
@@ -78,12 +75,5 @@ public abstract class Ninja {
         this.movementCounter = movementCounter;
     }
 
-
-    public JsonObject toJsonObject() {
-        return Json.createObjectBuilder()
-                .add("ninjaName", this.name)
-                .add("lifePoints", this.lifePoints)
-                .build();
-    }
 
 }
