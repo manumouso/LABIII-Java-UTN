@@ -41,5 +41,13 @@ public class MovementValidator {
         return player.getNinjas().get(0).isDead();
     }
 
+    public static boolean requiredNinjasQuantity(Player player){
 
+        return player.getNinjas().size()==GameConstants.MAX_NINJAS;
+    }
+
+    public static boolean lessThanRequiredNinjasQuantity(Player player){
+
+        return player.getNinjas().size()<GameConstants.MAX_NINJAS;
+    }
 }

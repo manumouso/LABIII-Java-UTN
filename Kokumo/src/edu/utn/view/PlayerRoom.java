@@ -24,8 +24,8 @@ public class PlayerRoom extends Stage{
         try {
 
             int option;
-            if(manager.getPlayer()==null){
-                manager.setPlayer(manager.createPlayer());
+            if(manager.getPlayerManager().getPlayer()==null){
+                manager.getPlayerManager().setPlayer(manager.getPlayerManager().createPlayer());
             }
 
             do
@@ -53,13 +53,13 @@ public class PlayerRoom extends Stage{
                     case 1 -> {
                         System.out.print("\t\t\tEnter your name-> ");
                         String name= scanner.next();
-                        manager.setPlayerName(name);
+                        manager.getPlayerManager().setPlayerName(name);
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
 
                     }
                     case 2 -> {
-                        if(manager.getPlayer().getNinjas().size()<GameConstants.MAX_NINJAS){
+                        if(manager.getRuleManager().lessThanRequiredNinjasQuantity(manager.getPlayerManager().getPlayer())){
                             placeNinjas(manager);
                             System.out.println("\t\t\tNinjas placed correctly");
                         }else{
@@ -74,7 +74,7 @@ public class PlayerRoom extends Stage{
                         scanner.next();
                     }
                     case 4 -> {
-                        if(manager.getPlayer().getNinjas().size()==GameConstants.MAX_NINJAS){
+                        if(manager.getRuleManager().requiredNinjasQuantity(manager.getPlayerManager().getPlayer())){
                             manager.toGameRoom();
                         }else{
                             System.out.println("\t\t\tFirst place your ninjas on the board");
@@ -103,14 +103,14 @@ public class PlayerRoom extends Stage{
             manager.setExternalMessage(false);
             manager.setConnectedClient(false);
         }
-        if(manager.getPlayer().getNinjas().size()>0){
-            manager.clearNinjas();
+        if(manager.getPlayerManager().getPlayer().getNinjas().size()>0){
+            manager.getPlayerManager().clearNinjas();
         }
         manager.clearBoards(true);
     }
 
     private void addNinja(Ninja ninja,GameManager manager){
-        manager.addNinjaToPlayer(ninja);
+        manager.getPlayerManager().addNinjaToPlayer(ninja);
 
     }
     private void placeNinjas(GameManager manager){
@@ -155,7 +155,7 @@ public class PlayerRoom extends Stage{
             int positionI= Integer.parseInt(posI);
             int positionJ= Integer.parseInt(posJ);
 
-            ninja = manager.createNinja(positionI,positionJ,commander,i);
+            ninja = manager.getRuleManager().createNinja(positionI,positionJ,commander,i);
             if(ninja!=null){
                 setWrongPosition(false);
             }

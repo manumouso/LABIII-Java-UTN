@@ -2,7 +2,7 @@ package edu.utn.factory;
 
 import edu.utn.view.*;
 
-public class MenuFactory {
+public class ViewFactory {
 
     public Introduction createIntro(){
 

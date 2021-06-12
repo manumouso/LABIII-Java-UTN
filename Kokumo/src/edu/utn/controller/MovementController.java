@@ -5,12 +5,9 @@ import edu.utn.model.Board;
 import edu.utn.model.ninja.Ninja;
 import edu.utn.model.ninja.NinjaPosition;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
-
-//pasarle LOS MENSAJES AL MANAGER
 public class MovementController {
 
     private List<String> standOnMessages;

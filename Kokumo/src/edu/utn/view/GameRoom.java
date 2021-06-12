@@ -1,14 +1,14 @@
 package edu.utn.view;
 
 
-import edu.utn.enums.MessageType;
+
 import edu.utn.manager.GameConstants;
 import edu.utn.manager.GameManager;
 import edu.utn.model.ninja.Direction;
 import edu.utn.model.ninja.Ninja;
 
 
-import java.awt.*;
+
 import java.util.Map;
 import java.util.Scanner;
 
@@ -37,9 +37,6 @@ public class GameRoom extends Stage{
         try {
 
             int option;
-            if(manager.getPlayer()==null){
-                manager.setPlayer(manager.createPlayer());
-            }
 
             do
             {
@@ -106,30 +103,30 @@ public class GameRoom extends Stage{
     }
 
     private void goBack(GameManager manager){
-        if(manager.getPlayer().getNinjas().size()>0){
-            manager.clearNinjas();
+        if(manager.getPlayerManager().getPlayer().getNinjas().size()>0){
+            manager.getPlayerManager().clearNinjas();
         }
         manager.clearBoards(true);
         //manager.clearBoards(false);
     }
     private void moveNinjas(GameManager manager){
-        if(manager.commanderAlive()) {
+        if(manager.getRuleManager().commanderAlive(manager.getPlayerManager().getPlayer())) {
 
             Scanner scanner = new Scanner(System.in);
             System.out.println("\t\t\tNINJA DIRECTIONS (case insensitive):");
-            System.out.println("\t\t\t[N]=[NORTH]");
-            System.out.println("\t\t\t[NE]=[NORTH EAST]");
-            System.out.println("\t\t\t[NW]=[NORTH WEST]");
-            System.out.println("\t\t\t[S]=[SOUTH]");
-            System.out.println("\t\t\t[SE]=[SOUTH EAST]");
-            System.out.println("\t\t\t[SW]=[SOUTH WEST]");
-            System.out.println("\t\t\t[E]=[EAST]");
-            System.out.println("\t\t\t[W]=[WEST]");
+            System.out.println("\t\t\t[N]=NORTH");
+            System.out.println("\t\t\t[NE]=NORTH EAST");
+            System.out.println("\t\t\t[NW]=NORTH WEST");
+            System.out.println("\t\t\t[S]=SOUTH");
+            System.out.println("\t\t\t[SE]=SOUTH EAST");
+            System.out.println("\t\t\t[SW]=SOUTH WEST");
+            System.out.println("\t\t\t[E]=EAST");
+            System.out.println("\t\t\t[W]=WEST");
             System.out.println(" ");
-            Map<String, Direction> directionMap = manager.getDirectionsMap();
+            Map<String, Direction> directionMap = manager.getRuleManager().getDirectionsMap();
 
-            for (Ninja ninja : manager.getPlayer().getNinjas()) {
-                if(manager.movementAllowed(ninja)){
+            for (Ninja ninja : manager.getPlayerManager().getPlayer().getNinjas()) {
+                if(manager.getRuleManager().movementAllowed(ninja)){
                     System.out.print("\t\t\tDo you want to move your ninja-> " + ninja.getName()+ "  [y/n]: ");
                     String answer = scanner.next();
                     System.out.println(" ");
@@ -144,7 +141,7 @@ public class GameRoom extends Stage{
                             System.out.print("\t\t\tEnter the direction ->");
                             direction = scanner.next();
                         }
-                        if (manager.move(ninja, directionMap.get(direction))) {
+                        if (manager.getRuleManager().move(ninja, directionMap.get(direction))) {
                             setMovedNinjas(getMovedNinjas() + 1);
                         }
                         manager.printBoard(true);
