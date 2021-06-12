@@ -1,16 +1,21 @@
 package edu.utn.controller;
 
-import edu.utn.message.Message;
+import edu.utn.json.AttackJson;
 import edu.utn.model.Board;
 import edu.utn.model.Player;
 import edu.utn.model.ninja.Ninja;
 import edu.utn.model.ninja.NinjaPosition;
 import edu.utn.model.square.Destroyed;
-import edu.utn.validator.AttackValidator;
+
+import javax.json.*;
+import java.util.*;
+
 
 public class AttackController {
 
     private NinjaController ninjaController;
+    private List<String> attackMessages;
+
     public NinjaController getNinjaController() {
         if(ninjaController==null){
             ninjaController=new NinjaController();
@@ -18,79 +23,123 @@ public class AttackController {
         return ninjaController;
     }
 
-    public void ninjaAttack(Player player){
-        //probablemente estos los reciba por parametro
-        // arrays y list representativos del body: que saco y meto en json(aca saco)
-        NinjaPosition[] attackPosition=new NinjaPosition[3];//sino ataca lo que llega pueden ser (-1;-1)
-        Integer[] attackPoints = new Integer[3];
-        Message message=new Message();
+    public List<String> getAttackMessages() {
+        if(attackMessages==null){
+            attackMessages= new ArrayList<>();
+        }
+        return attackMessages;
+    }
 
+    public AttackJson attackReceived(Player player, AttackJson model){
         int i=0;
+        String message;
         for(Ninja ninja: player.getNinjas()){
-            if(ninja.getNinjaPosition().getI()==attackPosition[i].getI() && ninja.getNinjaPosition().getJ()==attackPosition[i].getJ()){
-                ninja.setLifePoints(ninja.getLifePoints()-attackPoints[i]);
-                String previousName= ninja.getName();
-                getNinjaController().checkLifePoints(ninja);
-                if(ninja.isDead()){
-                    if(previousName.equals("NC")){
-                        //message.getMessageMap().put(i,"You WIN, killed: "+player.getName()+"'s ninja commander");
-                    }else{
-                        //message.getMessageMap().put(i,"You killed one: "+player.getName()+"'s ninja warrior");
-                    }
-                }else{
-                    //message.getMessageMap().put(i,"You hurt a ninja");
-                }
+            if(ninjaPositionEqualAttackPosition(ninja,model.getAttackPositions().get(i))){
+                message=hitNinja(ninja,model.getAttackPoints().get(i));
             }else{
-                //message.getMessageMap().put(i,"You destroyed a square");
-                Board.getInstance().getSquares()[attackPosition[i].getI()][attackPosition[i].getJ()]=new Destroyed();
+                message=hitSquare(model.getAttackPositions().get(i));
             }
+            model.getMessage().add(message);
             i++;
         }
-        //probablemente aca tenga que crear el obj json con message list que ira en el response body
-        //y segun la rta marco o no al casillero como destruido en mi tablero de ataques,
-        //entonces seguro necesito crear otra clase que sea direccion elegida para el ataque
-        //un punto intermedio hasta que vuelva rta, si la rta nunca vuelve, entonces que repita el turno
-        //si es que la conexion sigue activa
-    }
-    public void cleanNinjaAttack(Player player) {
-        //probablemente estos los reciba por parametro
-        // arrays y list representativos del body: que saco y meto en json(aca saco)
-        NinjaPosition[] attackPosition = new NinjaPosition[3];//sino ataca lo que llega pueden ser (-1;-1)
-        Integer[] attackPoints = new Integer[3];
-        Message message = new Message();
-        int i = 0;
-        for (Ninja ninja : player.getNinjas()) {
-            hitNinja(ninja/*,aca necesito pasarle lo json*/);
-            i++;
-        }
+
+        return model;
     }
 
-    public void hitNinja(Ninja ninja){
-        //esta tengo que resolver el tema de que le paso, si un array o el json array
-        //true= ninja.getNinjaPosition().getI()==attackPosition[i].getI() && ninja.getNinjaPosition().getJ()==attackPosition[i].getJ()
-        if(true){
-            ninja.setLifePoints(ninja.getLifePoints()/*-attackPoints[i]*/);
-            String previousName= ninja.getName();
-            //ninja.checkLifePoints();
-            ninjaDead(ninja.getName(),previousName);
+    public boolean ninjaPositionEqualAttackPosition(Ninja ninja, NinjaPosition attackPosition){
 
-        }else{
-            //Board.getInstance().getMessages().add("You destroyed a square");
-            //Board.getInstance().getSquares()[attackPosition[i].getI()][attackPosition[i].getJ()]=new Destroyed();
-
-        }
+        return ninja.getNinjaPosition().getI()==attackPosition.getI() && ninja.getNinjaPosition().getJ()==attackPosition.getJ();
+    }
+    public String hitNinja(Ninja ninja,int attackPoints){
+        ninja.setLifePoints(ninja.getLifePoints()-attackPoints);
+        getNinjaController().checkLifePoints(ninja);
+        return addHitInfo(ninja);
 
     }
-
-    public static void ninjaDead(String name, String previousName){
-        if(name.equals("dead")){
-            if(previousName.equals("NC")){
-                // Board.getInstance().getMessages().add("You Killed the ninja commander.");
+    public String hitSquare(NinjaPosition attackPosition){
+        Board.getInstance().getSquares()[attackPosition.getI()][attackPosition.getJ()]=new Destroyed();
+        getAttackMessages().add("Your square ("+attackPosition.getI()+","+attackPosition.getJ()+") was destroyed");
+        return "You destroyed a square";
+    }
+    public String addHitInfo(Ninja ninja){
+        String message;
+        if(ninja.isDead()){
+            if(ninja.getName().equals("NC")){
+                message="You killed the ninja commander";
+                getAttackMessages().add("Your commander was killed");
             }else{
-                //Board.getInstance().getMessages().add("You Killed a ninja warrior");
+                message="You killed a ninja warrior";
+                getAttackMessages().add("Your warrior"+ninja.getName()+" was killed");
             }
         }else{
-            //Board.getInstance().getMessages().add("You hurt a ninja");
+            message="You hurt a ninja";
+            getAttackMessages().add("Your ninja"+ninja.getName()+" was hurt. Life Points: "+ninja.getLifePoints());
         }
+        return message;
     }
+
+    public JsonArray message(String message){
+        JsonArrayBuilder builder= Json.createArrayBuilder();
+        builder.add(message);
+        return builder.build();
+    }
+    public JsonArray messages(JsonArray msg1,JsonArray msg2,JsonArray msg3){
+        JsonArrayBuilder builder = Json.createArrayBuilder();
+        builder.add(msg1)
+                .add(msg2)
+                .add(msg3);
+        return builder.build();
+    }
+    public JsonArray attackPoint(int attackPoint){
+        JsonArrayBuilder builder= Json.createArrayBuilder();
+        builder.add(attackPoint);
+        return builder.build();
+    }
+    public JsonArray points(JsonArray atta1,JsonArray atta2,JsonArray atta3){
+        JsonArrayBuilder builder = Json.createArrayBuilder();
+        builder.add(atta1)
+                .add(atta2)
+                .add(atta3);
+        return builder.build();
+    }
+    public JsonArray position(int i, int j){
+        JsonArrayBuilder builder= Json.createArrayBuilder();
+        builder.add(i).add(j);
+        return builder.build();
+    }
+
+    public JsonArray positions(JsonArray pos1,JsonArray pos2,JsonArray pos3){
+        JsonArrayBuilder builder = Json.createArrayBuilder();
+        builder.add(pos1)
+                .add(pos2)
+                .add(pos3);
+        return builder.build();
+    }
+
+    public JsonObject sendAttack(AttackJson attackJson){
+        JsonArray pos1= position(attackJson.getAttackPositions().get(0).getI(),attackJson.getAttackPositions().get(0).getJ());
+        JsonArray pos2= position(attackJson.getAttackPositions().get(1).getI(),attackJson.getAttackPositions().get(1).getJ());
+        JsonArray pos3= position(attackJson.getAttackPositions().get(2).getI(),attackJson.getAttackPositions().get(2).getJ());
+
+        JsonArray positions=positions(pos1,pos2,pos3);
+
+        JsonArray atta1= attackPoint(attackJson.getAttackPoints().get(0));
+        JsonArray atta2= attackPoint(attackJson.getAttackPoints().get(1));
+        JsonArray atta3= attackPoint(attackJson.getAttackPoints().get(2));
+
+        JsonArray points= points(atta1,atta2,atta3);
+
+        JsonArray msg1= message(attackJson.getMessage().get(0));
+        JsonArray msg2= message(attackJson.getMessage().get(1));
+        JsonArray msg3= message(attackJson.getMessage().get(2));
+
+        JsonArray messages= messages(msg1,msg2,msg3);
+
+        return Json.createObjectBuilder()
+                .add("positions",positions)
+                .add("points",points)
+                .add("messages",messages)
+                .build();
+    }
+
 }

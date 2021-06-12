@@ -29,4 +29,6 @@ public class NinjaPosition {
     public void setJ(int j) {
         this.j = j;
     }
+
+
 }

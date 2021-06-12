@@ -1,5 +1,6 @@
 package edu.utn.manager;
 
+import edu.utn.controller.AttackController;
 import edu.utn.controller.MovementController;
 import edu.utn.controller.NinjaController;
 import edu.utn.enums.MessageType;
@@ -18,6 +19,7 @@ public class RuleManager {
 
     private NinjaFactory ninjaFactory;
     private MovementController movementController;
+    private AttackController attackController;
     private NinjaController ninjaController;
     private Map<String, Direction> directionsMap;
     private Message message;
@@ -34,6 +36,14 @@ public class RuleManager {
         }
         return movementController;
     }
+
+    public AttackController getAttackController() {
+        if(attackController==null){
+            attackController=new AttackController();
+        }
+        return attackController;
+    }
+
     private NinjaController getNinjaController() {
         if(ninjaController==null){
             ninjaController= new NinjaController();

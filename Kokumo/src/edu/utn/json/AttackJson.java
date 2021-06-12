@@ -2,49 +2,51 @@ package edu.utn.json;
 
 
 import edu.utn.model.ninja.NinjaPosition;
-import edu.utn.message.Message;
+
 
 import javax.json.JsonArray;
 import javax.json.JsonObject;
+import java.util.ArrayList;
+import java.util.List;
 
-public class JsonModel {
+public class AttackJson {
 
-    private NinjaPosition[] attackPositions;
-    private int[] attackPoints;
-    private Message message;
+    private List<NinjaPosition> attackPositions;
+    private List<Integer> attackPoints;
+    private List<String> message;
 
-    //validation of the json on the client but also add validations here later
     //input
-    public JsonModel(JsonObject object) {
+    public AttackJson(JsonObject object) {
+
         JsonArray positions = object.getJsonArray("positions");
         JsonArray points = object.getJsonArray("points");
         JsonArray messages = object.getJsonArray("messages");
 
-        this.attackPositions = attackPosJsonToObj(positions);
+        this.attackPositions = attackPositionsJsonToObj(positions);
         this.attackPoints= attackPointsJsonToObj(points);
         this.message = msgJsonToObj(messages);
     }
     //output
-    public JsonModel(NinjaPosition[] attackPositions, int[] attackPoints, Message message) {
+    public AttackJson(List<NinjaPosition> attackPositions, List<Integer> attackPoints, List<String> message) {
         this.attackPositions = attackPositions;
         this.attackPoints = attackPoints;
         this.message = message;
     }
 
-    public NinjaPosition[] getAttackPositions() {
-
+    public List<NinjaPosition> getAttackPositions() {
         return attackPositions;
     }
 
-    public int[] getAttackPoints() {
+    public List<Integer> getAttackPoints() {
         return attackPoints;
     }
 
-    public Message getMessage() {
+    public List<String> getMessage() {
         return message;
     }
+
     //no voy a hacer estas funciones con for por ahora
-    private NinjaPosition[] attackPosJsonToObj(JsonArray positions){
+    private List<NinjaPosition> attackPositionsJsonToObj(JsonArray positions){
 
         JsonArray ninjaPos1 = positions.getJsonArray(0);
         JsonArray ninjaPos2 = positions.getJsonArray(1);
@@ -56,38 +58,40 @@ public class JsonModel {
         NinjaPosition pos2 = new NinjaPosition(ninjaPos2.getInt(0),ninjaPos2.getInt(1));
         NinjaPosition pos3 = new NinjaPosition(ninjaPos3.getInt(0),ninjaPos3.getInt(1));
 
-        NinjaPosition[] attackPos =new NinjaPosition[3];
-        attackPos[0]=pos1;
-        attackPos[1]=pos2;
-        attackPos[2]=pos3;
+        List<NinjaPosition> attackPos =new ArrayList<>();
+        attackPos.add(pos1);
+        attackPos.add(pos2);
+        attackPos.add(pos3);
 
         return attackPos;
     }
 
-    private int[] attackPointsJsonToObj(JsonArray points){
+    private List<Integer> attackPointsJsonToObj(JsonArray points){
 
         int ninjaAtta1= points.getInt(0);
         int ninjaAtta2= points.getInt(1);
         int ninjaAtta3= points.getInt(2);
-        //aca podria validar que los puntos de ataque no sean negativos, porque sino suman vida
-        int[] attackPoints = new int[3];
-        attackPoints[0]=ninjaAtta1;
-        attackPoints[1]=ninjaAtta2;
-        attackPoints[2]=ninjaAtta3;
+
+        List<Integer> attackPoints = new ArrayList<>();
+        attackPoints.add(ninjaAtta1);
+        attackPoints.add(ninjaAtta2);
+        attackPoints.add(ninjaAtta3);
 
         return attackPoints;
     }
 
-    private Message msgJsonToObj(JsonArray messages){
+    private List<String> msgJsonToObj(JsonArray messages){
         String msg1 = messages.getString(0);
         String msg2 = messages.getString(1);
         String msg3 = messages.getString(2);
-        //libertad de mensajes
-        Message message =new Message();
-        message.getMessageList().add(msg1);
-        message.getMessageList().add(msg2);
-        message.getMessageList().add(msg3);
+
+        List<String> message =new ArrayList<>();
+        message.add(msg1);
+        message.add(msg2);
+        message.add(msg3);
 
         return message;
     }
+
+
 }
