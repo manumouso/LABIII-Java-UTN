@@ -12,7 +12,7 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-public class Join extends Handlers{
+public class Join extends HttpHandlers {
 
     public Join(ServiceManager serviceManager) {
         super(serviceManager);

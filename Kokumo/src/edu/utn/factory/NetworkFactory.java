@@ -1,5 +1,6 @@
 package edu.utn.factory;
 
+import edu.utn.connection.client.Client;
 import edu.utn.connection.server.Server;
 
 public class NetworkFactory {
@@ -9,7 +10,8 @@ public class NetworkFactory {
         return new Server(IP,port);
     }
 
-    public void createClient(){
+    public Client createClient(){
 
+        return new Client();
     }
 }

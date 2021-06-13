@@ -8,16 +8,6 @@ import java.util.Scanner;
 public class ServerRoom extends Stage{
 
 
-    private boolean requestSent;
-
-    public boolean requestSent() {
-        return requestSent;
-    }
-
-    public void setRequestSent(boolean requestSent) {
-        this.requestSent = requestSent;
-    }
-
     @Override
     public void menu(GameManager manager) {
         try {
@@ -25,7 +15,6 @@ public class ServerRoom extends Stage{
             int option;
             do
             {
-
                 super.header();
                 System.out.println("\n\t\t\t\tSERVER MENU");
                 System.out.println("\n\t\t\t[1].CREATE SERVER");
@@ -53,7 +42,7 @@ public class ServerRoom extends Stage{
                     case 2 -> {
                         //PEDIR POR PANTALLA IP, PUERTO: CREAR OBJ SERVER DEL CLIENTE/otro Jugador
                         //MANDARLE UN REQUEST UNITE A MI, JSON PASARLE MI PUERTO MI IP
-                        //sendRequest(manager); construccion // request client sendInvitation
+                        sendRequest(manager);
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
                     }
@@ -113,9 +102,9 @@ public class ServerRoom extends Stage{
                 if(manager.getServer()!=null){
                     manager.setServerState();
                     manager.setServerWasCreated(true);
+                    manager.setClient();
                 }
-                manager.printMessages();
-                manager.clearMessages();
+                print(manager);
             }catch (NumberFormatException e){
                 System.out.println("\t\t\tPort must be a number");
             }catch (Exception e){
@@ -147,23 +136,31 @@ public class ServerRoom extends Stage{
 
     private void sendRequest(GameManager manager){
 
-        Scanner scanner2 =new Scanner(System.in);
-        System.out.print("\t\t\tEnter IP-> ");
-        String IP=scanner2.next();
-        System.out.print("\t\t\tEnter Port-> ");
-        String PORT=scanner2.next();
-        try {
-            int port= Integer.parseInt(PORT);
-            //crear un Objeto server del CLient
-            //mandar request a esa direccion
-        }catch (NumberFormatException e){
-            System.out.println("\t\t\tPort must be a number");
-        }
-        if(manager.serverWasCreated() && manager.isRunning() && requestSent()){
+        if(manager.serverWasCreated() && manager.isRunning()){
+            Scanner scanner2 =new Scanner(System.in);
+            System.out.print("\t\t\tEnter IP-> ");
+            String IP=scanner2.next();
+            System.out.print("\t\t\tEnter Port-> ");
+            String PORT=scanner2.next();
+            try {
+                int port= Integer.parseInt(PORT);
+                manager.sendInvitation(IP,port);
+                manager.setConnectedClient(true);
 
-            System.out.println("\t\t\tConnected to the client");
-            manager.toPlayerRoom();
+            }catch (NumberFormatException e){
+                System.out.println("\t\t\tPort must be a number");
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+            if(manager.connectedClient()){
+                while(!manager.getServiceManager().isRequestSuccessful()){}
+                System.out.println("\t\t\tConnected to the client");
+                manager.toPlayerRoom();
+            }
+        }else{
+            System.out.println("First create the server");
         }
+
     }
 }
 

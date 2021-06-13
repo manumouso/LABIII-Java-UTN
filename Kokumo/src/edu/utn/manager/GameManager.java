@@ -1,5 +1,6 @@
 package edu.utn.manager;
 
+import edu.utn.connection.client.Client;
 import edu.utn.connection.server.Server;
 import edu.utn.controller.BoardController;
 import edu.utn.enums.NetworkType;
@@ -119,6 +120,25 @@ public class GameManager {
             }
         }
         return null;
+    }
+
+    public void setClient(){
+        getServiceManager().setClient(createClient());
+    }
+
+    public Client createClient(){
+        NetworkFactory networkFactory = getServiceManager().getNetworkFactory();
+        Client client =networkFactory.createClient();
+        getMessage().getMessageList().add(NetworkType.CLIENT.getMessage());
+        return client;
+    }
+
+    public void sendInvitation(String IP,int port){
+        if(validIP(IP)){
+            if(validPort(port)){
+                getServiceManager().sendInvitation(IP,port,"{\"hola\":10}");
+            }
+        }
     }
 
     public void startConnection() throws IOException {

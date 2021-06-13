@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public abstract class ResponseHandler {
+public abstract class HttpResponseHandler {
 
     protected static int BUFFER_SIZE = 1024 * 8; // Size of the buffer when reading data from output stream
 

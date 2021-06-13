@@ -1,6 +1,7 @@
 package edu.utn.connection.server.requestHandler;
 
 import com.sun.net.httpserver.HttpExchange;
+import edu.utn.connection.client.HttpStatusCode;
 import edu.utn.manager.PlayerManager;
 import edu.utn.manager.RuleManager;
 import edu.utn.json.Constants;
@@ -16,7 +17,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 
-public class Attack extends Handlers{
+public class Attack extends HttpHandlers {
 
     public Attack(RuleManager ruleManager, PlayerManager playerManager) {
         super(ruleManager,playerManager);
@@ -31,11 +32,11 @@ public class Attack extends Handlers{
             JsonObject object = JsonController.stringJsonToJsonObject(requestBody);
 
             JsonArray position = object.getJsonArray("position");
-            String attackPoints = object.getString("attackPoints");
+            int attackPoints = object.getInt("attackPoints");
 
             NinjaPosition attackPosition = new NinjaPosition(position.getInt(0),position.getInt(1));
 
-            String message = ruleManager.attackReceived(playerManager.getPlayer(), attackPosition,Integer.parseInt(attackPoints));
+            String message = ruleManager.attackReceived(playerManager.getPlayer(), attackPosition,attackPoints);
 
             JsonObject res;
 
@@ -52,7 +53,7 @@ public class Attack extends Handlers{
             }
 
             exchange.getResponseHeaders().set(Constants.CONTENT_TYPE, Constants.APPLICATION_JSON);
-            exchange.sendResponseHeaders(200, 0);
+            exchange.sendResponseHeaders(HttpStatusCode.OK, 0);
 
             try (BufferedOutputStream out = new BufferedOutputStream(exchange.getResponseBody())) {
                 byte [] data = res.toString().getBytes();
