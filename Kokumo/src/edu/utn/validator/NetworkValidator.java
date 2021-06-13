@@ -4,7 +4,7 @@ public class NetworkValidator {
 
     public static boolean validPort(int port){
 
-        return port >= 8000 && port <=65000;
+        return port >= 1500 && port <=65000;
     }
 
     public static boolean validIP(String IP){
