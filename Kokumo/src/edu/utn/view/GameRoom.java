@@ -55,51 +55,50 @@ public class GameRoom extends Stage{
                 option = Integer.parseInt(number);
 
                 switch (option) {
-                    case 0 -> {
+                    case 0:
                         goBack(manager);
                         System.out.println("\n");
                         System.out.println("\t\t\tTo the Player Menu. ( ^_^)/\n");
+                        break;
 
-                    }
-                    case 1 -> {
+                    case 1:
                         if(getMovedNinjas()< GameConstants.MAX_NINJAS){
                             moveNinjas(manager);
                         }
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
-
-                    }
-                    case 2 -> {
-
+                        break;
+                    case 2:
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
-                    }
-                    case 3 -> {
+                        break;
+                    case 3:
                         System.out.println();
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
-                    }
-                    case 4 -> {
+                        break;
+
+                    case 4:
                         manager.printBoard(true);
                         manager.printBoard(false);
                         System.out.println("");
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
-                    }
-                    case 5 -> {
+                        break;
+                    case 5:
                         manager.waitAndPrint();
                         System.out.println("");
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
-                    }
-                    default -> {
+                        break;
+                    default:
                         System.out.println("\n");
                         System.out.println("\t\t\tEnter a valid number [1,2,3]");
                         System.out.println("\t\t\t[0]->Quit Game");
                         System.out.println("\n");
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
-                    }
+                        break;
                 }
 
             } while (option != 0);

@@ -13,10 +13,18 @@ public class BoardFactory {
                 int squareNumber = (int)Math.floor(Math.random()*GameConstants.MAX_COLUMN+1);
                 String function="addSquare"+squareNumber;
                 switch (function) {
-                    case "addSquare2" -> squares[i][j]=new Stone();
-                    case "addSquare3" -> squares[i][j]=new Tree();
-                    case "addSquare4" -> squares[i][j]=new NinjaTrap();
-                    default -> squares[i][j]=new Empty();
+                    case "addSquare2":
+                        squares[i][j]=new Stone();
+                        break;
+                    case "addSquare3":
+                        squares[i][j]=new Tree();
+                        break;
+                    case "addSquare4":
+                        squares[i][j]=new NinjaTrap();
+                        break;
+                    default:
+                        squares[i][j]=new Empty();
+                        break;
                 }
             }
         }

@@ -26,30 +26,29 @@ public class PrimaryStage extends Stage{
                 option = Integer.parseInt(number);
 
                 switch (option) {
-                    case 0 -> {
+                    case 0:
                         System.out.println("\n");
                         System.out.println("\t\t\tBye Ninja. ( ^_^)/\n");
                         super.footer();
-                    }
-                    case 1 -> {
+                        break;
+                    case 1:
                         manager.toServerRoom();
                         System.out.print("\t\t\tEnter to continue-> ");
                         scanner.nextLine();
-
-                    }
-                    case 2 -> {
+                        break;
+                    case 2:
                         manager.toClientRoom();
                         System.out.print("\t\t\tEnter to continue-> ");
                         scanner.nextLine();
-                    }
-                    default -> {
+                        break;
+                    default:
                         System.out.println("\n");
                         System.out.println("\t\t\tEnter a valid number [1,2]");
                         System.out.println("\t\t\t[0]->Quit Game");
                         System.out.println("\n");
                         System.out.print("\t\t\tEnter to continue-> ");
                         scanner.nextLine();
-                    }
+                        break;
                 }
 
             } while (option != 0);

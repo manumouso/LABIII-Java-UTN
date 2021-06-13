@@ -44,21 +44,19 @@ public class PlayerRoom extends Stage{
                 option = Integer.parseInt(number);
 
                 switch (option) {
-                    case 0 -> {
+                    case 0:
                         goBack(manager);
                         System.out.println("\n");
                         System.out.println("\t\t\tTo the Server Menu. ( ^_^)/\n");
-
-                    }
-                    case 1 -> {
+                        break;
+                    case 1:
                         System.out.print("\t\t\tEnter your name-> ");
                         String name= scanner.next();
                         manager.getPlayerManager().setPlayerName(name);
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
-
-                    }
-                    case 2 -> {
+                        break;
+                    case 2:
                         if(manager.getRuleManager().lessThanRequiredNinjasQuantity(manager.getPlayerManager().getPlayer())){
                             placeNinjas(manager);
                             System.out.println("\t\t\tNinjas placed correctly");
@@ -67,13 +65,13 @@ public class PlayerRoom extends Stage{
                         }
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
-                    }
-                    case 3 -> {
+                        break;
+                    case 3:
                         manager.printBoard(true);
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
-                    }
-                    case 4 -> {
+                        break;
+                    case 4:
                         if(manager.getRuleManager().requiredNinjasQuantity(manager.getPlayerManager().getPlayer())){
                             manager.toGameRoom();
                         }else{
@@ -81,15 +79,15 @@ public class PlayerRoom extends Stage{
                         }
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
-                    }
-                    default -> {
+                        break;
+                    default:
                         System.out.println("\n");
                         System.out.println("\t\t\tEnter a valid number [1,2,3,4]");
                         System.out.println("\t\t\t[0]->Quit Game");
                         System.out.println("\n");
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
-                    }
+                        break;
                 }
 
             } while (option != 0);

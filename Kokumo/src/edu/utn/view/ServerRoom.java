@@ -27,26 +27,25 @@ public class ServerRoom extends Stage{
                 option = Integer.parseInt(number);
 
                 switch (option) {
-                    case 0 -> {
+                    case 0:
                         goBack(manager);
                         System.out.println("\n");
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
-                    }
-                    case 1 -> {
+                        break;
+                    case 1:
                         start(manager);
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
-
-                    }
-                    case 2 -> {
+                        break;
+                    case 2:
                         //PEDIR POR PANTALLA IP, PUERTO: CREAR OBJ SERVER DEL CLIENTE/otro Jugador
                         //MANDARLE UN REQUEST UNITE A MI, JSON PASARLE MI PUERTO MI IP
                         sendRequest(manager);
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
-                    }
-                    case 3 -> {
+                        break;
+                    case 3:
                         //aca falta guardarme el objeto server del client/crearlo con la IP Y PUERTO
                         //cuando cree el requestHandler await en mi Server
                         if(waitToProceed(manager)){
@@ -55,15 +54,15 @@ public class ServerRoom extends Stage{
                         System.out.println("\n");
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
-                    }
-                    default -> {
+                        break;
+                    default:
                         System.out.println("\n");
                         System.out.println("\t\t\tEnter a valid number [1,2,3]");
                         System.out.println("\t\t\t[0]->Quit Game");
                         System.out.println("\n");
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
-                    }
+                        break;
                 }
 
             } while (option != 0);
