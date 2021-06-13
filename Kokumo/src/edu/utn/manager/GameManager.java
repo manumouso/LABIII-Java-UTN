@@ -7,6 +7,7 @@ import edu.utn.enums.NetworkType;
 import edu.utn.factory.ViewFactory;
 import edu.utn.factory.NetworkFactory;
 import edu.utn.message.Message;
+import edu.utn.model.ninja.NinjaPosition;
 import edu.utn.validator.NetworkValidator;
 import edu.utn.view.*;
 import java.io.IOException;
@@ -100,12 +101,6 @@ public class GameManager {
         GameRoom gameRoom = viewFactory.createGameRoom();
         gameRoom.menu(this);
     }
-
-    public void toClientRoom(){
-        ClientRoom clientRoom = viewFactory.createClientRoom();
-        clientRoom.menu(this);
-    }
-
     public void setServer(String IP,int port){
         getServiceManager().setServer(createServer(IP,port));
     }
@@ -136,9 +131,13 @@ public class GameManager {
     public void sendInvitation(String IP,int port){
         if(validIP(IP)){
             if(validPort(port)){
-                getServiceManager().sendInvitation(IP,port,"{\"hola\":10}");
+                getServiceManager().sendInvitation(IP,port,"{\"port\":"+port+"}");
             }
         }
+    }
+    public void attack(NinjaPosition attackPosition, int attackPoints){
+        String json="{\"position\":["+attackPosition.getI()+","+attackPosition.getJ()+"],\"attackPoints\":"+attackPoints+"}";
+        getServiceManager().attack(attackPosition,attackPoints,json);
     }
 
     public void startConnection() throws IOException {

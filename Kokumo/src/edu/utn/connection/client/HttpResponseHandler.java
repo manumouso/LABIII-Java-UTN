@@ -22,7 +22,7 @@ public abstract class HttpResponseHandler {
         // Do nothing by default
     }
 
-    public abstract void onSuccess(int statusCode, Map<String, List<String>> headers, byte[] content);
+    public abstract void onSuccess(int statusCode, Map<String, List<String>> headers, String content);
 
     public abstract void onFailure(int statusCode, Map<String, List<String>> headers, byte[] content);
 
@@ -47,8 +47,8 @@ public abstract class HttpResponseHandler {
         return os.toByteArray();
     }
 
-    //puedo devolver el String y despues parsearlo, pero creo que imprimiendo el mensaje ya estoy
-    protected void readToString(HttpURLConnection connection){
+    protected String readToString(HttpURLConnection connection){
+        String message = null;
         try(BufferedReader br = new BufferedReader(
                 new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8))) {
             StringBuilder response = new StringBuilder();
@@ -56,10 +56,11 @@ public abstract class HttpResponseHandler {
             while ((responseLine = br.readLine()) != null) {
                 response.append(responseLine.trim());
             }
-            System.out.println(response.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
+            message=response.toString();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
+        return message;
     }
 
     protected void processResponse(HttpURLConnection connection) {
@@ -71,7 +72,7 @@ public abstract class HttpResponseHandler {
 
             // Successful response codes will be in interval [200,300)
             if (responseCode >= 200 && responseCode < 300) {
-                byte[] responseContent = readFrom(connection.getInputStream(), contentLength);//or print the json as if with readToString()
+                String responseContent = readToString(connection);
                 onSuccess(responseCode, responseHeaders, responseContent);
             } else {
                 byte[] responseContent = readFrom(connection.getErrorStream(), contentLength);

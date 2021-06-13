@@ -19,11 +19,6 @@ public class ViewFactory {
         return new ServerRoom();
     }
 
-    public ClientRoom createClientRoom(){
-
-        return new ClientRoom();
-    }
-
     public PlayerRoom createPlayerRoom(){
 
         return new PlayerRoom();

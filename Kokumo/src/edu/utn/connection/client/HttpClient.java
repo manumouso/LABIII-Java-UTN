@@ -46,9 +46,8 @@ public abstract class HttpClient {
             // POST JSON
             urlConnection.setDoOutput(true);
 
-            String jsonInputString = "{\"name\": \"Upendra\", \"job\": \"Programmer\"}";
             try(OutputStream os = urlConnection.getOutputStream()) {
-                byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
+                byte[] input = json.getBytes(StandardCharsets.UTF_8);
                 urlConnection.setFixedLengthStreamingMode(input.length);
                 os.write(input);
             }

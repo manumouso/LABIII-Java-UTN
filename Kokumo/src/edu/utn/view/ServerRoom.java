@@ -39,15 +39,11 @@ public class ServerRoom extends Stage{
                         scanner.next();
                         break;
                     case 2:
-                        //PEDIR POR PANTALLA IP, PUERTO: CREAR OBJ SERVER DEL CLIENTE/otro Jugador
-                        //MANDARLE UN REQUEST UNITE A MI, JSON PASARLE MI PUERTO MI IP
                         sendRequest(manager);
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
                         break;
                     case 3:
-                        //aca falta guardarme el objeto server del client/crearlo con la IP Y PUERTO
-                        //cuando cree el requestHandler await en mi Server
                         if(waitToProceed(manager)){
                             manager.toPlayerRoom();
                         }
@@ -157,7 +153,7 @@ public class ServerRoom extends Stage{
                 manager.toPlayerRoom();
             }
         }else{
-            System.out.println("First create the server");
+            System.out.println("\t\t\tFirst create the server");
         }
 
     }

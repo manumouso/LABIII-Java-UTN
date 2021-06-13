@@ -17,8 +17,7 @@ public class PrimaryStage extends Stage{
 
                 super.header();
                 System.out.println("\n\t\t\t\tMAIN MENU");
-                System.out.println("\n\t\t\t[1].SERVER MODE");
-                System.out.println("\t\t\t[2].CLIENT MODE");
+                System.out.println("\n\t\t\t[1].START GAME");
                 System.out.println("\t\t\t[0].QUIT GAME");
                 System.out.print("\n\t\t\tSelect an option-> ");
                 Scanner scanner =new Scanner(System.in);
@@ -36,14 +35,9 @@ public class PrimaryStage extends Stage{
                         System.out.print("\t\t\tEnter to continue-> ");
                         scanner.nextLine();
                         break;
-                    case 2:
-                        manager.toClientRoom();
-                        System.out.print("\t\t\tEnter to continue-> ");
-                        scanner.nextLine();
-                        break;
                     default:
                         System.out.println("\n");
-                        System.out.println("\t\t\tEnter a valid number [1,2]");
+                        System.out.println("\t\t\tEnter a valid number [1]");
                         System.out.println("\t\t\t[0]->Quit Game");
                         System.out.println("\n");
                         System.out.print("\t\t\tEnter to continue-> ");

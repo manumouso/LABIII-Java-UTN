@@ -23,9 +23,16 @@ public class Join extends HttpHandlers {
         String requestMethod = exchange.getRequestMethod();
         if (requestMethod.equalsIgnoreCase(Constants.POST)) {
 
-            JsonObject res;
+            String requestBody = JsonController.streamToString(exchange.getRequestBody());
+            JsonObject object = JsonController.stringJsonToJsonObject(requestBody);
+
+            int port = object.getInt("port");
 
             serviceManager.setExternalMessage(true);
+            serviceManager.setRemoteIp(exchange.getRemoteAddress().getHostName());
+            serviceManager.setRemotePort(port);
+
+            JsonObject res;
 
             try {
 
