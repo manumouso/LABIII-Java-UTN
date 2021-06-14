@@ -24,7 +24,7 @@ public class NinjaFactory {
 
     }
 
-    private NinjaPosition createPosition(int i, int j){
+    public NinjaPosition createPosition(int i, int j){
 
         return new NinjaPosition(i,j);
     }

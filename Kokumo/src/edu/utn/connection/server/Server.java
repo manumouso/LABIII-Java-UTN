@@ -3,7 +3,7 @@ package edu.utn.connection.server;
 import com.sun.net.httpserver.HttpServer;
 import edu.utn.connection.server.requestHandler.Attack;
 import edu.utn.connection.server.requestHandler.Join;
-import edu.utn.connection.server.requestHandler.Move;
+import edu.utn.connection.server.requestHandler.YourTurn;
 import edu.utn.manager.PlayerManager;
 import edu.utn.manager.RuleManager;
 import edu.utn.manager.ServiceManager;
@@ -42,7 +42,7 @@ public class Server {
         try {
             getServer().createContext("/attack",new Attack(ruleManager,playerManager));
             getServer().createContext("/join",new Join(serviceManager));
-            getServer().createContext("/move",new Move());
+            getServer().createContext("/yourTurn",new YourTurn(playerManager));
             getServer().setExecutor(null);
             getServer().start();
 

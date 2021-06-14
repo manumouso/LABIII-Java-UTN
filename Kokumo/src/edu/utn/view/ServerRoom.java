@@ -18,7 +18,7 @@ public class ServerRoom extends Stage{
                 super.header();
                 System.out.println("\n\t\t\t\tSERVER MENU");
                 System.out.println("\n\t\t\t[1].CREATE SERVER");
-                System.out.println("\t\t\t[2].INVITE PLAYER");
+                System.out.println("\t\t\t[2].JOIN GAME");
                 System.out.println("\t\t\t[3].AWAIT REQUEST");
                 System.out.println("\t\t\t[0].GO BACK");
                 System.out.print("\n\t\t\tSelect an option-> ");
@@ -45,6 +45,7 @@ public class ServerRoom extends Stage{
                         break;
                     case 3:
                         if(waitToProceed(manager)){
+                            manager.getPlayerManager().setMyTurn(true);
                             manager.toPlayerRoom();
                         }
                         System.out.println("\n");
@@ -139,7 +140,7 @@ public class ServerRoom extends Stage{
             String PORT=scanner2.next();
             try {
                 int port= Integer.parseInt(PORT);
-                manager.sendInvitation(IP,port);
+                manager.sendJoin(IP,port);
                 manager.setConnectedClient(true);
 
             }catch (NumberFormatException e){
@@ -149,6 +150,7 @@ public class ServerRoom extends Stage{
             }
             if(manager.connectedClient()){
                 while(!manager.getServiceManager().isRequestSuccessful()){}
+                manager.getPlayerManager().setMyTurn(false);
                 System.out.println("\t\t\tConnected to the client");
                 manager.toPlayerRoom();
             }

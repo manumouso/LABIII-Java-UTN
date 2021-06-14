@@ -94,6 +94,10 @@ public class RuleManager {
 
         return null;
     }
+    public NinjaPosition createPosition(int i,int j){
+        NinjaFactory ninjaFactory=getNinjaFactory();
+        return ninjaFactory.createPosition(i,j);
+    }
 
     public boolean move(Ninja ninja, Direction direction){
 

@@ -9,11 +9,9 @@ import java.util.List;
 public class Player {
 
     private String name;
-    private State state;
     private List<Ninja> ninjas;
 
-    public Player(State state) {
-        this.state = state;
+    public Player() {
     }
 
     public String getName() {
@@ -22,14 +20,6 @@ public class Player {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public State getState() {
-        return state;
-    }
-
-    public void setState(State state) {
-        this.state = state;
     }
 
     public List<Ninja> getNinjas() {

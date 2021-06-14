@@ -23,4 +23,8 @@ public abstract class HttpHandlers implements HttpHandler {
         this.serviceManager = serviceManager;
     }
 
+    public HttpHandlers(PlayerManager playerManager){
+        this.playerManager=playerManager;
+    }
+
 }

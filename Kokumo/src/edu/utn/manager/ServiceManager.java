@@ -129,10 +129,13 @@ public class ServiceManager {
             @Override
             public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
                 System.out.println("\t\t\t"+content);
-                if(content.equals("You destroyed a square") || content.contains("You killed")){
+                if(content.equals("You destroyed a square") || content.equals("You killed the ninja commander") || content.equals("You killed a ninja warrior")){
                     AttackBoard.getInstance().getSquares()[attackPosition.getI()][attackPosition.getJ()]=new Destroyed();
                     setCorrectMovement(getCorrectMovement()+1);
+                }else if(content.equals("You hurt a ninja")){
+                    setCorrectMovement(getCorrectMovement()+1);
                 }
+
             }
 
             @Override
@@ -147,18 +150,18 @@ public class ServiceManager {
         });
     }
 
-    public void move(){
-        String url="http://"+getRemoteIp()+":"+getRemotePort()+"/move";
+    public void endTurn(){
+        String url="http://"+getRemoteIp()+":"+getRemotePort()+"/yourTurn";
 
-        client.post(url, " ", new HttpResponseHandler() {
+        client.post(url, "{}", new HttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
-                setCorrectMovement(getCorrectMovement()+1);
+                System.out.println(content);
             }
 
             @Override
             public void onFailure(int statusCode, Map<String, List<String>> headers, byte[] content) {
-
+                System.out.println(Arrays.toString(content));
             }
 
             @Override

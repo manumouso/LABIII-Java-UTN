@@ -12,6 +12,16 @@ public class PlayerManager {
     private PlayerFactory playerFactory;
     private PlayerController playerController;
 
+    private boolean myTurn;
+
+    public synchronized boolean isMyTurn() {
+        return myTurn;
+    }
+
+    public synchronized void setMyTurn(boolean myTurn) {
+        this.myTurn = myTurn;
+    }
+
     public synchronized Player getPlayer() {
         return player;
     }
@@ -52,6 +62,12 @@ public class PlayerManager {
     public void clearNinjas(){
         PlayerController playerController = getPlayerController();
         playerController.clearNinjas(getPlayer());
+    }
+
+    public synchronized void myTurn(){
+        for(Ninja ninja: getPlayer().getNinjas()){
+            ninja.setAttackCounter(0);
+        }
     }
 
 }

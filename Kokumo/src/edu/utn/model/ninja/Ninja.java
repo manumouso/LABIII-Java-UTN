@@ -10,6 +10,7 @@ public abstract class Ninja {
     private Direction direction;
     private boolean dead;
     private int movementCounter;
+    private int attackCounter;
 
     public Ninja(String name, int lifePoints, int attackPoints, NinjaPosition ninjaPosition) {
         this.name = name;
@@ -67,13 +68,19 @@ public abstract class Ninja {
         this.dead = dead;
     }
 
-    public int getMovementCounter() {
+    public synchronized int getMovementCounter() {
         return movementCounter;
     }
 
-    public void setMovementCounter(int movementCounter) {
+    public synchronized void setMovementCounter(int movementCounter) {
         this.movementCounter = movementCounter;
     }
 
+    public synchronized int getAttackCounter() {
+        return attackCounter;
+    }
 
+    public synchronized void setAttackCounter(int attackCounter) {
+        this.attackCounter = attackCounter;
+    }
 }

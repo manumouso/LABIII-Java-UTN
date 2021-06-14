@@ -2,34 +2,27 @@ package edu.utn.view;
 
 
 
+
 import edu.utn.manager.GameConstants;
 import edu.utn.manager.GameManager;
 import edu.utn.model.ninja.Direction;
 import edu.utn.model.ninja.Ninja;
-
+import edu.utn.model.ninja.NinjaPosition;
 
 
 import java.util.Map;
 import java.util.Scanner;
 
 public class GameRoom extends Stage{
-    private int movedNinjas;
-    private int attackedNinjas;
 
-    public int getMovedNinjas() {
-        return movedNinjas;
+    private boolean wrongPosition;
+
+    public boolean isWrongPosition() {
+        return wrongPosition;
     }
 
-    public void setMovedNinjas(int movedNinjas) {
-        this.movedNinjas = movedNinjas;
-    }
-
-    public int getAttackedNinjas() {
-        return attackedNinjas;
-    }
-
-    public void setAttackedNinjas(int attackedNinjas) {
-        this.attackedNinjas = attackedNinjas;
+    public void setWrongPosition(boolean wrongPosition) {
+        this.wrongPosition = wrongPosition;
     }
 
     @Override
@@ -47,7 +40,8 @@ public class GameRoom extends Stage{
                 System.out.println("\t\t\t[2].ATTACK");
                 System.out.println("\t\t\t[3].VIEW NINJAS DATA");
                 System.out.println("\t\t\t[4].VIEW BOARDS");
-                System.out.println("\t\t\t[5].WAIT ATTACK AND PRINT");
+                System.out.println("\t\t\t[5].CHECK RECEIVED MESSAGES");
+                System.out.println("\t\t\t[6].END YOUR TURN");
                 System.out.println("\t\t\t[0].GO BACK");
                 System.out.print("\n\t\t\tSelect an option-> ");
                 Scanner scanner =new Scanner(System.in);
@@ -62,17 +56,29 @@ public class GameRoom extends Stage{
                         break;
 
                     case 1:
-                        if(getMovedNinjas()< GameConstants.MAX_NINJAS){
-                            moveNinjas(manager);
+                        if(manager.getPlayerManager().isMyTurn()){
+                            if(manager.getServiceManager().getCorrectMovement()< GameConstants.MAX_NINJAS){
+                                moveNinjas(manager);
+
+                            }
+                        }else{
+                            System.out.println("It's not your turn, wait");
                         }
+
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
                         break;
                     case 2:
+                        if(manager.getPlayerManager().isMyTurn()){
+                            attackNinjas(manager);
+                        }else{
+                            System.out.println("It's not your turn, wait");
+                        }
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
                         break;
                     case 3:
+                        getInfo(manager);
                         System.out.println();
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
@@ -81,19 +87,29 @@ public class GameRoom extends Stage{
                     case 4:
                         manager.printBoard(true);
                         manager.printBoard(false);
-                        System.out.println("");
+                        System.out.println(" ");
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
                         break;
                     case 5:
-                        manager.waitAndPrint();
-                        System.out.println("");
+                        if(!manager.getPlayerManager().isMyTurn()){
+                            manager.checkReceivedMessages();
+                        }else{
+                            System.out.println("\t\t\tYou can't check your inbox if it is your turn");
+                        }
+                        System.out.println(" ");
+                        System.out.print("\t\t\tEnter a character to continue-> ");
+                        scanner.next();
+                        break;
+                    case 6:
+                        endTurn(manager);
+                        System.out.println(" ");
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
                         break;
                     default:
                         System.out.println("\n");
-                        System.out.println("\t\t\tEnter a valid number [1,2,3]");
+                        System.out.println("\t\t\tEnter a valid number [1,2,3,4,5,6]");
                         System.out.println("\t\t\t[0]->Quit Game");
                         System.out.println("\n");
                         System.out.print("\t\t\tEnter a character to continue-> ");
@@ -113,7 +129,22 @@ public class GameRoom extends Stage{
             manager.getPlayerManager().clearNinjas();
         }
         manager.clearBoards(true);
-        //manager.clearBoards(false);
+        manager.clearBoards(false);
+    }
+
+    private void getInfo(GameManager manager){
+        System.out.println("\t\t\t NINJAS DATA-----");
+        for(Ninja ninja: manager.getPlayerManager().getPlayer().getNinjas()){
+            System.out.println("\t\t\tNinja: "+ninja.getName());
+            System.out.println("\t\t\tLife Points: "+ninja.getLifePoints());
+            System.out.println("\t\t\tNinja position: i: "+ninja.getNinjaPosition().getI()+" j: "+ninja.getNinjaPosition().getJ());
+            System.out.println("\t\t\tMovement Allowed: "+(canMove(ninja)?"yes":"no"));
+            System.out.println("\t\t\t State: "+(ninja.isDead()?"DEAD":"ALIVE"));
+            System.out.println(" ");
+        }
+    }
+    private boolean canMove(Ninja ninja){
+        return ninja.getMovementCounter() == 0;
     }
     private void moveNinjas(GameManager manager){
         if(manager.getRuleManager().commanderAlive(manager.getPlayerManager().getPlayer())) {
@@ -148,7 +179,8 @@ public class GameRoom extends Stage{
                             direction = scanner.next();
                         }
                         if (manager.getRuleManager().move(ninja, directionMap.get(direction))) {
-                            setMovedNinjas(getMovedNinjas() + 1);
+                            manager.getServiceManager().setCorrectMovement(manager.getServiceManager().getCorrectMovement()+1);
+
                         }
                         manager.printBoard(true);
                         System.out.println(" ");
@@ -160,6 +192,88 @@ public class GameRoom extends Stage{
             }
         }else{
             print(manager);
+        }
+    }
+
+
+    private void attackNinjas(GameManager manager){
+
+            Scanner scanner = new Scanner(System.in);
+            NinjaPosition ninjaPosition=null;
+            for (Ninja ninja : manager.getPlayerManager().getPlayer().getNinjas()) {
+                if(ninja.getAttackCounter()==0 && !ninja.isDead()){
+                    System.out.print("\t\t\tDo you want to attack with-> " + ninja.getName()+ "  [y/n]: ");
+                    String answer = scanner.next();
+                    System.out.println(" ");
+                    if (answer.equals("y") || answer.equals("Y")) {
+                        manager.printBoard(false);
+                        System.out.println(" ");
+                        System.out.println("\t\t\tEnter the attack position:");
+                        ninjaPosition=inputPosition(manager);
+
+                        manager.sendAttack(ninjaPosition, ninja.getAttackPoints());
+                        ninja.setAttackCounter(ninja.getAttackCounter()+1);
+                        ninja.setMovementCounter(0);
+                        manager.printBoard(false);
+                        System.out.println(" ");
+
+                    }
+                }else{
+                    System.out.println("\t\t\tThis ninja can't attack. Ninja: "+ninja.getName());
+                }
+            }
+
+    }
+    private NinjaPosition inputPosition(GameManager manager){
+        setWrongPosition(true);
+        Scanner scanner =new Scanner(System.in);
+        NinjaPosition attackPosition = null;
+        while(isWrongPosition()){
+          System.out.print("\t\t\tEnter the attack position ROW: position I: [expected number 0 to 4 included] -> ");
+          String posI = scanner.next();
+          System.out.print("\t\t\tEnter the attack position COLUMN: position J: [expected number 0 to 4 included] -> ");
+          String posJ= scanner.next();
+          attackPosition=toInt(posI,posJ,manager);
+
+        }
+        return attackPosition;
+    }
+
+    private NinjaPosition toInt(String posI,String posJ,GameManager manager){
+        NinjaPosition attackPosition=null;
+        try{
+            int positionI= Integer.parseInt(posI);
+            int positionJ= Integer.parseInt(posJ);
+
+            attackPosition=manager.getRuleManager().createPosition(positionI,positionJ);
+            if(attackPosition!=null){
+                setWrongPosition(false);
+            }
+            System.out.println(" ");
+
+        }catch (NumberFormatException e){
+            System.out.println("\t\t\tRemember only numbers allowed.");
+            System.out.println("\t\t\tTry again!!!");
+            setWrongPosition(true);
+        }catch (Exception e){
+            System.out.println("\t\t\tException: "+e.getMessage());
+            setWrongPosition(true);
+        }
+        return attackPosition;
+    }
+
+
+    private void endTurn(GameManager manager){
+        if(manager.getPlayerManager().isMyTurn()){
+            if(manager.getServiceManager().getCorrectMovement()==GameConstants.MAX_NINJAS){
+                manager.getServiceManager().setCorrectMovement(0);
+                manager.getPlayerManager().setMyTurn(false);
+                manager.sendEndTurn();
+            }else{
+                System.out.println("\t\t\tYou have movements(move or attack) left: "+ (GameConstants.MAX_NINJAS-manager.getServiceManager().getCorrectMovement()));
+            }
+        }else{
+            System.out.println("\t\t\tIt's not your turn, wait");
         }
     }
 

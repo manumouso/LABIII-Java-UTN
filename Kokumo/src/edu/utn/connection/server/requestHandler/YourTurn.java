@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpExchange;
 import edu.utn.connection.client.HttpStatusCode;
 import edu.utn.json.Constants;
 import edu.utn.json.JsonController;
+import edu.utn.manager.PlayerManager;
 
 
 import javax.json.Json;
@@ -12,7 +13,11 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-public class Move extends HttpHandlers {
+public class YourTurn extends HttpHandlers {
+    public YourTurn(PlayerManager playerManager) {
+        super(playerManager);
+    }
+
     @Override
     public void handle(HttpExchange exchange) throws IOException {
 
@@ -20,11 +25,13 @@ public class Move extends HttpHandlers {
         if (requestMethod.equalsIgnoreCase(Constants.POST)) {
 
 
+            playerManager.setMyTurn(true);
+            playerManager.myTurn();
             JsonObject res;
 
             try {
                 res= Json.createObjectBuilder()
-                        .add("message","moved correctly")
+                        .add("message","Turn ended, wait")
                         .build();
 
             }

@@ -128,16 +128,20 @@ public class GameManager {
         return client;
     }
 
-    public void sendInvitation(String IP,int port){
+    public void sendJoin(String IP,int port){
         if(validIP(IP)){
             if(validPort(port)){
                 getServiceManager().sendInvitation(IP,port,"{\"port\":"+port+"}");
             }
         }
     }
-    public void attack(NinjaPosition attackPosition, int attackPoints){
+    public void sendAttack(NinjaPosition attackPosition, int attackPoints){
         String json="{\"position\":["+attackPosition.getI()+","+attackPosition.getJ()+"],\"attackPoints\":"+attackPoints+"}";
         getServiceManager().attack(attackPosition,attackPoints,json);
+    }
+
+    public void sendEndTurn(){
+        getServiceManager().endTurn();
     }
 
     public void startConnection() throws IOException {
@@ -229,11 +233,11 @@ public class GameManager {
         return false;
     }
 
-    //Algo asi para el turno
-    public synchronized void waitAndPrint(){
-        while (getRuleManager().getMessageArrived()<3){}
-        printMessages();
-        clearMessages();
-        getRuleManager().setMessageArrived(0);
+    public synchronized void checkReceivedMessages(){
+        if(getRuleManager().getMessageArrived()>0) {
+            printMessages();
+            clearMessages();
+            getRuleManager().setMessageArrived(0);
+        }
     }
 }
