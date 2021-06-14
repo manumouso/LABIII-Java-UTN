@@ -10,15 +10,8 @@ import java.util.List;
 
 public class MovementController {
 
-    private List<String> standOnMessages;
     private NinjaController ninjaController;
-
-    public List<String> getStandOnMessages() {
-        if(standOnMessages==null){
-            standOnMessages=new ArrayList<>();
-        }
-        return standOnMessages;
-    }
+    private List<String> standOnMessages;
 
     public NinjaController getNinjaController() {
         if(ninjaController==null){
@@ -26,6 +19,13 @@ public class MovementController {
         }
         return ninjaController;
     }
+    public List<String> getStandOnMessages() {
+        if(standOnMessages==null){
+            standOnMessages=new ArrayList<>();
+        }
+        return standOnMessages;
+    }
+
 
     public void ninjaStandsOn(Ninja ninja){
         Board.getInstance().getSquares()[ninja.getNinjaPosition().getI()][ninja.getNinjaPosition().getJ()].setHasNinja(true);

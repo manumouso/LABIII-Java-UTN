@@ -29,15 +29,6 @@ public class NinjaFactory {
         return new NinjaPosition(i,j);
     }
 
-    public List<Ninja> createListNinja(Ninja ninja1, Ninja ninja2, Ninja ninja3){
-        List<Ninja> ninjas= new ArrayList<>();
-        ninjas.add(ninja1);
-        ninjas.add(ninja2);
-        ninjas.add(ninja3);
-
-        return ninjas;
-    }
-
     public Map<String,Direction> createDirectionMap(){
         Map<String,Direction> directionMap = new HashMap<>();
         directionMap.put("N",Direction.getNorth());

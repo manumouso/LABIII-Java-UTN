@@ -1,7 +1,6 @@
 package edu.utn.connection.server.requestHandler;
 
 import com.sun.net.httpserver.HttpExchange;
-import edu.utn.connection.client.HttpStatusCode;
 import edu.utn.json.Constants;
 import edu.utn.json.JsonController;
 import edu.utn.manager.PlayerManager;
@@ -42,7 +41,7 @@ public class YourTurn extends HttpHandlers {
             }
 
             exchange.getResponseHeaders().set(Constants.CONTENT_TYPE, Constants.APPLICATION_JSON);
-            exchange.sendResponseHeaders(HttpStatusCode.OK, 0);
+            exchange.sendResponseHeaders(200, 0);
 
             try (BufferedOutputStream out = new BufferedOutputStream(exchange.getResponseBody())) {
                 byte [] data = res.toString().getBytes();

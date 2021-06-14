@@ -39,7 +39,7 @@ public class ServerRoom extends Stage{
                         scanner.next();
                         break;
                     case 2:
-                        sendRequest(manager);
+                        sendJoin(manager);
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
                         break;
@@ -130,7 +130,7 @@ public class ServerRoom extends Stage{
         return manager.connectedClient();
     }
 
-    private void sendRequest(GameManager manager){
+    private void sendJoin(GameManager manager){
 
         if(manager.serverWasCreated() && manager.isRunning()){
             Scanner scanner2 =new Scanner(System.in);

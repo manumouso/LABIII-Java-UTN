@@ -70,7 +70,7 @@ public class GameRoom extends Stage{
                         break;
                     case 2:
                         if(manager.getPlayerManager().isMyTurn()){
-                            attackNinjas(manager);
+                            ninjaAttacks(manager);
                         }else{
                             System.out.println("It's not your turn, wait");
                         }
@@ -102,7 +102,11 @@ public class GameRoom extends Stage{
                         scanner.next();
                         break;
                     case 6:
-                        endTurn(manager);
+                        if(manager.getServiceManager().getKilledNinjasCounter()!=GameConstants.MAX_NINJAS){
+                            endTurn(manager);
+                        }else{
+                            System.out.println("WINNER: "+manager.getPlayerManager().getPlayer().getName());
+                        }
                         System.out.println(" ");
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
@@ -133,6 +137,7 @@ public class GameRoom extends Stage{
     }
 
     private void getInfo(GameManager manager){
+        int i=0;
         System.out.println("\t\t\t NINJAS DATA-----");
         for(Ninja ninja: manager.getPlayerManager().getPlayer().getNinjas()){
             System.out.println("\t\t\tNinja: "+ninja.getName());
@@ -141,6 +146,14 @@ public class GameRoom extends Stage{
             System.out.println("\t\t\tMovement Allowed: "+(canMove(ninja)?"yes":"no"));
             System.out.println("\t\t\t State: "+(ninja.isDead()?"DEAD":"ALIVE"));
             System.out.println(" ");
+        }
+        for(Ninja ninja:manager.getPlayerManager().getPlayer().getNinjas()){
+            if(ninja.isDead()){
+                i++;
+            }
+        }
+        if(i==GameConstants.MAX_NINJAS){
+            System.out.println("LOSER: "+ manager.getPlayerManager().getPlayer().getName());
         }
     }
     private boolean canMove(Ninja ninja){
@@ -196,7 +209,7 @@ public class GameRoom extends Stage{
     }
 
 
-    private void attackNinjas(GameManager manager){
+    private void ninjaAttacks(GameManager manager){
 
             Scanner scanner = new Scanner(System.in);
             NinjaPosition ninjaPosition=null;

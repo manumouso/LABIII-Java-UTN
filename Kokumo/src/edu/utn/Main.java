@@ -16,14 +16,5 @@ public class Main {
         GameManager manager =managerFactory.createManager();
         manager.startGame();
 
-//        try{
-//
-//            Server server = new Server("192.168.0.192",8080);
-//            server.startConnection();
-//
-//        }catch (IOException e){
-//            e.printStackTrace();
-//
-//        }
     }
 }

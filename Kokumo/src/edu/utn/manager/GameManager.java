@@ -137,7 +137,7 @@ public class GameManager {
     }
     public void sendAttack(NinjaPosition attackPosition, int attackPoints){
         String json="{\"position\":["+attackPosition.getI()+","+attackPosition.getJ()+"],\"attackPoints\":"+attackPoints+"}";
-        getServiceManager().attack(attackPosition,attackPoints,json);
+        getServiceManager().attack(attackPosition,json);
     }
 
     public void sendEndTurn(){

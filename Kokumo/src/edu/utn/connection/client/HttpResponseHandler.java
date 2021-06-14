@@ -22,9 +22,9 @@ public abstract class HttpResponseHandler {
         // Do nothing by default
     }
 
-    public abstract void onSuccess(int statusCode, Map<String, List<String>> headers, String content);
+    public abstract void onSuccess(int statusCode, String content);
 
-    public abstract void onFailure(int statusCode, Map<String, List<String>> headers, byte[] content);
+    public abstract void onFailure(int statusCode, byte[] content);
 
     public abstract void onFailure(Throwable throwable);
 
@@ -68,15 +68,14 @@ public abstract class HttpResponseHandler {
             // Response
             int responseCode = connection.getResponseCode();
             long contentLength = connection.getContentLength();
-            Map<String, List<String>> responseHeaders = connection.getHeaderFields();
 
             // Successful response codes will be in interval [200,300)
             if (responseCode >= 200 && responseCode < 300) {
                 String responseContent = readToString(connection);
-                onSuccess(responseCode, responseHeaders, responseContent);
+                onSuccess(responseCode, responseContent);
             } else {
                 byte[] responseContent = readFrom(connection.getErrorStream(), contentLength);
-                onFailure(responseCode, responseHeaders, responseContent);
+                onFailure(responseCode, responseContent);
             }
         } catch (IOException e) {
             onFailure(e);

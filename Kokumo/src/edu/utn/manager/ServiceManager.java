@@ -10,8 +10,6 @@ import edu.utn.model.square.Destroyed;
 
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 public class ServiceManager {
 
@@ -23,6 +21,7 @@ public class ServiceManager {
     private int remotePort;
 
     private int correctMovement;
+    private int killedNinjasCounter;
 
     public Server getServer() {
         return server;
@@ -97,11 +96,19 @@ public class ServiceManager {
         this.correctMovement = correctMovement;
     }
 
+    public synchronized int getKilledNinjasCounter() {
+        return killedNinjasCounter;
+    }
+
+    public synchronized void setKilledNinjasCounter(int killedNinjasCounter) {
+        this.killedNinjasCounter = killedNinjasCounter;
+    }
+
     public void sendInvitation(String IP, int port, String json){
         String url="http://"+IP+":"+port+"/join";
         client.post(url, json, new HttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, String content) {
 
                 System.out.println("\t\t\t"+content);
                 setRequestSuccessful(true);
@@ -110,7 +117,7 @@ public class ServiceManager {
             }
 
             @Override
-            public void onFailure(int statusCode, Map<String, List<String>> headers, byte[] content) {
+            public void onFailure(int statusCode, byte[] content) {
                 System.out.println("\t\t\t"+Arrays.toString(content));
                 setRequestSuccessful(false);
             }
@@ -122,24 +129,29 @@ public class ServiceManager {
         });
     }
 
-    public void attack(NinjaPosition attackPosition, int attackPoints,String json){
+    public void attack(NinjaPosition attackPosition, String json){
         String url="http://"+getRemoteIp()+":"+getRemotePort()+"/attack";
 
         client.post(url, json, new HttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, String content) {
                 System.out.println("\t\t\t"+content);
-                if(content.equals("You destroyed a square") || content.equals("You killed the ninja commander") || content.equals("You killed a ninja warrior")){
+                if(content.equals("You killed the ninja commander") || content.equals("You killed a ninja warrior")){
                     AttackBoard.getInstance().getSquares()[attackPosition.getI()][attackPosition.getJ()]=new Destroyed();
                     setCorrectMovement(getCorrectMovement()+1);
-                }else if(content.equals("You hurt a ninja")){
+                    setKilledNinjasCounter(getKilledNinjasCounter()+1);
+                }
+                if(content.equals("You destroyed a square")){
+                    AttackBoard.getInstance().getSquares()[attackPosition.getI()][attackPosition.getJ()]=new Destroyed();
                     setCorrectMovement(getCorrectMovement()+1);
                 }
-
+                if(content.equals("You hurt a ninja")){
+                    setCorrectMovement(getCorrectMovement()+1);
+                }
             }
 
             @Override
-            public void onFailure(int statusCode, Map<String, List<String>> headers, byte[] content) {
+            public void onFailure(int statusCode, byte[] content) {
                 System.out.println("\t\t\t"+Arrays.toString(content));
             }
 
@@ -155,12 +167,12 @@ public class ServiceManager {
 
         client.post(url, "{}", new HttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Map<String, List<String>> headers, String content) {
+            public void onSuccess(int statusCode, String content) {
                 System.out.println(content);
             }
 
             @Override
-            public void onFailure(int statusCode, Map<String, List<String>> headers, byte[] content) {
+            public void onFailure(int statusCode, byte[] content) {
                 System.out.println(Arrays.toString(content));
             }
 
