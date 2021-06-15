@@ -19,7 +19,7 @@ public class ServerRoom extends Stage{
                 System.out.println("\n\t\t\t\tSERVER MENU");
                 System.out.println("\n\t\t\t[1].CREATE SERVER");
                 System.out.println("\t\t\t[2].JOIN GAME");
-                System.out.println("\t\t\t[3].AWAIT REQUEST");
+                System.out.println("\t\t\t[3].HOST GAME");
                 System.out.println("\t\t\t[0].GO BACK");
                 System.out.print("\n\t\t\tSelect an option-> ");
                 Scanner scanner =new Scanner(System.in);
@@ -151,7 +151,7 @@ public class ServerRoom extends Stage{
             if(manager.connectedClient()){
                 while(!manager.getServiceManager().isRequestSuccessful()){}
                 manager.getPlayerManager().setMyTurn(false);
-                System.out.println("\t\t\tConnected to the client");
+                System.out.println("\t\t\tConnected to the server");
                 manager.toPlayerRoom();
             }
         }else{

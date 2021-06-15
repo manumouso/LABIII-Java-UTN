@@ -30,14 +30,16 @@ public class Join extends HttpHandlers {
 
             serviceManager.setExternalMessage(true);
             serviceManager.setRemoteIp(exchange.getRemoteAddress().getHostName());
+            System.out.println(exchange.getRemoteAddress().getHostName());
             serviceManager.setRemotePort(port);
+            System.out.println(port);
 
             JsonObject res;
 
             try {
 
                 res = Json.createObjectBuilder()
-                        .add("message","Established connection")
+                        .add("message","Connected to the server")
                         .build();
             }
             catch (Exception ex) {

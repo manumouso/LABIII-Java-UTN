@@ -70,7 +70,9 @@ public class GameRoom extends Stage{
                         break;
                     case 2:
                         if(manager.getPlayerManager().isMyTurn()){
-                            ninjaAttacks(manager);
+                            if(manager.getServiceManager().getCorrectMovement()< GameConstants.MAX_NINJAS){
+                                ninjaAttacks(manager);
+                            }
                         }else{
                             System.out.println("It's not your turn, wait");
                         }

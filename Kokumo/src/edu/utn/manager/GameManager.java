@@ -131,7 +131,8 @@ public class GameManager {
     public void sendJoin(String IP,int port){
         if(validIP(IP)){
             if(validPort(port)){
-                getServiceManager().sendInvitation(IP,port,"{\"port\":"+port+"}");
+                int myPort= getServiceManager().getServer().getPort();
+                getServiceManager().joinGame(IP,port,"{\"port\":"+myPort+"}");
             }
         }
     }
