@@ -26,13 +26,11 @@ public class Join extends HttpHandlers {
             String requestBody = JsonController.streamToString(exchange.getRequestBody());
             JsonObject object = JsonController.stringJsonToJsonObject(requestBody);
 
-            int port = object.getInt("port");
+            int remotePort = object.getInt("port");
 
             serviceManager.setExternalMessage(true);
             serviceManager.setRemoteIp(exchange.getRemoteAddress().getHostName());
-            System.out.println(exchange.getRemoteAddress().getHostName());
-            serviceManager.setRemotePort(port);
-            System.out.println(port);
+            serviceManager.setRemotePort(remotePort);
 
             JsonObject res;
 

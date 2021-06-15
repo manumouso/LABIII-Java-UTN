@@ -7,6 +7,7 @@ import edu.utn.enums.NetworkType;
 import edu.utn.factory.ViewFactory;
 import edu.utn.factory.NetworkFactory;
 import edu.utn.message.Message;
+import edu.utn.model.ninja.Ninja;
 import edu.utn.model.ninja.NinjaPosition;
 import edu.utn.validator.NetworkValidator;
 import edu.utn.view.*;
@@ -101,19 +102,19 @@ public class GameManager {
         GameRoom gameRoom = viewFactory.createGameRoom();
         gameRoom.menu(this);
     }
-    public void setServer(String IP,int port){
-        getServiceManager().setServer(createServer(IP,port));
+    public void setServer(int port){
+        getServiceManager().setServer(createServer(port));
     }
 
-    public Server createServer(String IP, int port){
+    public Server createServer(int port){
         NetworkFactory networkFactory = getServiceManager().getNetworkFactory();
-        if(validIP(IP)){
+
             if(validPort(port)){
-                Server server =networkFactory.createServer(IP,port);
+                Server server =networkFactory.createServer(port);
                 getMessage().getMessageList().add(NetworkType.SERVER.getMessage());
                 return server;
             }
-        }
+
         return null;
     }
 
@@ -128,13 +129,14 @@ public class GameManager {
         return client;
     }
 
-    public void sendJoin(String IP,int port){
+    public boolean sendJoin(String IP,int port){
         if(validIP(IP)){
             if(validPort(port)){
                 int myPort= getServiceManager().getServer().getPort();
-                getServiceManager().joinGame(IP,port,"{\"port\":"+myPort+"}");
+                return getServiceManager().joinGame(IP,port,"{\"port\":"+myPort+"}");
             }
         }
+        return false;
     }
     public void sendAttack(NinjaPosition attackPosition, int attackPoints){
         String json="{\"position\":["+attackPosition.getI()+","+attackPosition.getJ()+"],\"attackPoints\":"+attackPoints+"}";
@@ -234,6 +236,10 @@ public class GameManager {
         return false;
     }
 
+    public boolean canMove(Ninja ninja){
+        return ninja.getMovementCounter() == 0;
+    }
+
     public synchronized void checkReceivedMessages(){
         if(getRuleManager().getMessageArrived()>0) {
             printMessages();
@@ -241,4 +247,5 @@ public class GameManager {
             getRuleManager().setMessageArrived(0);
         }
     }
+
 }

@@ -23,19 +23,19 @@ public class BoardPrinter {
             }
             System.out.print("\n");
         }
-        System.out.println("\t\t================================================================================================================");
+        System.out.println("\t\t================================================================================");
         System.out.println("\n");
     }
     public void printAttackBoard(){
         System.out.println("\n\t\t\t\tATTACK BOARD\n");
         for(int i=0;i< GameConstants.MAX_ROW;i++){
-            System.out.println("\t\t================================================================================================================");
+            System.out.println("\t\t================================================================================");
             for(int j=0; j< GameConstants.MAX_COLUMN;j++){
                 System.out.print("\t\t     "+AttackBoard.getInstance().getSquares()[i][j].name());
             }
             System.out.print("\n");
         }
-        System.out.println("\t\t================================================================================================================");
+        System.out.println("\t\t================================================================================");
         System.out.println("\n");
     }
 

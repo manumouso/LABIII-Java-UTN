@@ -70,4 +70,29 @@ public class PlayerManager {
         }
     }
 
+    public boolean lose(){
+        int i=0;
+        for(Ninja ninja: getPlayer().getNinjas()){
+            if(ninja.isDead()){
+                i++;
+            }
+        }
+        if(i==GameConstants.MAX_NINJAS){
+            System.out.println("\t\t\tLOSER: "+ getPlayer().getName());
+            return true;
+        }
+        return false;
+    }
+
+    public int getAliveNinjasQuantity(){
+        int i=0;
+        for(Ninja ninja:getPlayer().getNinjas()){
+            if(!ninja.isDead()){
+                i++;
+            }
+        }
+        return i;
+    }
+
+
 }

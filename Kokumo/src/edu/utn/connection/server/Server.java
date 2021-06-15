@@ -14,19 +14,17 @@ import java.net.InetSocketAddress;
 
 public class Server {
 
-
     private String IP;
     private int port;
     private HttpServer server;
 
-    public Server(String IP, int port) {
-        this.IP = IP;
+    public Server(int port) {
         this.port = port;
     }
 
     private HttpServer getServer() throws IOException {
         if(server==null){
-            server=HttpServer.create(new InetSocketAddress(IP,port),0);
+            server=HttpServer.create(new InetSocketAddress(port),0);
         }
         return server;
     }

@@ -3,10 +3,7 @@ package edu.utn;
 
 import edu.utn.factory.ManagerFactory;
 import edu.utn.manager.GameManager;
-import edu.utn.validator.NetworkValidator;
 
-
-import java.io.IOException;
 
 public class Main {
 

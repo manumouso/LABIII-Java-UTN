@@ -101,23 +101,20 @@ public class ServiceManager {
         this.killedNinjasCounter = killedNinjasCounter;
     }
 
-    public void joinGame(String IP, int port, String json){
+    public boolean joinGame(String IP, int port, String json){
         String url="http://"+IP+":"+port+"/join";
         String response = client.post(url,json);
-        System.out.println(response);
+        System.out.println("\t\t\t"+response);
         if(response.equals("Connected to the server")){
             setRequestSuccessful(true);
             setRemoteIp(IP);
-            System.out.println(IP);
-            System.out.println(getRemoteIp());
             setRemotePort(port);
-            System.out.println(port);
-            System.out.println(getRemotePort());
+            return true;
         }else{
-            System.out.println("Try again");
+            System.out.println("\t\t\tTry again");
         }
 
-
+        return false;
     }
 
     public void attack(NinjaPosition attackPosition, String json){
@@ -135,13 +132,13 @@ public class ServiceManager {
         if(response.equals("You hurt a ninja")){
             setCorrectMovement(getCorrectMovement()+1);
         }
-        System.out.println(response);
+        System.out.println("\t\t\t"+response);
 
     }
     public void endTurn(){
         String url="http://"+getRemoteIp()+":"+getRemotePort()+"/yourTurn";
         String response = client.post(url,"{}");
-        System.out.println(response);
+        System.out.println("\t\t\t"+response);
     }
     public NetworkFactory getNetworkFactory() {
         if(networkFactory==null){

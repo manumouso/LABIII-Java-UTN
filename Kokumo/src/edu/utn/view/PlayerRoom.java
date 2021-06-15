@@ -34,9 +34,7 @@ public class PlayerRoom extends Stage{
                 super.header();
                 System.out.println("\n\t\t\t\tPLAYER MENU");
                 System.out.println("\n\t\t\t[1].ENTER NAME");
-                System.out.println("\t\t\t[2].PLACE YOUR NINJAS");
-                System.out.println("\t\t\t[3].VIEW NINJAS BOARD");
-                System.out.println("\t\t\t[4].TO THE GAME ROOM");
+                System.out.println("\t\t\t[2].PLACE YOUR NINJAS TO ADVANCE");
                 System.out.println("\t\t\t[0].GO BACK");
                 System.out.print("\n\t\t\tSelect an option-> ");
                 Scanner scanner =new Scanner(System.in);
@@ -60,30 +58,18 @@ public class PlayerRoom extends Stage{
                         if(manager.getRuleManager().lessThanRequiredNinjasQuantity(manager.getPlayerManager().getPlayer())){
                             placeNinjas(manager);
                             System.out.println("\t\t\tNinjas placed correctly");
-                        }else{
-                            System.out.println("\t\t\tYou already placed the ninjas correctly");
                         }
-                        System.out.print("\t\t\tEnter a character to continue-> ");
-                        scanner.next();
-                        break;
-                    case 3:
-                        manager.printBoard(true);
-                        System.out.print("\t\t\tEnter a character to continue-> ");
-                        scanner.next();
-                        break;
-                    case 4:
                         if(manager.getRuleManager().requiredNinjasQuantity(manager.getPlayerManager().getPlayer())){
                             manager.toGameRoom();
-                        }else{
-                            System.out.println("\t\t\tFirst place your ninjas on the board");
+
                         }
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
                         break;
                     default:
                         System.out.println("\n");
-                        System.out.println("\t\t\tEnter a valid number [1,2,3,4]");
-                        System.out.println("\t\t\t[0]->Quit Game");
+                        System.out.println("\t\t\tEnter a valid number [1,2]");
+                        System.out.println("\t\t\t[0]->GO BACK");
                         System.out.println("\n");
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
@@ -93,8 +79,10 @@ public class PlayerRoom extends Stage{
             } while (option != 0);
 
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            System.out.println("\t\t\tException: "+e.getMessage());
+
         }
+
     }
     private void goBack(GameManager manager){
         if(manager.connectedClient()){
@@ -115,7 +103,7 @@ public class PlayerRoom extends Stage{
         System.out.println(" ");
         System.out.println("\t\t\tYou will be placing your NINJA COMMANDER FIRST");
         System.out.println("\t\t\tThen you will place the NINJA WARRIORS");
-        Ninja ninja=null;
+        Ninja ninja;
         for(int i=0;i<GameConstants.MAX_NINJAS;i++){
             if(i==0){
                 ninja=inputPosition("commander",true,manager,i);
@@ -130,7 +118,9 @@ public class PlayerRoom extends Stage{
         Scanner scanner =new Scanner(System.in);
         Ninja ninja = null;
         while(isWrongPosition()){
+            manager.printBoard(true);
             if(i==0){
+
                 System.out.print("\t\t\tEnter "+ name+" ROW: position I: [expected number 0 to 4 included] -> ");
                 String posI = scanner.next();
                 System.out.print("\t\t\tEnter "+ name+" COLUMN: position J: [expected number 0 to 4 included] -> ");

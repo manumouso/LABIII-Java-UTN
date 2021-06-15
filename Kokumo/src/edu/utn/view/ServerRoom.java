@@ -18,8 +18,8 @@ public class ServerRoom extends Stage{
                 super.header();
                 System.out.println("\n\t\t\t\tSERVER MENU");
                 System.out.println("\n\t\t\t[1].CREATE SERVER");
-                System.out.println("\t\t\t[2].JOIN GAME");
-                System.out.println("\t\t\t[3].HOST GAME");
+                System.out.println("\t\t\t[2].HOST GAME");
+                System.out.println("\t\t\t[3].JOIN GAME");
                 System.out.println("\t\t\t[0].GO BACK");
                 System.out.print("\n\t\t\tSelect an option-> ");
                 Scanner scanner =new Scanner(System.in);
@@ -39,16 +39,16 @@ public class ServerRoom extends Stage{
                         scanner.next();
                         break;
                     case 2:
-                        sendJoin(manager);
+                        if(waitToProceed(manager)){
+                        manager.getPlayerManager().setMyTurn(true);
+                        manager.toPlayerRoom();
+                        }
+                        System.out.println("\n");
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
                         break;
                     case 3:
-                        if(waitToProceed(manager)){
-                            manager.getPlayerManager().setMyTurn(true);
-                            manager.toPlayerRoom();
-                        }
-                        System.out.println("\n");
+                        sendJoin(manager);
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
                         break;
@@ -65,7 +65,7 @@ public class ServerRoom extends Stage{
             } while (option != 0);
 
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            System.out.println("\t\t\tException: "+e.getMessage());
         }
     }
 
@@ -87,14 +87,12 @@ public class ServerRoom extends Stage{
     private void start(GameManager manager) throws IOException {
         if(!manager.serverWasCreated()){
             Scanner scanner2 =new Scanner(System.in);
-            System.out.print("\t\t\tEnter IP-> ");
-            String IP=scanner2.next();
             System.out.print("\t\t\tEnter Port-> ");
             String PORT=scanner2.next();
 
             try {
                 int port= Integer.parseInt(PORT);
-                manager.setServer(IP,port);
+                manager.setServer(port);
                 if(manager.getServer()!=null){
                     manager.setServerState();
                     manager.setServerWasCreated(true);
@@ -104,7 +102,7 @@ public class ServerRoom extends Stage{
             }catch (NumberFormatException e){
                 System.out.println("\t\t\tPort must be a number");
             }catch (Exception e){
-                System.out.println("Exception: "+ e.getMessage());
+                System.out.println("\t\t\tException: "+ e.getMessage());
             }
         }else{
             System.out.println("\t\t\tYou have already created the server");
@@ -113,7 +111,7 @@ public class ServerRoom extends Stage{
         if(manager.serverWasCreated() && !manager.isRunning()){
             manager.startConnection();
             manager.setRunning(true);
-            System.out.println("\t\t\tServer Running at IP: "+manager.getServiceManager().getServer().getIP()+" and port: "+manager.getServiceManager().getServer().getPort());
+            System.out.println("\t\t\tServer Running at port: "+manager.getServiceManager().getServer().getPort());
         }
     }
 
@@ -140,9 +138,10 @@ public class ServerRoom extends Stage{
             String PORT=scanner2.next();
             try {
                 int port= Integer.parseInt(PORT);
-                manager.sendJoin(IP,port);
-                manager.setConnectedClient(true);
 
+                if(manager.sendJoin(IP,port)){
+                    manager.setConnectedClient(true);
+                }
             }catch (NumberFormatException e){
                 System.out.println("\t\t\tPort must be a number");
             }catch (Exception e){
@@ -151,7 +150,6 @@ public class ServerRoom extends Stage{
             if(manager.connectedClient()){
                 while(!manager.getServiceManager().isRequestSuccessful()){}
                 manager.getPlayerManager().setMyTurn(false);
-                System.out.println("\t\t\tConnected to the server");
                 manager.toPlayerRoom();
             }
         }else{

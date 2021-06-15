@@ -5,9 +5,9 @@ import edu.utn.connection.server.Server;
 
 public class NetworkFactory {
 
-    public Server createServer(String IP,int port){
+    public Server createServer(int port){
 
-        return new Server(IP,port);
+        return new Server(port);
     }
 
     public Client createClient(){
