@@ -59,7 +59,7 @@ public class GameRoom extends Stage{
                         break;
                     case 1:
                         if(manager.getPlayerManager().isMyTurn()){
-                            if(manager.getServiceManager().getCorrectMovement()< GameConstants.MAX_NINJAS){
+                            if(manager.getServiceManager().getCorrectMovement()< manager.getPlayerManager().getAliveNinjasQuantity()){
                                 moveNinjas(manager);
 
                             }
