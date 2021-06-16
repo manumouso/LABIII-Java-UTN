@@ -169,7 +169,7 @@ public class GameRoom extends Stage{
                             System.out.print("\t\t\tEnter the direction ->");
                             direction = scanner.next();
                         }
-                        if (manager.getRuleManager().move(ninja, directionMap.get(direction))) {
+                        if (manager.getRuleManager().move(ninja, directionMap.get(direction),manager.getServiceManager())) {
                             manager.getServiceManager().setCorrectMovement(manager.getServiceManager().getCorrectMovement()+1);
                             ninja.setMovedPreviousTurn(true);
                         }

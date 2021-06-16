@@ -99,7 +99,7 @@ public class RuleManager {
         return ninjaFactory.createPosition(i,j);
     }
 
-    public boolean move(Ninja ninja, Direction direction){
+    public boolean move(Ninja ninja, Direction direction,ServiceManager manager){
 
             MovementController movementController = getMovementController();
             NinjaController ninjaController = getNinjaController();
@@ -111,7 +111,7 @@ public class RuleManager {
                 if (squarePassable(next.getI(), next.getJ())){
                     if (freeSquare(next.getI(), next.getJ())){
 
-                        movementController.move(ninja, current, next);
+                        movementController.move(ninja, current, next,manager);
                         addAll(movementController.getStandOnMessages());
                         movementController.getStandOnMessages().clear();
                         return true;
