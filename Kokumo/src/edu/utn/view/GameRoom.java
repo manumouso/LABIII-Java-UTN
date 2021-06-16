@@ -36,6 +36,8 @@ public class GameRoom extends Stage{
                 if(!manager.getPlayerManager().lose() && !manager.getPlayerManager().winner(manager)){
                     manager.getPlayerManager().endTurn(manager);
                     System.out.println("\n\t\t\t\tGAME ROOM");
+                    manager.printBoard(true);
+                    System.out.println(" ");
                     System.out.println("\n\t\t\t[1].MOVE");
                     System.out.println("\t\t\t[2].ATTACK");
                     System.out.println("\t\t\t[3].VIEW NINJAS DATA");
