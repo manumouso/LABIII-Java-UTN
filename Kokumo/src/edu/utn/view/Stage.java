@@ -8,9 +8,9 @@ public abstract class Stage implements View {
 
     @Override
     public void header() {
-        System.out.println("\n     ======================================================================\n");
-        System.out.println("\t\t     KOKUMO NO MONOGATARI (^o^)y\n");
-        System.out.println("     ======================================================================\n");
+        System.out.println("\n     =================================================================================================================================================\n");
+        System.out.println("\t\t\t\t     KOKUMO NO MONOGATARI (^o^)y\n");
+        System.out.println("     =================================================================================================================================================\n");
     }
 
     public abstract void menu(GameManager manager);

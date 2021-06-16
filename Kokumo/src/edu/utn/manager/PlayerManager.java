@@ -96,37 +96,7 @@ public class PlayerManager {
         }
     }
 
-    public void endTurn(GameManager manager){
-        Scanner scanner= new Scanner(System.in);
-        if(isMyTurn()){
-            if(manager.getServiceManager().getCorrectMovement()==getAliveNinjasQuantity()){
-                manager.getServiceManager().setCorrectMovement(0);
-                resetCounters();
-                setMyTurn(false);
-                manager.sendEndTurn();
-                while(!isMyTurn()){
-                    if(lose()){
-                        System.out.print("\t\t\tEnter a character to close the game->");
-                        scanner.next();
-                        System.exit(0);
-                    }
-                    manager.checkReceivedMessages();
-                }
-            }else{
-                System.out.println("\t\t\tMovements(move or attack) left: "+ (getAliveNinjasQuantity()-manager.getServiceManager().getCorrectMovement()));
-            }
-        }else{
-            System.out.println("\t\t\tIt's not your turn, wait");
-            while(!isMyTurn()){
-                if(lose()){
-                    System.out.print("\t\t\tEnter a character to close the game->");
-                    scanner.next();
-                    System.exit(0);
-                }
-                manager.checkReceivedMessages();
-            }
-        }
-    }
+
 
     public int getAliveNinjasQuantity(){
         int i=0;

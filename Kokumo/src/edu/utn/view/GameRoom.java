@@ -34,10 +34,9 @@ public class GameRoom extends Stage{
                 Scanner scanner =new Scanner(System.in);
 
                 if(!manager.getPlayerManager().lose() && !manager.getPlayerManager().winner(manager)){
-                    manager.getPlayerManager().endTurn(manager);
+                    endTurn(manager);
                     System.out.println("\n\t\t\t\tGAME ROOM");
                     manager.printBoard(true);
-                    System.out.println(" ");
                     System.out.println("\n\t\t\t[1].MOVE");
                     System.out.println("\t\t\t[2].ATTACK");
                     System.out.println("\t\t\t[3].VIEW NINJAS DATA");
@@ -48,8 +47,9 @@ public class GameRoom extends Stage{
                     option = Integer.parseInt(number);
                 }else{
                     option=0;
-                    System.out.print("\t\t\t Enter a character to quit the game->");
+                    System.out.print("\t\t\tEnter a character to quit the game->");
                     scanner.next();
+                    super.footer();
                     System.exit(0);
                 }
 
@@ -256,6 +256,38 @@ public class GameRoom extends Stage{
         return attackPosition;
     }
 
-
+    public void endTurn(GameManager manager){
+        Scanner scanner= new Scanner(System.in);
+        if(manager.getPlayerManager().isMyTurn()){
+            if(manager.getServiceManager().getCorrectMovement()==manager.getPlayerManager().getAliveNinjasQuantity()){
+                manager.getServiceManager().setCorrectMovement(0);
+                manager.getPlayerManager().resetCounters();
+                manager.getPlayerManager().setMyTurn(false);
+                manager.sendEndTurn();
+                while(!manager.getPlayerManager().isMyTurn()){
+                    if(manager.getPlayerManager().lose()){
+                        System.out.print("\t\t\tEnter a character to close the game->");
+                        scanner.next();
+                        super.footer();
+                        System.exit(0);
+                    }
+                    manager.checkReceivedMessages();
+                }
+            }else{
+                System.out.println("\t\t\tMovements(move or attack) left: "+ (manager.getPlayerManager().getAliveNinjasQuantity()-manager.getServiceManager().getCorrectMovement()));
+            }
+        }else{
+            System.out.println("\t\t\tIt's not your turn, wait");
+            while(!manager.getPlayerManager().isMyTurn()){
+                if(manager.getPlayerManager().lose()){
+                    System.out.print("\t\t\tEnter a character to close the game->");
+                    scanner.next();
+                    super.footer();
+                    System.exit(0);
+                }
+                manager.checkReceivedMessages();
+            }
+        }
+    }
 
 }

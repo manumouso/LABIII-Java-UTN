@@ -6,7 +6,7 @@ public class Introduction {
 
     public void print(){
 
-        System.out.println("\n     ======================================================================\n");
+        System.out.println("\n     =================================================================================================================================================\n");
         System.out.println("\t\t\t My face may have changed,");
         System.out.println("\t\t\t many things have happened, and there are many secrets,");
         System.out.println("\t\t\t many have been forgotten,");

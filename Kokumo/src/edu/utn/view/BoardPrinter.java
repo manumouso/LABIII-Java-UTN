@@ -11,9 +11,9 @@ import edu.utn.model.ninja.*;
 public class BoardPrinter {
 
    public void printBoard(Player player){
-        System.out.println("\n\t\t\t\tNINJA BOARD\n");
+        System.out.println("\n\t\tNINJA BOARD\n");
         for(int i = 0; i< GameConstants.MAX_ROW; i++){
-            System.out.println("\t\t================================================================================");
+            System.out.println("\t\t==========================================================================================================================");
             for(int j=0; j< GameConstants.MAX_COLUMN;j++){
                 if(Board.getInstance().getSquares()[i][j].hasNinja()){
                     hasNinja(i,j,player);
@@ -23,7 +23,7 @@ public class BoardPrinter {
             }
             System.out.print("\n");
         }
-        System.out.println("\t\t================================================================================");
+        System.out.println("\t\t==========================================================================================================================");
         System.out.println("\n");
     }
     public void printAttackBoard(){
