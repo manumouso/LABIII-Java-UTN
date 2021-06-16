@@ -124,15 +124,18 @@ public class ServiceManager {
             AttackBoard.getInstance().getSquares()[attackPosition.getI()][attackPosition.getJ()]=new Destroyed();
             setCorrectMovement(getCorrectMovement()+1);
             setKilledNinjasCounter(getKilledNinjasCounter()+1);
+            System.out.println("\t\t\t"+response);
             return true;
         }
         if(response.equals("You destroyed a square")){
             AttackBoard.getInstance().getSquares()[attackPosition.getI()][attackPosition.getJ()]=new Destroyed();
             setCorrectMovement(getCorrectMovement()+1);
+            System.out.println("\t\t\t"+response);
             return true;
         }
         if(response.equals("You hurt a ninja")){
             setCorrectMovement(getCorrectMovement()+1);
+            System.out.println("\t\t\t"+response);
             return true;
         }
         System.out.println("\t\t\t"+response);
