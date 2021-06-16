@@ -2,7 +2,6 @@ package edu.utn.controller;
 
 import edu.utn.enums.MessageType;
 import edu.utn.enums.SquareType;
-import edu.utn.manager.GameManager;
 import edu.utn.manager.ServiceManager;
 import edu.utn.model.Board;
 import edu.utn.model.ninja.Ninja;
