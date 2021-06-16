@@ -53,4 +53,8 @@ public class RuleValidator {
 
         return player.getNinjas().size()<GameConstants.MAX_NINJAS;
     }
+
+    public static boolean canMoveThisTurn(Ninja ninja){
+        return ninja.getAttackCounter() == 0 && ninja.getMovementCounter() == 0;
+    }
 }

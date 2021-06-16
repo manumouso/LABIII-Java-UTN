@@ -210,4 +210,9 @@ public class RuleManager {
 
         return message;
     }
+
+    public boolean canMoveThisTurn(Ninja ninja){
+
+        return RuleValidator.canMoveThisTurn(ninja);
+    }
 }

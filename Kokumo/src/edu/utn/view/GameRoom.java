@@ -1,9 +1,5 @@
 package edu.utn.view;
 
-
-
-
-import edu.utn.manager.GameConstants;
 import edu.utn.manager.GameManager;
 import edu.utn.model.ninja.Direction;
 import edu.utn.model.ninja.Ninja;
@@ -36,19 +32,23 @@ public class GameRoom extends Stage{
 
                 super.header();
                 Scanner scanner =new Scanner(System.in);
-                if(!manager.getPlayerManager().lose()){
+
+                if(!manager.getPlayerManager().lose() && !manager.getPlayerManager().winner(manager)){
+                    manager.getPlayerManager().endTurn(manager);
                     System.out.println("\n\t\t\t\tGAME ROOM");
                     System.out.println("\n\t\t\t[1].MOVE");
                     System.out.println("\t\t\t[2].ATTACK");
                     System.out.println("\t\t\t[3].VIEW NINJAS DATA");
                     System.out.println("\t\t\t[4].VIEW BOARDS");
-                    System.out.println("\t\t\t[5].END YOUR TURN");
                     System.out.println("\t\t\t[0].GO BACK");
                     System.out.print("\n\t\t\tSelect an option-> ");
                     String number = scanner.next();
                     option = Integer.parseInt(number);
                 }else{
-                    option=99523189;
+                    option=0;
+                    System.out.print("\t\t\t Enter a character to quit the game->");
+                    scanner.next();
+                    System.exit(0);
                 }
 
                 switch (option) {
@@ -64,7 +64,7 @@ public class GameRoom extends Stage{
 
                             }
                         }else{
-                            System.out.println("It's not your turn, wait");
+                            System.out.println("\t\t\tIt's not your turn, wait");
                         }
 
                         System.out.print("\t\t\tEnter a character to continue-> ");
@@ -76,7 +76,7 @@ public class GameRoom extends Stage{
                                 ninjaAttacks(manager);
                             }
                         }else{
-                            System.out.println("It's not your turn, wait");
+                            System.out.println("\t\t\tIt's not your turn, wait");
                         }
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
@@ -87,7 +87,6 @@ public class GameRoom extends Stage{
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
                         break;
-
                     case 4:
                         manager.printBoard(true);
                         manager.printBoard(false);
@@ -95,28 +94,9 @@ public class GameRoom extends Stage{
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
                         break;
-                    case 5:
-                        if(manager.getServiceManager().getKilledNinjasCounter()!=GameConstants.MAX_NINJAS){
-                            endTurn(manager);
-                            while(!manager.getPlayerManager().isMyTurn()){
-                                manager.checkReceivedMessages();
-                            }
-                        }else{
-                            System.out.println("WINNER: "+manager.getPlayerManager().getPlayer().getName());
-                        }
-                        System.out.println(" ");
-                        System.out.print("\t\t\tEnter a character to continue-> ");
-                        scanner.next();
-                        break;
-                    case 99523189:
-                        System.out.print("\t\t\t Do you want to Quit the Game? [Y/n]: ");
-                        if (scanner.next().equals("Y")) {
-                            System.exit(0);
-                        }
-                        break;
                     default:
                         System.out.println("\n");
-                        System.out.println("\t\t\tEnter a valid number [1,2,3,4,5]");
+                        System.out.println("\t\t\tEnter a valid number [1,2,3,4]");
                         System.out.println("\t\t\t[0]->GO BACK");
                         System.out.println("\n");
                         System.out.print("\t\t\tEnter a character to continue-> ");
@@ -172,7 +152,7 @@ public class GameRoom extends Stage{
             Map<String, Direction> directionMap = manager.getRuleManager().getDirectionsMap();
 
             for (Ninja ninja : manager.getPlayerManager().getPlayer().getNinjas()) {
-                if(ninja.getMovementCounter()==0 && manager.getRuleManager().movementAllowed(ninja) && manager.getRuleManager().isAlive(ninja)){
+                if(manager.getRuleManager().canMoveThisTurn(ninja) && manager.getRuleManager().movementAllowed(ninja) && manager.getRuleManager().isAlive(ninja)){
                     System.out.print("\t\t\tDo you want to move your ninja-> " + ninja.getName()+ "  [y/n]: ");
                     String answer = scanner.next();
                     System.out.println(" ");
@@ -190,6 +170,7 @@ public class GameRoom extends Stage{
                         if (manager.getRuleManager().move(ninja, directionMap.get(direction))) {
                             manager.getServiceManager().setCorrectMovement(manager.getServiceManager().getCorrectMovement()+1);
 
+                            System.out.println(ninja.getName() + " se movio: "+ ninja.getMovementCounter()+"ataco: " +ninja.getAttackCounter());
                         }
                         manager.printBoard(true);
                         System.out.println(" ");
@@ -210,7 +191,7 @@ public class GameRoom extends Stage{
             Scanner scanner = new Scanner(System.in);
             NinjaPosition ninjaPosition=null;
             for (Ninja ninja : manager.getPlayerManager().getPlayer().getNinjas()) {
-                if(ninja.getAttackCounter()==0 && !ninja.isDead()){
+                if(manager.getRuleManager().canMoveThisTurn(ninja) && !ninja.isDead()){
                     System.out.print("\t\t\tDo you want to attack with-> " + ninja.getName()+ "  [y/n]: ");
                     String answer = scanner.next();
                     System.out.println(" ");
@@ -222,7 +203,7 @@ public class GameRoom extends Stage{
 
                         manager.sendAttack(ninjaPosition, ninja.getAttackPoints());
                         ninja.setAttackCounter(ninja.getAttackCounter()+1);
-                        ninja.setMovementCounter(0);
+                        ninja.setMovementCounter(0);//aca puede estar el bug, cuando cambia de turno no se si estoy seteando de nuevo en cero todo
                         manager.printBoard(false);
                         System.out.println(" ");
 
@@ -272,18 +253,5 @@ public class GameRoom extends Stage{
     }
 
 
-    private void endTurn(GameManager manager){
-        if(manager.getPlayerManager().isMyTurn()){
-            if(manager.getServiceManager().getCorrectMovement()==manager.getPlayerManager().getAliveNinjasQuantity()){
-                manager.getServiceManager().setCorrectMovement(0);
-                manager.getPlayerManager().setMyTurn(false);
-                manager.sendEndTurn();
-            }else{
-                System.out.println("\t\t\tYou have movements(move or attack) left: "+ (manager.getPlayerManager().getAliveNinjasQuantity()-manager.getServiceManager().getCorrectMovement()));
-            }
-        }else{
-            System.out.println("\t\t\tIt's not your turn, wait");
-        }
-    }
 
 }

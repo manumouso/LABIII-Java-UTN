@@ -41,6 +41,7 @@ public class ServerRoom extends Stage{
                     case 2:
                         if(waitToProceed(manager)){
                         manager.getPlayerManager().setMyTurn(true);
+                        manager.setHost(true);
                         manager.toPlayerRoom();
                         }
                         System.out.println("\n");
@@ -150,6 +151,7 @@ public class ServerRoom extends Stage{
             if(manager.connectedClient()){
                 while(!manager.getServiceManager().isRequestSuccessful()){}
                 manager.getPlayerManager().setMyTurn(false);
+                manager.setHost(false);
                 manager.toPlayerRoom();
             }
         }else{

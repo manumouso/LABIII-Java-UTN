@@ -6,6 +6,8 @@ import edu.utn.factory.PlayerFactory;
 import edu.utn.model.Player;
 import edu.utn.model.ninja.Ninja;
 
+import java.util.Scanner;
+
 public class PlayerManager {
 
     private Player player;
@@ -70,6 +72,16 @@ public class PlayerManager {
         }
     }
 
+    public boolean winner(GameManager manager){
+        if(manager.getServiceManager().getKilledNinjasCounter()==GameConstants.MAX_NINJAS) {
+
+            System.out.println("\t\t\tWINNER: " + getPlayer().getName());
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public boolean lose(){
         int i=0;
         for(Ninja ninja: getPlayer().getNinjas()){
@@ -82,6 +94,37 @@ public class PlayerManager {
             return true;
         }
         return false;
+    }
+
+    public void endTurn(GameManager manager){
+        Scanner scanner= new Scanner(System.in);
+        if(manager.getPlayerManager().isMyTurn()){
+            if(manager.getServiceManager().getCorrectMovement()==manager.getPlayerManager().getAliveNinjasQuantity()){
+                manager.getServiceManager().setCorrectMovement(0);
+                manager.getPlayerManager().setMyTurn(false);
+                manager.sendEndTurn();
+                while(!manager.getPlayerManager().isMyTurn()){
+                    if(lose()){
+                        System.out.print("\t\t\tEnter a character to close the game->");
+                        scanner.next();
+                        System.exit(0);
+                    }
+                    manager.checkReceivedMessages();
+                }
+            }else{
+                System.out.println("\t\t\tMovements(move or attack) left: "+ (manager.getPlayerManager().getAliveNinjasQuantity()-manager.getServiceManager().getCorrectMovement()));
+            }
+        }else{
+            System.out.println("\t\t\tIt's not your turn, wait");
+            while(!manager.getPlayerManager().isMyTurn()){
+                if(lose()){
+                    System.out.print("\t\t\tEnter a character to close the game->");
+                    scanner.next();
+                    System.exit(0);
+                }
+                manager.checkReceivedMessages();
+            }
+        }
     }
 
     public int getAliveNinjasQuantity(){

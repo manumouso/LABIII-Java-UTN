@@ -15,6 +15,7 @@ import java.io.IOException;
 
 public class GameManager {
 
+    private boolean host;
     private ServiceManager serviceManager;
     private RuleManager ruleManager;
     private PlayerManager playerManager;
@@ -28,6 +29,14 @@ public class GameManager {
         this.serviceManager = serviceManager;
         this.ruleManager = ruleManager;
         this.playerManager = playerManager;
+    }
+
+    public boolean isHost() {
+        return host;
+    }
+
+    public void setHost(boolean host) {
+        this.host = host;
     }
 
     public ServiceManager getServiceManager() {
@@ -247,5 +256,7 @@ public class GameManager {
             getRuleManager().setMessageArrived(0);
         }
     }
+
+
 
 }
