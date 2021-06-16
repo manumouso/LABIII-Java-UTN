@@ -117,22 +117,26 @@ public class ServiceManager {
         return false;
     }
 
-    public void attack(NinjaPosition attackPosition, String json){
+    public boolean attack(NinjaPosition attackPosition, String json){
         String url="http://"+getRemoteIp()+":"+getRemotePort()+"/attack";
         String response = client.post(url,json);
         if(response.equals("You killed the ninja commander") || response.equals("You killed a ninja warrior")){
             AttackBoard.getInstance().getSquares()[attackPosition.getI()][attackPosition.getJ()]=new Destroyed();
             setCorrectMovement(getCorrectMovement()+1);
             setKilledNinjasCounter(getKilledNinjasCounter()+1);
+            return true;
         }
         if(response.equals("You destroyed a square")){
             AttackBoard.getInstance().getSquares()[attackPosition.getI()][attackPosition.getJ()]=new Destroyed();
             setCorrectMovement(getCorrectMovement()+1);
+            return true;
         }
         if(response.equals("You hurt a ninja")){
             setCorrectMovement(getCorrectMovement()+1);
+            return true;
         }
         System.out.println("\t\t\t"+response);
+        return false;
 
     }
     public void endTurn(){

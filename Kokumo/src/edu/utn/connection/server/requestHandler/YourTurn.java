@@ -25,7 +25,7 @@ public class YourTurn extends HttpHandlers {
 
 
             playerManager.setMyTurn(true);
-            playerManager.myTurn();
+            playerManager.resetCounters();
             JsonObject res;
 
             try {

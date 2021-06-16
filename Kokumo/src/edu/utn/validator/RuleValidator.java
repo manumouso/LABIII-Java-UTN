@@ -34,10 +34,6 @@ public class RuleValidator {
         }
         return dead;
     }
-    public static boolean movedPreviousTurn(int movementCounter){
-
-        return movementCounter> GameConstants.CONSECUTIVE_MOVEMENTS_ALLOWED;
-    }
 
     public static boolean commanderDead(Player player){
 

@@ -157,11 +157,11 @@ public class RuleManager {
         return false;
     }
     public boolean movementAllowed(Ninja ninja){
-        if(!RuleValidator.movedPreviousTurn(ninja.getMovementCounter())){
-            return true;
+        if(ninja.isMovedPreviousTurn()){
+            getMessage().getMessageList().add(MessageType.CONSECUTIVE.getMessage());
+            return false;
         }
-        getMessage().getMessageList().add(MessageType.CONSECUTIVE.getMessage());
-        return false;
+        return true;
     }
     private boolean squarePassable(int i, int j){
         if(!RuleValidator.squareDestroyed(i, j)){

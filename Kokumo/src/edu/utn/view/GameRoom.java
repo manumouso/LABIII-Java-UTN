@@ -169,8 +169,7 @@ public class GameRoom extends Stage{
                         }
                         if (manager.getRuleManager().move(ninja, directionMap.get(direction))) {
                             manager.getServiceManager().setCorrectMovement(manager.getServiceManager().getCorrectMovement()+1);
-
-                            System.out.println(ninja.getName() + " se movio: "+ ninja.getMovementCounter()+"ataco: " +ninja.getAttackCounter());
+                            ninja.setMovedPreviousTurn(true);
                         }
                         manager.printBoard(true);
                         System.out.println(" ");
@@ -201,9 +200,12 @@ public class GameRoom extends Stage{
                         System.out.println("\t\t\tEnter the attack position:");
                         ninjaPosition=inputPosition(manager);
 
-                        manager.sendAttack(ninjaPosition, ninja.getAttackPoints());
-                        ninja.setAttackCounter(ninja.getAttackCounter()+1);
-                        ninja.setMovementCounter(0);//aca puede estar el bug, cuando cambia de turno no se si estoy seteando de nuevo en cero todo
+                        if(manager.sendAttack(ninjaPosition, ninja.getAttackPoints())){
+                            ninja.setAttackCounter(ninja.getAttackCounter()+1);
+                        }
+                        if(ninja.isMovedPreviousTurn()){
+                            ninja.setMovedPreviousTurn(false);
+                        }
                         manager.printBoard(false);
                         System.out.println(" ");
 

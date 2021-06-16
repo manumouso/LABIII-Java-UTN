@@ -66,12 +66,6 @@ public class PlayerManager {
         playerController.clearNinjas(getPlayer());
     }
 
-    public synchronized void myTurn(){
-        for(Ninja ninja: getPlayer().getNinjas()){
-            ninja.setAttackCounter(0);
-        }
-    }
-
     public boolean winner(GameManager manager){
         if(manager.getServiceManager().getKilledNinjasCounter()==GameConstants.MAX_NINJAS) {
 
@@ -95,15 +89,22 @@ public class PlayerManager {
         }
         return false;
     }
+    public void resetCounters(){
+        for(Ninja ninja: getPlayer().getNinjas()){
+            ninja.setAttackCounter(0);
+            ninja.setMovementCounter(0);
+        }
+    }
 
     public void endTurn(GameManager manager){
         Scanner scanner= new Scanner(System.in);
-        if(manager.getPlayerManager().isMyTurn()){
-            if(manager.getServiceManager().getCorrectMovement()==manager.getPlayerManager().getAliveNinjasQuantity()){
+        if(isMyTurn()){
+            if(manager.getServiceManager().getCorrectMovement()==getAliveNinjasQuantity()){
                 manager.getServiceManager().setCorrectMovement(0);
-                manager.getPlayerManager().setMyTurn(false);
+                resetCounters();
+                setMyTurn(false);
                 manager.sendEndTurn();
-                while(!manager.getPlayerManager().isMyTurn()){
+                while(!isMyTurn()){
                     if(lose()){
                         System.out.print("\t\t\tEnter a character to close the game->");
                         scanner.next();
@@ -112,11 +113,11 @@ public class PlayerManager {
                     manager.checkReceivedMessages();
                 }
             }else{
-                System.out.println("\t\t\tMovements(move or attack) left: "+ (manager.getPlayerManager().getAliveNinjasQuantity()-manager.getServiceManager().getCorrectMovement()));
+                System.out.println("\t\t\tMovements(move or attack) left: "+ (getAliveNinjasQuantity()-manager.getServiceManager().getCorrectMovement()));
             }
         }else{
             System.out.println("\t\t\tIt's not your turn, wait");
-            while(!manager.getPlayerManager().isMyTurn()){
+            while(!isMyTurn()){
                 if(lose()){
                     System.out.print("\t\t\tEnter a character to close the game->");
                     scanner.next();
