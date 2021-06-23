@@ -191,7 +191,7 @@ public class ServiceManager {
 
     public synchronized String invitationReceived(){
         Scanner scanner= new Scanner(System.in);
-        System.out.println("Do you want to accept the invitation from: "+getRemoteIp()+" ? [Y/n]");
+        System.out.print("\t\t\tDo you want to accept the invitation from: "+getRemoteIp()+" ? [Y/n]->");
         String answer = scanner.next();
         if(answer.equals("y")||answer.equals("Y")){
             setInvitationAccepted(true);
