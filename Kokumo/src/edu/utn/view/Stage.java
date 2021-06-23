@@ -38,6 +38,10 @@ public abstract class Stage implements View {
             System.out.println("\t\t\t"+e.getMessage());
         }
     }
+    protected void exit(){
+        footer();
+        System.exit(0);
+    }
     @Override
     public void footer() {
 

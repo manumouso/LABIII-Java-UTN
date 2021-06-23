@@ -19,8 +19,10 @@ public class ServerRoom extends Stage{
                 super.header();
                 System.out.println("\n\t\t\t\tSERVER MENU");
                 System.out.println("\n\t\t\t[1].CREATE SERVER");
-                System.out.println("\t\t\t[2].HOST GAME");
-                System.out.println("\t\t\t[3].JOIN GAME");
+                System.out.println("\t\t\t[2].SERVER MODE: WAIT SOMEONE TO JOIN");
+                System.out.println("\t\t\t[3].CLIENT MODE: JOIN GAME");
+                System.out.println("\t\t\t[4].SERVER MODE: SEND INVITATION");
+                System.out.println("\t\t\t[5].CLIENT MODE: WAIT TO BE INVITED");
                 System.out.println("\t\t\t[0].GO BACK");
                 System.out.print("\n\t\t\tSelect an option-> ");
                 Scanner scanner =new Scanner(System.in);
@@ -50,13 +52,27 @@ public class ServerRoom extends Stage{
                         scanner.next();
                         break;
                     case 3:
-                        sendJoin(manager);
+                        joinGame(manager);
+                        System.out.print("\t\t\tEnter a character to continue-> ");
+                        scanner.next();
+                        break;
+                    case 4:
+                        sendInvitation(manager);
+                        System.out.print("\t\t\tEnter a character to continue-> ");
+                        scanner.next();
+                        break;
+                    case 5:
+                        if(waitInvitation(manager)){
+                            manager.getPlayerManager().setMyTurn(true);
+                            manager.setHost(false);
+                            manager.toPlayerRoom();
+                        }
                         System.out.print("\t\t\tEnter a character to continue-> ");
                         scanner.next();
                         break;
                     default:
                         System.out.println("\n");
-                        System.out.println("\t\t\tEnter a valid number [1,2,3]");
+                        System.out.println("\t\t\tEnter a valid number [1,2,3,4,5]");
                         System.out.println("\t\t\t[0]->Quit Game");
                         System.out.println("\n");
                         System.out.print("\t\t\tEnter a character to continue-> ");
@@ -130,7 +146,7 @@ public class ServerRoom extends Stage{
         return manager.connectedClient();
     }
 
-    private void sendJoin(GameManager manager){
+    private void joinGame(GameManager manager){
 
         if(manager.serverWasCreated() && manager.isRunning()){
             Scanner scanner2 =new Scanner(System.in);
@@ -150,7 +166,7 @@ public class ServerRoom extends Stage{
                 System.out.println(e.getMessage());
             }
             if(manager.connectedClient()){
-                while(!manager.getServiceManager().isRequestSuccessful()){}
+                while(!manager.getServiceManager().isJoinSuccessful()){}
                 manager.getPlayerManager().setMyTurn(false);
                 manager.setHost(false);
                 manager.toPlayerRoom();
@@ -159,6 +175,52 @@ public class ServerRoom extends Stage{
             System.out.println("\t\t\tFirst create the server");
         }
 
+    }
+
+    private void sendInvitation(GameManager manager){
+        if(manager.serverWasCreated() && manager.isRunning()){
+            Scanner scanner2 =new Scanner(System.in);
+            System.out.print("\t\t\tEnter IP-> ");
+            String IP=scanner2.next();
+            System.out.print("\t\t\tEnter Port-> ");
+            String PORT=scanner2.next();
+            try {
+                int port= Integer.parseInt(PORT);
+
+                if(manager.sendInvitation(IP,port)){
+                    manager.setConnectedClient(true);
+                }
+            }catch (NumberFormatException e){
+                System.out.println("\t\t\tPort must be a number");
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+            if(manager.connectedClient()){
+                while(!manager.getServiceManager().isInvitationAccepted()){
+                    if(manager.getServiceManager().getAnswer().equals("Connection refused")){
+                        return;
+                    }
+                }
+                manager.getPlayerManager().setMyTurn(false);
+                manager.setHost(false);
+                manager.toPlayerRoom();
+            }
+        }else{
+            System.out.println("\t\t\tFirst create the server");
+        }
+    }
+
+    private boolean waitInvitation(GameManager manager){
+        if(!manager.connectedClient()){
+            if(manager.serverWasCreated() && manager.isRunning()){
+                while(!manager.getServiceManager().isInvitationAccepted()){}
+                manager.setConnectedClient(true);
+                System.out.println("\t\t\tConnected to the client");
+            }else{
+                System.out.println("\t\t\tFirst create the server");
+            }
+        }
+        return manager.connectedClient();
     }
 }
 

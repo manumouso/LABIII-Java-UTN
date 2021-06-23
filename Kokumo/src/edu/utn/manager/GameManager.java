@@ -147,6 +147,15 @@ public class GameManager {
         }
         return false;
     }
+    public boolean sendInvitation(String IP,int port){
+        if(validIP(IP)){
+            if(validPort(port)){
+                int myPort= getServiceManager().getServer().getPort();
+                return getServiceManager().invite(IP,port,"{\"port\":"+myPort+"}");
+            }
+        }
+        return false;
+    }
     public boolean sendAttack(NinjaPosition attackPosition, int attackPoints){
         String json="{\"position\":["+attackPosition.getI()+","+attackPosition.getJ()+"],\"attackPoints\":"+attackPoints+"}";
         return getServiceManager().attack(attackPosition,json);

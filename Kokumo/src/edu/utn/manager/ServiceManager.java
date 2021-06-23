@@ -8,14 +8,22 @@ import edu.utn.model.AttackBoard;
 import edu.utn.model.ninja.NinjaPosition;
 import edu.utn.model.square.Destroyed;
 
+import java.util.Scanner;
+
 public class ServiceManager {
 
     private Server server;
     private Client client;
     private ServerState serverState;
+    private NetworkFactory networkFactory;
 
     private String remoteIp;
     private int remotePort;
+
+    private boolean externalMessage;
+    private boolean joinSuccessful;
+    private boolean invitationAccepted;
+    private String answer;
 
     private int correctMovement;
     private int killedNinjasCounter;
@@ -47,10 +55,6 @@ public class ServiceManager {
         this.serverState = serverState;
     }
 
-    private NetworkFactory networkFactory;
-
-    private boolean externalMessage;
-
     public synchronized boolean externalMessageArrived() {
         return externalMessage;
     }
@@ -59,14 +63,28 @@ public class ServiceManager {
         this.externalMessage = externalMessage;
     }
 
-    private boolean requestSuccessful;
-
-    public synchronized boolean isRequestSuccessful() {
-        return requestSuccessful;
+    public synchronized boolean isJoinSuccessful() {
+        return joinSuccessful;
     }
 
-    public synchronized void setRequestSuccessful(boolean requestSuccessful) {
-        this.requestSuccessful = requestSuccessful;
+    public synchronized void setJoinSuccessful(boolean joinSuccessful) {
+        this.joinSuccessful = joinSuccessful;
+    }
+
+    public synchronized boolean isInvitationAccepted() {
+        return invitationAccepted;
+    }
+
+    public synchronized void setInvitationAccepted(boolean invitationAccepted) {
+        this.invitationAccepted = invitationAccepted;
+    }
+
+    public synchronized String getAnswer() {
+        return answer;
+    }
+
+    public synchronized void setAnswer(String answer) {
+        this.answer = answer;
     }
 
     public synchronized String getRemoteIp() {
@@ -106,7 +124,7 @@ public class ServiceManager {
         String response = client.post(url,json);
         System.out.println("\t\t\t"+response);
         if(response.equals("Connected to the server")){
-            setRequestSuccessful(true);
+            setJoinSuccessful(true);
             setRemoteIp(IP);
             setRemotePort(port);
             return true;
@@ -152,5 +170,34 @@ public class ServiceManager {
             networkFactory=new NetworkFactory();
         }
         return networkFactory;
+    }
+
+    public boolean invite(String IP, int port, String json){
+        String url="http://"+IP+":"+port+"/invite";
+        String response = client.post(url,json);
+        System.out.println("\t\t\t"+response);
+        if(response.equals("Connection accepted by the client")){
+            setInvitationAccepted(true);
+            setRemoteIp(IP);
+            setRemotePort(port);
+            return true;
+        }else{
+            setAnswer("Connection refused");
+            System.out.println("\t\t\tTry again");
+        }
+
+        return false;
+    }
+
+    public synchronized String invitationReceived(){
+        Scanner scanner= new Scanner(System.in);
+        System.out.println("Do you want to accept the invitation from: "+getRemoteIp()+" ? [Y/n]");
+        String answer = scanner.next();
+        if(answer.equals("y")||answer.equals("Y")){
+            setInvitationAccepted(true);
+            return "Connection accepted by the client";
+        }else{
+            return "Connection refused";
+        }
     }
 }

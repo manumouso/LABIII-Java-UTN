@@ -1,10 +1,7 @@
 package edu.utn.connection.server;
 
 import com.sun.net.httpserver.HttpServer;
-import edu.utn.connection.server.requestHandler.Attack;
-import edu.utn.connection.server.requestHandler.DeadByTrap;
-import edu.utn.connection.server.requestHandler.Join;
-import edu.utn.connection.server.requestHandler.YourTurn;
+import edu.utn.connection.server.requestHandler.*;
 import edu.utn.manager.PlayerManager;
 import edu.utn.manager.RuleManager;
 import edu.utn.manager.ServiceManager;
@@ -42,6 +39,7 @@ public class Server {
             getServer().createContext("/attack",new Attack(ruleManager,playerManager));
             getServer().createContext("/deadByTrap",new DeadByTrap(serviceManager,ruleManager));
             getServer().createContext("/join",new Join(serviceManager));
+            getServer().createContext("/invite",new Invite(serviceManager));
             getServer().createContext("/yourTurn",new YourTurn(playerManager));
             getServer().setExecutor(null);
             getServer().start();
