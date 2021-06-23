@@ -24,6 +24,7 @@ public class ServiceManager {
     private boolean joinSuccessful;
     private boolean invitationAccepted;
     private String answer;
+    private int refused;
 
     private int correctMovement;
     private int killedNinjasCounter;
@@ -85,6 +86,14 @@ public class ServiceManager {
 
     public synchronized void setAnswer(String answer) {
         this.answer = answer;
+    }
+
+    public synchronized int getRefused() {
+        return refused;
+    }
+
+    public synchronized void setRefused(int refused) {
+        this.refused = refused;
     }
 
     public synchronized String getRemoteIp() {
@@ -197,6 +206,7 @@ public class ServiceManager {
             setInvitationAccepted(true);
             return "Connection accepted by the client";
         }else{
+            setRefused(getRefused()+5);
             return "Connection refused";
         }
     }

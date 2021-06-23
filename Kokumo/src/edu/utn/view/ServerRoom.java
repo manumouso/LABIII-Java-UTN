@@ -213,7 +213,12 @@ public class ServerRoom extends Stage{
     private boolean waitInvitation(GameManager manager){
         if(!manager.connectedClient()){
             if(manager.serverWasCreated() && manager.isRunning()){
-                while(!manager.getServiceManager().isInvitationAccepted()){}
+                while(!manager.getServiceManager().isInvitationAccepted()){
+                    if(manager.getServiceManager().getRefused()==5){
+                        manager.getServiceManager().setRefused(manager.getServiceManager().getRefused()-5);
+                        return false;
+                    }
+                }
                 manager.setConnectedClient(true);
                 System.out.println("\t\t\tConnected to the client");
             }else{
