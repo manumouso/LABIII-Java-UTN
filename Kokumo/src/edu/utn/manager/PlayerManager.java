@@ -66,10 +66,10 @@ public class PlayerManager {
         playerController.clearNinjas(getPlayer());
     }
 
-    public boolean winner(GameManager manager){
+    public boolean win(GameManager manager){
         if(manager.getServiceManager().getKilledNinjasCounter()==GameConstants.MAX_NINJAS) {
 
-            System.out.println("\t\t\tWINNER: " + getPlayer().getName());
+            System.out.println("\t\t\tWINNER: "+ getPlayer().getName());
             return true;
         }else{
             return false;
@@ -77,18 +77,15 @@ public class PlayerManager {
     }
 
     public boolean lose(){
-        int i=0;
-        for(Ninja ninja: getPlayer().getNinjas()){
-            if(ninja.isDead()){
-                i++;
-            }
-        }
+        int i;
+        i=getDeadNinjaQuantity();
         if(i==GameConstants.MAX_NINJAS){
             System.out.println("\t\t\tLOSER: "+ getPlayer().getName());
             return true;
         }
         return false;
     }
+
     public void resetCounters(){
         for(Ninja ninja: getPlayer().getNinjas()){
             ninja.setAttackCounter(0);
@@ -96,7 +93,15 @@ public class PlayerManager {
         }
     }
 
-
+    private int getDeadNinjaQuantity(){
+        int i=0;
+        for(Ninja ninja: getPlayer().getNinjas()){
+            if(ninja.isDead()){
+                i++;
+            }
+        }
+        return i;
+    }
 
     public int getAliveNinjasQuantity(){
         int i=0;

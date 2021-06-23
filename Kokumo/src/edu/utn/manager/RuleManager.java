@@ -12,6 +12,7 @@ import edu.utn.model.ninja.Ninja;
 import edu.utn.model.ninja.NinjaPosition;
 import edu.utn.validator.RuleValidator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,16 +24,8 @@ public class RuleManager {
     private NinjaController ninjaController;
     private Map<String, Direction> directionsMap;
     private Message message;
-
     public int messageArrived;
-
-    public synchronized int getMessageArrived() {
-        return messageArrived;
-    }
-
-    public synchronized void setMessageArrived(int messageArrived) {
-        this.messageArrived = messageArrived;
-    }
+    private List<NinjaPosition> attackPositions;
 
 
     public NinjaFactory getNinjaFactory() {
@@ -47,14 +40,12 @@ public class RuleManager {
         }
         return movementController;
     }
-
     public synchronized AttackController getAttackController() {
         if(attackController==null){
             attackController=new AttackController();
         }
         return attackController;
     }
-
     private NinjaController getNinjaController() {
         if(ninjaController==null){
             ninjaController= new NinjaController();
@@ -73,10 +64,26 @@ public class RuleManager {
         }
         return message;
     }
-
     private synchronized void addAll(List<String> messages){
 
         getMessage().getMessageList().addAll(messages);
+    }
+    public synchronized int getMessageArrived() {
+        return messageArrived;
+    }
+    public synchronized void setMessageArrived(int messageArrived) {
+        this.messageArrived = messageArrived;
+    }
+
+    public List<NinjaPosition> getAttackPositions() {
+        if(attackPositions==null){
+            attackPositions=new ArrayList<>();
+        }
+        return attackPositions;
+    }
+
+    public void resetAttackPositions(){
+        getAttackPositions().clear();
     }
 
     public Ninja createNinja(int i, int j, boolean commander, int m){
@@ -182,22 +189,14 @@ public class RuleManager {
         }
         return false;
     }
+    public boolean canMoveThisTurn(Ninja ninja){
 
-
-    private boolean attackAllowed(Player player,NinjaPosition attackPosition,int attackPoints){
-        int i= attackPosition.getI();
-        int j= attackPosition.getJ();
-        if(RuleValidator.withinLimitsBoard(i,j)){
-            if(!RuleValidator.squareDestroyed(i,j)){
-                return !RuleValidator.ninjaDead(player, i, j);
-            }
-        }
-        return false;
+        return RuleValidator.canMoveThisTurn(ninja);
     }
 
     public synchronized String attackReceived(Player player, NinjaPosition attackPosition,int attackPoints){
         String message;
-        if(attackAllowed(player,attackPosition,attackPoints)){
+        if(attackAllowed(player,attackPosition)){
             message = getAttackController().attackReceived(player, attackPosition,attackPoints);
 
             addAll(getAttackController().getAttackMessages());
@@ -211,8 +210,28 @@ public class RuleManager {
         return message;
     }
 
-    public boolean canMoveThisTurn(Ninja ninja){
+    private boolean attackAllowed(Player player,NinjaPosition attackPosition){
+        int i= attackPosition.getI();
+        int j= attackPosition.getJ();
+        if(RuleValidator.withinLimitsBoard(i,j)){
+            if(!RuleValidator.squareDestroyed(i,j)){
+                return !RuleValidator.ninjaDead(player, i, j);
+            }
+        }
+        return false;
+    }
 
-        return RuleValidator.canMoveThisTurn(ninja);
+    public synchronized void ninjaDiedByTrap(){
+        getMessage().getMessageList().add("Enemy Ninja died standing on a trap");
+        setMessageArrived(getMessageArrived()+1);
+    }
+
+    public boolean choseRepeatedPosition(NinjaPosition attack){
+        for(NinjaPosition position:getAttackPositions()){
+            if(attack.getI()== position.getI() && attack.getJ()== position.getJ()){
+                return true;
+            }
+        }
+        return false;
     }
 }

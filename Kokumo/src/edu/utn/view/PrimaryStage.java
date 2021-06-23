@@ -14,7 +14,7 @@ public class PrimaryStage extends Stage{
             int option;
             do
             {
-
+                super.cleanConsole();
                 super.header();
                 System.out.println("\n\t\t\t\tMAIN MENU");
                 System.out.println("\n\t\t\t[1].START GAME");

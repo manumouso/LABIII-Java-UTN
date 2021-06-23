@@ -15,6 +15,7 @@ public class ServerRoom extends Stage{
             int option;
             do
             {
+                super.cleanConsole();
                 super.header();
                 System.out.println("\n\t\t\t\tSERVER MENU");
                 System.out.println("\n\t\t\t[1].CREATE SERVER");

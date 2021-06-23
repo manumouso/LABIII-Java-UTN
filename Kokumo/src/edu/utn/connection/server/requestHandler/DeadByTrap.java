@@ -3,6 +3,7 @@ package edu.utn.connection.server.requestHandler;
 import com.sun.net.httpserver.HttpExchange;
 import edu.utn.json.Constants;
 import edu.utn.json.JsonController;
+import edu.utn.manager.RuleManager;
 import edu.utn.manager.ServiceManager;
 
 import javax.json.Json;
@@ -12,8 +13,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 public class DeadByTrap extends HttpHandlers{
-    public DeadByTrap(ServiceManager serviceManager) {
-        super(serviceManager);
+    public DeadByTrap(ServiceManager serviceManager, RuleManager ruleManager) {
+        super(serviceManager,ruleManager);
     }
 
     @Override
@@ -24,6 +25,7 @@ public class DeadByTrap extends HttpHandlers{
 
 
             serviceManager.setKilledNinjasCounter(serviceManager.getKilledNinjasCounter()+1);
+            ruleManager.ninjaDiedByTrap();
             JsonObject res;
 
             try {

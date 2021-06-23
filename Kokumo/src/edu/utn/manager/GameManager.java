@@ -245,10 +245,6 @@ public class GameManager {
         return false;
     }
 
-    public boolean canMove(Ninja ninja){
-        return ninja.getMovementCounter() == 0;
-    }
-
     public synchronized void checkReceivedMessages(){
         if(getRuleManager().getMessageArrived()>0) {
             printMessages();

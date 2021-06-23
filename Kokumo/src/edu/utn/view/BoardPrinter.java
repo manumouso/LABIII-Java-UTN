@@ -27,7 +27,7 @@ public class BoardPrinter {
         System.out.println("\n");
     }
     public void printAttackBoard(){
-        System.out.println("\n\t\t\t\tATTACK BOARD\n");
+        System.out.println("\n\t\tATTACK BOARD\n");
         for(int i=0;i< GameConstants.MAX_ROW;i++){
             System.out.println("\t\t==========================================================================================================================");
             for(int j=0; j< GameConstants.MAX_COLUMN;j++){

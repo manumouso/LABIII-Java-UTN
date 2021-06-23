@@ -30,7 +30,7 @@ public class PlayerRoom extends Stage{
 
             do
             {
-
+                super.cleanConsole();
                 super.header();
                 System.out.println("\n\t\t\t\tPLAYER MENU");
                 System.out.println("\n\t\t\t[1].ENTER NAME");

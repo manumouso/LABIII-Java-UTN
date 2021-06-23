@@ -40,7 +40,7 @@ public class Server {
     public void startConnection(ServiceManager serviceManager, RuleManager ruleManager, PlayerManager playerManager) throws IOException {
         try {
             getServer().createContext("/attack",new Attack(ruleManager,playerManager));
-            getServer().createContext("/deadByTrap",new DeadByTrap(serviceManager));
+            getServer().createContext("/deadByTrap",new DeadByTrap(serviceManager,ruleManager));
             getServer().createContext("/join",new Join(serviceManager));
             getServer().createContext("/yourTurn",new YourTurn(playerManager));
             getServer().setExecutor(null);
