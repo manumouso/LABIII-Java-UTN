@@ -1,6 +1,5 @@
 package edu.utn.manager;
 
-import edu.utn.connection.client.Client;
 import edu.utn.controller.AttackController;
 import edu.utn.controller.MovementController;
 import edu.utn.controller.NinjaController;
@@ -86,14 +85,12 @@ public class RuleManager {
     public synchronized void setMessageArrived(int messageArrived) {
         this.messageArrived = messageArrived;
     }
-
     public List<NinjaPosition> getAttackPositions() {
         if(attackPositions==null){
             attackPositions=new ArrayList<>();
         }
         return attackPositions;
     }
-
     public void resetAttackPositions(){
         getAttackPositions().clear();
     }
@@ -328,7 +325,7 @@ public class RuleManager {
                 setMessageArrived(getMessageArrived()+1);
 
             }else{
-                message="WRONG ATTACK!!! Try again";
+                message=MessageType.WRONG_ATTACK.getMessage();
             }
         }catch (Exception e){
             getOpError().add(ErrorType.attackReceived.getErrorCode(),ErrorType.attackReceived.getErrorMessage()+e.getMessage());
@@ -356,8 +353,12 @@ public class RuleManager {
     }
 
     public synchronized void ninjaDiedByTrap(){
-        getMessage().getMessageList().add("Enemy Ninja died standing on a trap");
-        setMessageArrived(getMessageArrived()+1);
+        try {
+            getMessage().getMessageList().add(MessageType.ENEMY_DIED_TRAP.getMessage());
+            setMessageArrived(getMessageArrived()+1);
+        }catch (Exception e){
+            getOpError().add(ErrorType.diedTrap.getErrorCode(),ErrorType.diedTrap.getErrorMessage()+e.getMessage());
+        }
     }
 
     public boolean choseRepeatedPosition(NinjaPosition attack){
@@ -417,7 +418,6 @@ public class RuleManager {
 
     }
 
-
     public synchronized String validDirectionClient(int nextI,int nextJ,NinjaPosition pos1, NinjaPosition pos2,NinjaPosition pos3){
         String message=" ";
         try{
@@ -440,8 +440,6 @@ public class RuleManager {
         }finally {
             return message;
         }
-
-
     }
 
     public synchronized void moveClient(Ninja ninja, Direction direction, ServiceManager manager) {
@@ -455,7 +453,7 @@ public class RuleManager {
             addAll(movementController.getStandOnMessages());
             movementController.getStandOnMessages().clear();
         }catch (Exception e){
-            getOpError().add(ErrorType.validDirectionClient.getErrorCode(),ErrorType.validDirectionClient.getErrorMessage()+e.getMessage());
+            getOpError().add(ErrorType.moveNinjaClient.getErrorCode(),ErrorType.moveNinjaClient.getErrorMessage()+e.getMessage());
         }
 
     }
