@@ -17,7 +17,11 @@ public enum ErrorType {
     moveNinja(-20,"Exception occurred when trying to move the ninja: "),attackReceived(-21,"Exception occurred while processing the attack received: "),
     validatingAttack(-22,"Exception happened when validating attack received: "),canMoveClient(-23,"Exception ocurred while cheking if the client can move: "),
     canAttackClient(-24,"Exception happened when checking if the client can attack: "),validDirectionClient(-25,"Exception occurred when validating the client ninja direction: "),
-    moveNinjaClient(-26,"Exception happened trying to move the client ninja: "),deadCommander(-27,"Exception when validating commander's dead: ");
+    moveNinjaClient(-26,"Exception happened trying to move the client ninja: "),deadCommander(-27,"Exception when validating commander's dead: "),withinLimits(-28,"Exception when validating position within the limits of board"),
+    freeSquare(-29,"Exception occurred when validating free square: "),isAlive(-30,"Exception occurred when validating ninja is alive: "),
+    movementAllowed(-31,"Exception occurred when validating if movement allowed: "),squarePassable(-32,"Exception occurred when validating if square was passable: "),
+    requiredQuantity(-33,"Exception happened when checking required ninjas quantity: "),lessQuantity(-34,"Exception occurred when checking less than required ninjas quantity: "),
+    moveThisTurn(-35,"Exception happened when checking if the ninja can move this turn: ");
 
     private int errorCode;
     private String errorMessage;

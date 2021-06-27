@@ -168,7 +168,7 @@ public class RuleManager {
                 getMessage().getMessageList().add(MessageType.DEADCOMMANDER.getMessage());
                 success=false;
             }
-            
+
         }catch (Exception e){
             getOpError().add(ErrorType.deadCommander.getErrorCode(),ErrorType.deadCommander.getErrorMessage()+e.getMessage());
         }finally {
@@ -177,62 +177,144 @@ public class RuleManager {
 
     }
     private boolean withinLimits(int i,int j,boolean create){
-        if(RuleValidator.withinLimitsBoard(i,j)){
-            return true;
+        boolean success= false;
+        try{
+            if(RuleValidator.withinLimitsBoard(i,j)){
+                success= true;
+            }else{
+                getMessage().getMessageList().add(MessageType.CREATE.getMessage());
+                success= false;
+            }
+
+        }catch (Exception e){
+            getOpError().add(ErrorType.withinLimits.getErrorCode(),ErrorType.withinLimits.getErrorMessage()+e.getMessage());
+        }finally {
+            return success;
         }
-        getMessage().getMessageList().add(MessageType.CREATE.getMessage());
-        return false;
+
     }
     private boolean withinLimits(int i,int j){
-        if(RuleValidator.withinLimitsBoard(i,j)){
-            return true;
+        boolean success= false;
+        try{
+            if(RuleValidator.withinLimitsBoard(i,j)){
+                success= true;
+            }else{
+                getMessage().getMessageList().add(MessageType.OUTBOUNDARY.getMessage());
+                success= false;
+            }
+        }catch (Exception e){
+            getOpError().add(ErrorType.withinLimits.getErrorCode(),ErrorType.withinLimits.getErrorMessage()+e.getMessage());
+        }finally {
+            return success;
         }
-        getMessage().getMessageList().add(MessageType.OUTBOUNDARY.getMessage());
-        return false;
     }
     private boolean freeSquare(int i,int j){
-        if(!RuleValidator.squareOccupied(i,j)){
-            return true;
+        boolean success= false;
+        try{
+            if(!RuleValidator.squareOccupied(i,j)){
+                success= true;
+            }else{
+                getMessage().getMessageList().add(MessageType.OCCUPIED.getMessage());
+                success= false;
+            }
+        }catch (Exception e){
+            getOpError().add(ErrorType.freeSquare.getErrorCode(),ErrorType.freeSquare.getErrorMessage()+e.getMessage());
+        }finally {
+            return success;
         }
-        getMessage().getMessageList().add(MessageType.OCCUPIED.getMessage());
-        return false;
     }
     public boolean isAlive(Ninja ninja){
-        if(!ninja.isDead()){
-            return true;
+        boolean success= false;
+        try{
+            if(!ninja.isDead()){
+                success= true;
+            }else{
+                getMessage().getMessageList().add(MessageType.DEAD.getMessage());
+                success= false;
+            }
+        }catch (Exception e){
+            getOpError().add(ErrorType.isAlive.getErrorCode(),ErrorType.isAlive.getErrorMessage()+e.getMessage());
+        }finally {
+            return success;
         }
-        getMessage().getMessageList().add(MessageType.DEAD.getMessage());
-        return false;
     }
     public boolean movementAllowed(Ninja ninja){
-        if(ninja.isMovedPreviousTurn()){
-            getMessage().getMessageList().add(MessageType.CONSECUTIVE.getMessage());
-            return false;
+        boolean success= false;
+        try{
+            if(ninja.isMovedPreviousTurn()){
+                getMessage().getMessageList().add(MessageType.CONSECUTIVE.getMessage());
+                success= false;
+            }else{
+                success= true;
+            }
+        }catch (Exception e){
+            getOpError().add(ErrorType.movementAllowed.getErrorCode(),ErrorType.movementAllowed.getErrorMessage()+e.getMessage());
+        }finally {
+            return success;
         }
-        return true;
+
+
     }
     private boolean squarePassable(int i, int j){
-        if(!RuleValidator.squareDestroyed(i, j)){
-            return true;
+        boolean success= false;
+        try{
+            if(!RuleValidator.squareDestroyed(i, j)){
+                success= true;
+            }else{
+                getMessage().getMessageList().add(MessageType.DESTROYED.getMessage());
+                success= false;
+            }
+        }catch (Exception e){
+            getOpError().add(ErrorType.squarePassable.getErrorCode(),ErrorType.squarePassable.getErrorMessage()+e.getMessage());
+        }finally {
+            return success;
         }
-        getMessage().getMessageList().add(MessageType.DESTROYED.getMessage());
-        return false;
+
+
     }
     public boolean requiredNinjasQuantity(Player player){
-        if(RuleValidator.requiredNinjasQuantity(player)){
-            return true;
+        boolean success= false;
+        try{
+            if(RuleValidator.requiredNinjasQuantity(player)){
+                success= true;
+            }else{
+                success= false;
+            }
+        }catch (Exception e){
+            getOpError().add(ErrorType.requiredQuantity.getErrorCode(),ErrorType.requiredQuantity.getErrorMessage()+e.getMessage());
+        }finally {
+            return success;
         }
-        return false;
     }
     public boolean lessThanRequiredNinjasQuantity(Player player){
-        if(RuleValidator.lessThanRequiredNinjasQuantity(player)){
-            return true;
+        boolean success= false;
+        try{
+            if(RuleValidator.lessThanRequiredNinjasQuantity(player)){
+                success= true;
+            }else{
+                success= false;
+            }
+        }catch (Exception e){
+            getOpError().add(ErrorType.lessQuantity.getErrorCode(),ErrorType.lessQuantity.getErrorMessage()+e.getMessage());
+        }finally {
+            return success;
         }
-        return false;
+
+
     }
     public boolean canMoveThisTurn(Ninja ninja){
-
-        return RuleValidator.canMoveThisTurn(ninja);
+        boolean success= false;
+        try{
+            if(RuleValidator.canMoveThisTurn(ninja)){
+                success=true;
+            }else{
+                success=false;
+            }
+        }catch (Exception e){
+            getOpError().add(ErrorType.lessQuantity.getErrorCode(),ErrorType.lessQuantity.getErrorMessage()+e.getMessage());
+        }finally {
+            return success;
+        }
     }
 
     public synchronized String attackReceived(Player player, NinjaPosition attackPosition,int attackPoints){
