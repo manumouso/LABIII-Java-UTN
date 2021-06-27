@@ -129,50 +129,64 @@ public class ServiceManager {
     }
 
     public boolean joinGame(String IP, int port, String json){
-        String url="http://"+IP+":"+port+"/join";
-        String response = client.post(url,json);
-        System.out.println("\t\t\t"+response);
-        if(response.equals("Connected to the server")){
-            setJoinSuccessful(true);
-            setRemoteIp(IP);
-            setRemotePort(port);
-            return true;
-        }else{
-            System.out.println("\t\t\tTry again");
+        boolean success=false;
+        try{
+            String url="http://"+IP+":"+port+"/join";
+            String response = client.post(url,json);
+            System.out.println("\t\t\t"+response);
+            if(response.equals("Connected to the server")){
+                setJoinSuccessful(true);
+                setRemoteIp(IP);
+                setRemotePort(port);
+                success=true;
+            }else{
+                System.out.println("\t\t\tTry again");
+            }
+        }catch (Exception e){
+            System.out.println("\t\t\tException: "+e.getMessage());
+        }finally {
+            return success;
         }
-
-        return false;
     }
 
     public boolean attack(NinjaPosition attackPosition, String json){
-        String url="http://"+getRemoteIp()+":"+getRemotePort()+"/attack";
-        String response = client.post(url,json);
-        if(response.equals("You killed the ninja commander") || response.equals("You killed a ninja warrior")){
-            AttackBoard.getInstance().getSquares()[attackPosition.getI()][attackPosition.getJ()]=new Destroyed();
-            setCorrectMovement(getCorrectMovement()+1);
-            setKilledNinjasCounter(getKilledNinjasCounter()+1);
+        boolean success=false;
+        try{
+            String url="http://"+getRemoteIp()+":"+getRemotePort()+"/attack";
+            String response = client.post(url,json);
             System.out.println("\t\t\t"+response);
-            return true;
+            if(response.equals("You killed the ninja commander") || response.equals("You killed a ninja warrior")){
+                AttackBoard.getInstance().getSquares()[attackPosition.getI()][attackPosition.getJ()]=new Destroyed();
+                setCorrectMovement(getCorrectMovement()+1);
+                setKilledNinjasCounter(getKilledNinjasCounter()+1);
+                success= true;
+            }
+            if(response.equals("You destroyed a square")){
+                AttackBoard.getInstance().getSquares()[attackPosition.getI()][attackPosition.getJ()]=new Destroyed();
+                setCorrectMovement(getCorrectMovement()+1);
+                success= true;
+            }
+            if(response.equals("You hurt a ninja")){
+                setCorrectMovement(getCorrectMovement()+1);
+                success= true;
+            }
+        }catch (Exception e){
+            System.out.println("\t\t\tException: "+e.getMessage());
+        }finally {
+            return success;
         }
-        if(response.equals("You destroyed a square")){
-            AttackBoard.getInstance().getSquares()[attackPosition.getI()][attackPosition.getJ()]=new Destroyed();
-            setCorrectMovement(getCorrectMovement()+1);
-            System.out.println("\t\t\t"+response);
-            return true;
-        }
-        if(response.equals("You hurt a ninja")){
-            setCorrectMovement(getCorrectMovement()+1);
-            System.out.println("\t\t\t"+response);
-            return true;
-        }
-        System.out.println("\t\t\t"+response);
-        return false;
+
 
     }
     public void endTurn(){
-        String url="http://"+getRemoteIp()+":"+getRemotePort()+"/yourTurn";
-        String response = client.post(url,"{}");
-        System.out.println("\t\t\t"+response);
+        try{
+            String url="http://"+getRemoteIp()+":"+getRemotePort()+"/yourTurn";
+            String response = client.post(url,"{}");
+            System.out.println("\t\t\t"+response);
+        }catch (Exception e){
+            System.out.println("\t\t\tException: "+e.getMessage());
+        }
+
     }
     public NetworkFactory getNetworkFactory() {
         if(networkFactory==null){
@@ -182,32 +196,45 @@ public class ServiceManager {
     }
 
     public boolean invite(String IP, int port, String json){
-        String url="http://"+IP+":"+port+"/invite";
-        String response = client.post(url,json);
-        System.out.println("\t\t\t"+response);
-        if(response.equals("Connection accepted by the client")){
-            setInvitationAccepted(true);
-            setRemoteIp(IP);
-            setRemotePort(port);
-            return true;
-        }else{
-            setAnswer("Connection refused");
-            System.out.println("\t\t\tTry again");
+        boolean success=false;
+        try{
+            String url="http://"+IP+":"+port+"/invite";
+            String response = client.post(url,json);
+            System.out.println("\t\t\t"+response);
+            if(response.equals("Connection accepted by the client")){
+                setInvitationAccepted(true);
+                setRemoteIp(IP);
+                setRemotePort(port);
+                success= true;
+            }else{
+                setAnswer("Connection refused");
+                System.out.println("\t\t\tTry again");
+            }
+        }catch (Exception e){
+            System.out.println("\t\t\tException: "+e.getMessage());
+        }finally {
+            return success;
         }
-
-        return false;
     }
 
     public synchronized String invitationReceived(){
-        Scanner scanner= new Scanner(System.in);
-        System.out.print("\t\t\tDo you want to accept the invitation from: "+getRemoteIp()+" ? [Y/n]->");
-        String answer = scanner.next();
-        if(answer.equals("y")||answer.equals("Y")){
-            setInvitationAccepted(true);
-            return "Connection accepted by the client";
-        }else{
-            setRefused(getRefused()+5);
-            return "Connection refused";
+        String message=" ";
+        try{
+            Scanner scanner= new Scanner(System.in);
+            System.out.print("\t\t\tDo you want to accept the invitation from: "+getRemoteIp()+" ? [Y/n]->");
+            String answer = scanner.next();
+            if(answer.equals("y")||answer.equals("Y")){
+                setInvitationAccepted(true);
+                message= "Connection accepted by the client";
+            }else{
+                setRefused(getRefused()+5);
+                message= "Connection refused";
+            }
+        }catch (Exception e){
+            System.out.println("\t\t\tException: "+e.getMessage());
+
+        }finally {
+            return message;
         }
     }
 }

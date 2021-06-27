@@ -7,7 +7,6 @@ import edu.utn.enums.NetworkType;
 import edu.utn.factory.ViewFactory;
 import edu.utn.factory.NetworkFactory;
 import edu.utn.message.Message;
-import edu.utn.model.ninja.Ninja;
 import edu.utn.model.ninja.NinjaPosition;
 import edu.utn.validator.NetworkValidator;
 import edu.utn.view.*;
@@ -116,15 +115,19 @@ public class GameManager {
     }
 
     public Server createServer(int port){
-        NetworkFactory networkFactory = getServiceManager().getNetworkFactory();
-
-            if(validPort(port)){
-                Server server =networkFactory.createServer(port);
+        Server server = null;
+        try {
+            NetworkFactory networkFactory = getServiceManager().getNetworkFactory();
+            if (validPort(port)) {
+                server = networkFactory.createServer(port);
                 getMessage().getMessageList().add(NetworkType.SERVER.getMessage());
-                return server;
             }
+        }catch (Exception e){
+            System.out.println("\t\t\t Exception: "+e.getMessage());
+        }finally {
+            return server;
+        }
 
-        return null;
     }
 
     public void setClient(){
@@ -132,45 +135,92 @@ public class GameManager {
     }
 
     public Client createClient(){
-        NetworkFactory networkFactory = getServiceManager().getNetworkFactory();
-        Client client =networkFactory.createClient();
-        getMessage().getMessageList().add(NetworkType.CLIENT.getMessage());
-        return client;
+        Client client=null;
+        try{
+            NetworkFactory networkFactory = getServiceManager().getNetworkFactory();
+            client =networkFactory.createClient();
+            getMessage().getMessageList().add(NetworkType.CLIENT.getMessage());
+
+        }catch (Exception e){
+            System.out.println("\t\t\t Exception: "+e.getMessage());
+        }finally {
+            return client;
+        }
+
     }
 
     public boolean sendJoin(String IP,int port){
-        if(validIP(IP)){
-            if(validPort(port)){
-                int myPort= getServiceManager().getServer().getPort();
-                return getServiceManager().joinGame(IP,port,"{\"port\":"+myPort+"}");
+        boolean success=false;
+        try{
+            if(validIP(IP)){
+                if(validPort(port)){
+                    int myPort= getServiceManager().getServer().getPort();
+                    success= getServiceManager().joinGame(IP,port,"{\"port\":"+myPort+"}");
+                }
             }
+
+        }catch (Exception e){
+            System.out.println("\t\t\t Exception: "+e.getMessage());
+        }finally {
+            return success;
         }
-        return false;
+
     }
     public boolean sendInvitation(String IP,int port){
-        if(validIP(IP)){
-            if(validPort(port)){
-                int myPort= getServiceManager().getServer().getPort();
-                return getServiceManager().invite(IP,port,"{\"port\":"+myPort+"}");
+        boolean success= false;
+        try{
+            if(validIP(IP)){
+                if(validPort(port)){
+                    int myPort= getServiceManager().getServer().getPort();
+                    success= getServiceManager().invite(IP,port,"{\"port\":"+myPort+"}");
+                }
             }
+        }catch (Exception e){
+            System.out.println("\t\t\t Exception: "+e.getMessage());
+        }finally {
+            return success;
         }
-        return false;
+
     }
     public boolean sendAttack(NinjaPosition attackPosition, int attackPoints){
-        String json="{\"position\":["+attackPosition.getI()+","+attackPosition.getJ()+"],\"attackPoints\":"+attackPoints+"}";
-        return getServiceManager().attack(attackPosition,json);
+        boolean success= false;
+        try {
+            String json="{\"position\":["+attackPosition.getI()+","+attackPosition.getJ()+"],\"attackPoints\":"+attackPoints+"}";
+            success= getServiceManager().attack(attackPosition,json);
+        }catch (Exception e){
+            System.out.println("\t\t\t Exception: "+e.getMessage());
+        }finally {
+            return success;
+        }
+
     }
 
     public void sendEndTurn(){
-        getServiceManager().endTurn();
+        try{
+            getServiceManager().endTurn();
+        }catch (Exception e){
+            System.out.println("\t\t\tException: "+e.getMessage());
+        }
     }
 
-    public void startConnection() throws IOException {
-        getServiceManager().getServer().startConnection(getServiceManager(),getRuleManager(),getPlayerManager());
+    public void startConnection(){
+        try{
+            getServiceManager().getServer().startConnection(getServiceManager(),getRuleManager(),getPlayerManager());
+        }catch (IOException e){
+            System.out.println("\t\t\tIO Exception: "+e.getMessage());
+        }catch (Exception e){
+            System.out.println("\t\t\tException: "+e.getMessage());
+        }
     }
 
-    public void closeConnection() throws IOException {
-        getServiceManager().getServer().closeConnection();
+    public void closeConnection(){
+        try{
+            getServiceManager().getServer().closeConnection();
+        }catch (IOException e){
+            System.out.println("\t\t\tIO Exception: "+e.getMessage());
+        }catch (Exception e){
+            System.out.println("\t\t\tException: "+e.getMessage());
+        }
     }
 
     public void setServerState(){
@@ -255,11 +305,16 @@ public class GameManager {
     }
 
     public synchronized void checkReceivedMessages(){
-        if(getRuleManager().getMessageArrived()>0) {
-            printMessages();
-            clearMessages();
-            getRuleManager().setMessageArrived(0);
+        try{
+            if(getRuleManager().getMessageArrived()>0) {
+                printMessages();
+                clearMessages();
+                getRuleManager().setMessageArrived(0);
+            }
+        }catch (Exception e){
+            System.out.println("\t\t\tException: "+e.getMessage());
         }
+
     }
 
 
