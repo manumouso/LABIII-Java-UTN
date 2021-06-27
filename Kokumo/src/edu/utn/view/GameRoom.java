@@ -1,7 +1,10 @@
 package edu.utn.view;
 
+import edu.utn.controller.MovementController;
+import edu.utn.controller.NinjaController;
 import edu.utn.manager.GameConstants;
 import edu.utn.manager.GameManager;
+import edu.utn.model.Board;
 import edu.utn.model.ninja.Direction;
 import edu.utn.model.ninja.Ninja;
 import edu.utn.model.ninja.NinjaPosition;
@@ -62,7 +65,11 @@ public class GameRoom extends Stage{
                     case 1:
                         if(manager.getPlayerManager().isMyTurn()) {
                             if (manager.getServiceManager().getCorrectMovement() < manager.getPlayerManager().getAliveNinjasQuantity()) {
-                                moveNinjas(manager);
+                                if(manager.isHost()){
+                                    moveNinjas(manager);
+                                }else{
+                                    moveNinjasClient(manager);
+                                }
 
                             }
                         }
@@ -133,16 +140,7 @@ public class GameRoom extends Stage{
             cleanConsoleAndPrintHeader();
             System.out.println(" ");
             Scanner scanner = new Scanner(System.in);
-            System.out.println("\t\t\tNINJA DIRECTIONS:");
-            System.out.println("\t\t\t[N]=NORTH");
-            System.out.println("\t\t\t[NE]=NORTH EAST");
-            System.out.println("\t\t\t[NW]=NORTH WEST");
-            System.out.println("\t\t\t[S]=SOUTH");
-            System.out.println("\t\t\t[SE]=SOUTH EAST");
-            System.out.println("\t\t\t[SW]=SOUTH WEST");
-            System.out.println("\t\t\t[E]=EAST");
-            System.out.println("\t\t\t[W]=WEST");
-            System.out.println(" ");
+            printDirection();
             Map<String, Direction> directionMap = manager.getRuleManager().getDirectionsMap();
 
             for (Ninja ninja : manager.getPlayerManager().getPlayer().getNinjas()) {
@@ -176,6 +174,65 @@ public class GameRoom extends Stage{
         }else{
             print(manager);
         }
+    }
+    private void moveNinjasClient(GameManager manager){
+        NinjaController ninjaController = new NinjaController();
+        MovementController movementController = new MovementController();
+        cleanConsoleAndPrintHeader();
+        Scanner scanner = new Scanner(System.in);
+        printDirection();
+        Map<String, Direction> directionMap = manager.getRuleManager().getDirectionsMap();
+        NinjaPosition[] ninjaPositions= new NinjaPosition[3];
+        int i=0;
+        for (Ninja ninja : manager.getPlayerManager().getPlayer().getNinjas()){
+            ninjaPositions[i]=ninja.getNinjaPosition();
+            i++;
+        }
+        for (Ninja ninja : manager.getPlayerManager().getPlayer().getNinjas()) {
+
+            if(manager.sendCanMove(manager.getPlayerManager().getPlayer().getNinjas().get(0).isDead(),ninja)){
+
+                System.out.print("\t\t\tDo you want to move your ninja-> " + ninja.getName()+ "  [y/n]: ");
+                String answer = scanner.next();
+                System.out.println(" ");
+                if (answer.equals("y") || answer.equals("Y")) {
+                    manager.printBoard(true);
+                    System.out.println(" ");
+                    System.out.print("\t\t\tEnter the direction ->");
+                    String direction=scanner.next();
+                    while(!directionMap.containsKey(direction)){
+                        System.out.println(" ");
+                        System.out.println("\t\t\tWrong Direction try again!!!");
+                        System.out.print("\t\t\tEnter the direction ->");
+                        direction = scanner.next();
+                    }
+                    ninjaController.setDirection(ninja,directionMap.get(direction));
+                    NinjaPosition next = movementController.getNextPosition(ninja);
+                    if(manager.sendValidDirection(next.getI(), next.getJ(),ninjaPositions)){
+                        manager.getRuleManager().moveClient(ninja,directionMap.get(direction),manager.getServiceManager());
+                        manager.getServiceManager().setCorrectMovement(manager.getServiceManager().getCorrectMovement()+1);
+                        ninja.setMovedPreviousTurn(true);
+
+                        manager.printBoard(true);
+                        System.out.println(" ");
+                        print(manager);
+                    }
+                }
+            }
+        }
+    }
+    private void printDirection(){
+        System.out.println(" ");
+        System.out.println("\t\t\tNINJA DIRECTIONS:");
+        System.out.println("\t\t\t[N]=NORTH");
+        System.out.println("\t\t\t[NE]=NORTH EAST");
+        System.out.println("\t\t\t[NW]=NORTH WEST");
+        System.out.println("\t\t\t[S]=SOUTH");
+        System.out.println("\t\t\t[SE]=SOUTH EAST");
+        System.out.println("\t\t\t[SW]=SOUTH WEST");
+        System.out.println("\t\t\t[E]=EAST");
+        System.out.println("\t\t\t[W]=WEST");
+        System.out.println(" ");
     }
 
 

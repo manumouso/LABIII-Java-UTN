@@ -1,11 +1,13 @@
 package edu.utn.manager;
 
+import edu.utn.connection.client.Client;
 import edu.utn.controller.AttackController;
 import edu.utn.controller.MovementController;
 import edu.utn.controller.NinjaController;
 import edu.utn.enums.MessageType;
 import edu.utn.factory.NinjaFactory;
 import edu.utn.message.Message;
+import edu.utn.model.AttackBoard;
 import edu.utn.model.Player;
 import edu.utn.model.ninja.Direction;
 import edu.utn.model.ninja.Ninja;
@@ -233,5 +235,55 @@ public class RuleManager {
             }
         }
         return false;
+    }
+
+    public synchronized String canMoveClient(boolean commanderDead,int attackCounter,int moveCounter, boolean movedPreviousTurn,boolean ninjaDead){
+        if(!RuleValidator.ninjaDead(commanderDead)){
+            if(!RuleValidator.ninjaDead(ninjaDead)){
+                if(RuleValidator.canMoveThisTurn(attackCounter,moveCounter)){
+                    if(!RuleValidator.movedPreviousTurn(movedPreviousTurn)){
+                        return MessageType.ALLOWED.getMessage();
+                    }else{
+                        return MessageType.CONSECUTIVE.getMessage();
+                    }
+                }else{
+                    return MessageType.ALREADY.getMessage();
+                }
+            }else{
+                return MessageType.DEAD.getMessage();
+            }
+        }else{
+            return MessageType.DEADCOMMANDER.getMessage();
+        }
+    }
+
+
+    public synchronized String validDirectionClient(int nextI,int nextJ,NinjaPosition pos1, NinjaPosition pos2,NinjaPosition pos3){
+        if(RuleValidator.withinLimitsBoard(nextI,nextJ)){
+            if(!RuleValidator.squareDestroyed(AttackBoard.getInstance().getSquares()[nextI][nextJ].name())){
+                NinjaPosition next = new NinjaPosition(nextI,nextJ);
+                if(!RuleValidator.squareOccupied(next,pos1,pos2,pos3)){
+                    return MessageType.VALID_DIRECTION.getMessage();
+                }else{
+                    return MessageType.OCCUPIED.getMessage();
+                }
+            }else {
+                return MessageType.DESTROYED.getMessage();
+            }
+        }else{
+            return MessageType.OUTBOUNDARY.getMessage();
+        }
+
+    }
+
+    public synchronized void moveClient(Ninja ninja, Direction direction, ServiceManager manager) {
+        MovementController movementController = getMovementController();
+        NinjaController ninjaController = getNinjaController();
+        ninjaController.setDirection(ninja, direction);
+        NinjaPosition current = ninjaController.getCurrentPosition(ninja);
+        NinjaPosition next = movementController.getNextPosition(ninja);
+        movementController.move(ninja, current, next, manager);
+        addAll(movementController.getStandOnMessages());
+        movementController.getStandOnMessages().clear();
     }
 }

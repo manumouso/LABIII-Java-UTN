@@ -37,9 +37,11 @@ public class Server {
     public void startConnection(ServiceManager serviceManager, RuleManager ruleManager, PlayerManager playerManager) throws IOException {
         try {
             getServer().createContext("/attack",new Attack(ruleManager,playerManager));
+            getServer().createContext("/canMove",new CanMove(ruleManager));
             getServer().createContext("/deadByTrap",new DeadByTrap(serviceManager,ruleManager));
-            getServer().createContext("/join",new Join(serviceManager));
             getServer().createContext("/invite",new Invite(serviceManager));
+            getServer().createContext("/join",new Join(serviceManager));
+            getServer().createContext("/validDirection",new ValidDirection(ruleManager));
             getServer().createContext("/yourTurn",new YourTurn(playerManager));
             getServer().setExecutor(null);
             getServer().start();

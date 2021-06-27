@@ -149,6 +149,44 @@ public class ServiceManager {
         }
     }
 
+    public boolean canMove(String json){
+        boolean success=false;
+        try{
+            String url="http://"+getRemoteIp()+":"+getRemotePort()+"/canMove";
+            String response = client.post(url,json);
+
+            if(response.equals("Move allowed")){
+                success=true;
+
+            }else{
+                System.out.println("\t\t\t"+response);
+            }
+        }catch (Exception e){
+            System.out.println("\t\t\tException: "+e.getMessage());
+        }finally {
+            return success;
+        }
+    }
+
+    public boolean validDirection(String json){
+        boolean success=false;
+        try{
+            String url="http://"+getRemoteIp()+":"+getRemotePort()+"/validDirection";
+            String response = client.post(url,json);
+
+            if(response.equals("Valid direction")){
+
+                success=true;
+            }else{
+                System.out.println("\t\t\t"+response);
+            }
+        }catch (Exception e){
+            System.out.println("\t\t\tException: "+e.getMessage());
+        }finally {
+            return success;
+        }
+    }
+
     public boolean attack(NinjaPosition attackPosition, String json){
         boolean success=false;
         try{

@@ -202,7 +202,7 @@ public class ServerRoom extends Stage{
                     }
                 }
                 manager.getPlayerManager().setMyTurn(false);
-                manager.setHost(false);
+                manager.setHost(true);
                 manager.toPlayerRoom();
             }
         }else{

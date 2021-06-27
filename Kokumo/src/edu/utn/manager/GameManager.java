@@ -7,6 +7,7 @@ import edu.utn.enums.NetworkType;
 import edu.utn.factory.ViewFactory;
 import edu.utn.factory.NetworkFactory;
 import edu.utn.message.Message;
+import edu.utn.model.ninja.Ninja;
 import edu.utn.model.ninja.NinjaPosition;
 import edu.utn.validator.NetworkValidator;
 import edu.utn.view.*;
@@ -182,6 +183,39 @@ public class GameManager {
         }
 
     }
+    public boolean sendCanMove(boolean commanderDead, Ninja ninja){
+        boolean success= false;
+        try{
+            String json="{\"commanderDead\":"+commanderDead+",\"attackCounter\":"+ninja.getAttackCounter()+",\"moveCounter\":"+ninja.getMovementCounter()+",\"movedPreviousTurn\":"+ninja.isMovedPreviousTurn()+",\"ninjaDead\":"+ninja.isDead()+"}";
+            success= getServiceManager().canMove(json);
+        }catch (Exception e){
+            System.out.println("\t\t\t Exception: "+e.getMessage());
+        }finally {
+            return success;
+        }
+
+    }
+
+    public boolean sendValidDirection(int i, int j, NinjaPosition[] ninjaPositions){
+        boolean success= false;
+        NinjaPosition pos1=ninjaPositions[0];
+        NinjaPosition pos2=ninjaPositions[1];
+        NinjaPosition pos3=ninjaPositions[2];
+        String position1="["+pos1.getI()+","+pos1.getJ()+"]";
+        String position2="["+pos2.getI()+","+pos2.getJ()+"]";
+        String position3="["+pos3.getI()+","+pos3.getJ()+"]";
+
+
+        try{
+            String json="{\"nextI\":"+i+",\"nextJ\":"+j+",\"pos1\":"+position1+",\"pos2\":"+position2+",\"pos3\":"+position3+"}";
+            success= getServiceManager().validDirection(json);
+        }catch (Exception e){
+            System.out.println("\t\t\t Exception: "+e.getMessage());
+        }finally {
+            return success;
+        }
+    }
+
     public boolean sendAttack(NinjaPosition attackPosition, int attackPoints){
         boolean success= false;
         try {

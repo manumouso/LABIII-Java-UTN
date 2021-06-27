@@ -24,6 +24,10 @@ public abstract class HttpHandlers implements HttpHandler {
         this.ruleManager = ruleManager;
     }
 
+    public HttpHandlers(RuleManager ruleManager) {
+        this.ruleManager = ruleManager;
+    }
+
     public HttpHandlers(ServiceManager serviceManager) {
         this.serviceManager = serviceManager;
     }
