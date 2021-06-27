@@ -81,11 +81,6 @@ public class GameManager {
         }
         return message;
     }
-    private synchronized void addAll(){
-
-        getMessage().getMessageList().addAll(getRuleManager().getMessage().getMessageList());
-        getRuleManager().getMessage().getMessageList().clear();
-    }
 
     private MessagePrinter getMessagePrinter() {
         if(messagePrinter==null){
@@ -394,6 +389,15 @@ public class GameManager {
 
     }
 
-
+    private synchronized void addAll(){
+        try{
+            getMessage().getMessageList().addAll(getRuleManager().getMessage().getMessageList());
+            getRuleManager().getMessage().getMessageList().clear();
+            getOpError().add(getRuleManager().getOpError());
+            getOpError().add(getServiceManager().getOpError());
+        }catch (Exception e){
+            opError.add(ErrorType.addErrors.getErrorCode(),ErrorType.addErrors.getErrorMessage()+e.getMessage());
+        }
+    }
 
 }

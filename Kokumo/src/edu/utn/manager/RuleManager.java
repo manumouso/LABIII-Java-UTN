@@ -4,7 +4,9 @@ import edu.utn.connection.client.Client;
 import edu.utn.controller.AttackController;
 import edu.utn.controller.MovementController;
 import edu.utn.controller.NinjaController;
+import edu.utn.enums.ErrorType;
 import edu.utn.enums.MessageType;
+import edu.utn.error.OperationError;
 import edu.utn.factory.NinjaFactory;
 import edu.utn.message.Message;
 import edu.utn.model.AttackBoard;
@@ -29,6 +31,14 @@ public class RuleManager {
     public int messageArrived;
     private List<NinjaPosition> attackPositions;
 
+    private OperationError opError;
+
+    public OperationError getOpError() {
+        if(opError==null){
+            opError= new OperationError();
+        }
+        return opError;
+    }
 
     public NinjaFactory getNinjaFactory() {
         if(ninjaFactory==null){
@@ -89,27 +99,41 @@ public class RuleManager {
     }
 
     public Ninja createNinja(int i, int j, boolean commander, int m){
-        if(withinLimits(i,j,true)){
-            if(freeSquare(i,j)){
-                NinjaFactory ninjaFactory = getNinjaFactory();
-                Ninja ninja =ninjaFactory.createNinja(i,j,commander,m);
-                MovementController movementController = getMovementController();
-                movementController.ninjaStandsOn(ninja);
-                addAll(movementController.getStandOnMessages());
-                movementController.getStandOnMessages().clear();
-                return ninja;
+        Ninja ninja=null;
+        try{
+            if(withinLimits(i,j,true)){
+                if(freeSquare(i,j)){
+                    NinjaFactory ninjaFactory = getNinjaFactory();
+                    ninja =ninjaFactory.createNinja(i,j,commander,m);
+                    MovementController movementController = getMovementController();
+                    movementController.ninjaStandsOn(ninja);
+                    addAll(movementController.getStandOnMessages());
+                    movementController.getStandOnMessages().clear();
+                    return ninja;
+                }
             }
+        }catch (Exception e){
+            getOpError().add(ErrorType.createNinja.getErrorCode(),ErrorType.createNinja.getErrorMessage()+e.getMessage());
+        }finally {
+            return ninja;
         }
-
-        return null;
     }
     public NinjaPosition createPosition(int i,int j){
-        NinjaFactory ninjaFactory=getNinjaFactory();
-        return ninjaFactory.createPosition(i,j);
+        NinjaPosition ninjaPosition= null;
+        try{
+            NinjaFactory ninjaFactory=getNinjaFactory();
+            ninjaPosition= ninjaFactory.createPosition(i,j);
+        }catch (Exception e){
+            getOpError().add(ErrorType.createPosition.getErrorCode(),ErrorType.createPosition.getErrorMessage()+e.getMessage());
+        }finally {
+            return ninjaPosition;
+        }
+
     }
 
     public boolean move(Ninja ninja, Direction direction,ServiceManager manager){
-
+        boolean success=false;
+        try{
             MovementController movementController = getMovementController();
             NinjaController ninjaController = getNinjaController();
             ninjaController.setDirection(ninja,direction);
@@ -123,19 +147,34 @@ public class RuleManager {
                         movementController.move(ninja, current, next,manager);
                         addAll(movementController.getStandOnMessages());
                         movementController.getStandOnMessages().clear();
-                        return true;
+                        success= true;
                     }
                 }
             }
-        return false;
+        }catch (Exception e){
+            getOpError().add(ErrorType.moveNinja.getErrorCode(),ErrorType.moveNinja.getErrorMessage()+e.getMessage());
+        }finally {
+            return success;
+        }
+
     }
 
     public boolean commanderAlive(Player player){
-        if(!RuleValidator.commanderDead(player)){
-            return true;
+        boolean success= false;
+        try{
+            if(!RuleValidator.commanderDead(player)){
+                success= true;
+            }else{
+                getMessage().getMessageList().add(MessageType.DEADCOMMANDER.getMessage());
+                success=false;
+            }
+            
+        }catch (Exception e){
+            getOpError().add(ErrorType.deadCommander.getErrorCode(),ErrorType.deadCommander.getErrorMessage()+e.getMessage());
+        }finally {
+            return success;
         }
-        getMessage().getMessageList().add(MessageType.DEADCOMMANDER.getMessage());
-        return false;
+
     }
     private boolean withinLimits(int i,int j,boolean create){
         if(RuleValidator.withinLimitsBoard(i,j)){
@@ -197,30 +236,41 @@ public class RuleManager {
     }
 
     public synchronized String attackReceived(Player player, NinjaPosition attackPosition,int attackPoints){
-        String message;
-        if(attackAllowed(player,attackPosition)){
-            message = getAttackController().attackReceived(player, attackPosition,attackPoints);
+        String message=" ";
+        try{
+            if(attackAllowed(player,attackPosition)){
+                message = getAttackController().attackReceived(player, attackPosition,attackPoints);
 
-            addAll(getAttackController().getAttackMessages());
-            getAttackController().getAttackMessages().clear();
-            setMessageArrived(getMessageArrived()+1);
+                addAll(getAttackController().getAttackMessages());
+                getAttackController().getAttackMessages().clear();
+                setMessageArrived(getMessageArrived()+1);
 
-        }else{
-            message="WRONG ATTACK!!! Try again";
+            }else{
+                message="WRONG ATTACK!!! Try again";
+            }
+        }catch (Exception e){
+            getOpError().add(ErrorType.attackReceived.getErrorCode(),ErrorType.attackReceived.getErrorMessage()+e.getMessage());
+        }finally {
+            return message;
         }
-
-        return message;
     }
 
     private boolean attackAllowed(Player player,NinjaPosition attackPosition){
-        int i= attackPosition.getI();
-        int j= attackPosition.getJ();
-        if(RuleValidator.withinLimitsBoard(i,j)){
-            if(!RuleValidator.squareDestroyed(i,j)){
-                return !RuleValidator.ninjaDead(player, i, j);
+        boolean success= false;
+        try{
+            int i= attackPosition.getI();
+            int j= attackPosition.getJ();
+            if(RuleValidator.withinLimitsBoard(i,j)){
+                if(!RuleValidator.squareDestroyed(i,j)){
+                    success= !RuleValidator.ninjaDead(player, i, j);
+                }
             }
+        }catch (Exception e){
+            getOpError().add(ErrorType.validatingAttack.getErrorCode(),ErrorType.validatingAttack.getErrorMessage()+e.getMessage());
+        }finally {
+            return success;
         }
-        return false;
+
     }
 
     public synchronized void ninjaDiedByTrap(){
@@ -238,64 +288,93 @@ public class RuleManager {
     }
 
     public synchronized String canMoveClient(boolean commanderDead,int attackCounter,int moveCounter, boolean movedPreviousTurn,boolean ninjaDead){
-        if(!RuleValidator.ninjaDead(commanderDead)){
-            if(!RuleValidator.ninjaDead(ninjaDead)){
-                if(RuleValidator.canMoveThisTurn(attackCounter,moveCounter)){
-                    if(!RuleValidator.movedPreviousTurn(movedPreviousTurn)){
-                        return MessageType.ALLOWED.getMessage();
+        String message=" ";
+        try{
+            if(!RuleValidator.ninjaDead(commanderDead)){
+                if(!RuleValidator.ninjaDead(ninjaDead)){
+                    if(RuleValidator.canMoveThisTurn(attackCounter,moveCounter)){
+                        if(!RuleValidator.movedPreviousTurn(movedPreviousTurn)){
+                            message= MessageType.ALLOWED.getMessage();
+                        }else{
+                            message= MessageType.CONSECUTIVE.getMessage();
+                        }
                     }else{
-                        return MessageType.CONSECUTIVE.getMessage();
+                        message= MessageType.ALREADY.getMessage();
                     }
                 }else{
-                    return MessageType.ALREADY.getMessage();
+                    message= MessageType.DEAD.getMessage();
                 }
             }else{
-                return MessageType.DEAD.getMessage();
+                message= MessageType.DEADCOMMANDER.getMessage();
             }
-        }else{
-            return MessageType.DEADCOMMANDER.getMessage();
+        }catch (Exception e){
+            getOpError().add(ErrorType.canMoveClient.getErrorCode(),ErrorType.canMoveClient.getErrorMessage()+e.getMessage());
+        }finally {
+            return message;
         }
+
     }
 
     public synchronized String canAttackClient(int attackCounter, int moveCounter, boolean ninjaDead) {
-        if (!RuleValidator.ninjaDead(ninjaDead)) {
-            if (RuleValidator.canMoveThisTurn(attackCounter, moveCounter)) {
-                return MessageType.ATTACK_ALLOWED.getMessage();
-            } else {
-                return MessageType.ALREADY.getMessage();
+        String message=" ";
+        try{
+            if (!RuleValidator.ninjaDead(ninjaDead)) {
+                if (RuleValidator.canMoveThisTurn(attackCounter, moveCounter)) {
+                    message= MessageType.ATTACK_ALLOWED.getMessage();
+                } else {
+                    message= MessageType.ALREADY.getMessage();
+                }
+            }else{
+                message= MessageType.DEAD.getMessage();
             }
-        }else{
-            return MessageType.DEAD.getMessage();
+        }catch (Exception e){
+            getOpError().add(ErrorType.canAttackClient.getErrorCode(),ErrorType.canAttackClient.getErrorMessage()+e.getMessage());
+        }finally {
+            return message;
         }
+
     }
 
 
     public synchronized String validDirectionClient(int nextI,int nextJ,NinjaPosition pos1, NinjaPosition pos2,NinjaPosition pos3){
-        if(RuleValidator.withinLimitsBoard(nextI,nextJ)){
-            if(!RuleValidator.squareDestroyed(AttackBoard.getInstance().getSquares()[nextI][nextJ].name())){
-                NinjaPosition next = new NinjaPosition(nextI,nextJ);
-                if(!RuleValidator.squareOccupied(next,pos1,pos2,pos3)){
-                    return MessageType.VALID_DIRECTION.getMessage();
-                }else{
-                    return MessageType.OCCUPIED.getMessage();
+        String message=" ";
+        try{
+            if(RuleValidator.withinLimitsBoard(nextI,nextJ)){
+                if(!RuleValidator.squareDestroyed(AttackBoard.getInstance().getSquares()[nextI][nextJ].name())){
+                    NinjaPosition next = new NinjaPosition(nextI,nextJ);
+                    if(!RuleValidator.squareOccupied(next,pos1,pos2,pos3)){
+                        message= MessageType.VALID_DIRECTION.getMessage();
+                    }else{
+                        message= MessageType.OCCUPIED.getMessage();
+                    }
+                }else {
+                    message= MessageType.DESTROYED.getMessage();
                 }
-            }else {
-                return MessageType.DESTROYED.getMessage();
+            }else{
+                message= MessageType.OUTBOUNDARY.getMessage();
             }
-        }else{
-            return MessageType.OUTBOUNDARY.getMessage();
+        }catch (Exception e){
+            getOpError().add(ErrorType.validDirectionClient.getErrorCode(),ErrorType.validDirectionClient.getErrorMessage()+e.getMessage());
+        }finally {
+            return message;
         }
+
 
     }
 
     public synchronized void moveClient(Ninja ninja, Direction direction, ServiceManager manager) {
-        MovementController movementController = getMovementController();
-        NinjaController ninjaController = getNinjaController();
-        ninjaController.setDirection(ninja, direction);
-        NinjaPosition current = ninjaController.getCurrentPosition(ninja);
-        NinjaPosition next = movementController.getNextPosition(ninja);
-        movementController.move(ninja, current, next, manager);
-        addAll(movementController.getStandOnMessages());
-        movementController.getStandOnMessages().clear();
+        try{
+            MovementController movementController = getMovementController();
+            NinjaController ninjaController = getNinjaController();
+            ninjaController.setDirection(ninja, direction);
+            NinjaPosition current = ninjaController.getCurrentPosition(ninja);
+            NinjaPosition next = movementController.getNextPosition(ninja);
+            movementController.move(ninja, current, next, manager);
+            addAll(movementController.getStandOnMessages());
+            movementController.getStandOnMessages().clear();
+        }catch (Exception e){
+            getOpError().add(ErrorType.validDirectionClient.getErrorCode(),ErrorType.validDirectionClient.getErrorMessage()+e.getMessage());
+        }
+
     }
 }

@@ -3,6 +3,7 @@ package edu.utn.manager;
 
 import edu.utn.connection.client.Client;
 import edu.utn.connection.server.Server;
+import edu.utn.error.OperationError;
 import edu.utn.factory.NetworkFactory;
 import edu.utn.model.AttackBoard;
 import edu.utn.model.ninja.NinjaPosition;
@@ -28,6 +29,15 @@ public class ServiceManager {
 
     private int correctMovement;
     private int killedNinjasCounter;
+
+    private OperationError opError;
+
+    public OperationError getOpError() {
+        if(opError==null){
+            opError= new OperationError();
+        }
+        return opError;
+    }
 
     public Server getServer() {
         return server;
