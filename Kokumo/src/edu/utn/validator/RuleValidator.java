@@ -1,6 +1,7 @@
 package edu.utn.validator;
 
 import edu.utn.manager.GameConstants;
+import edu.utn.model.AttackBoard;
 import edu.utn.model.Board;
 import edu.utn.model.Player;
 import edu.utn.model.ninja.Ninja;
@@ -19,6 +20,10 @@ public class RuleValidator {
     public static boolean squareDestroyed(int i, int j){
 
         return Board.getInstance().getSquares()[i][j].name().equals(SquareType.DESTROYED.getName());
+    }
+    public static boolean attackSquareDestroyed(int i, int j){
+
+        return AttackBoard.getInstance().getSquares()[i][j].name().equals(SquareType.DESTROYED.getName());
     }
     public static boolean squareDestroyed(String squareName){
         return squareName.equals(SquareType.DESTROYED.getName());

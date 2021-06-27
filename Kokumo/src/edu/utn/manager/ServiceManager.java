@@ -168,6 +168,25 @@ public class ServiceManager {
         }
     }
 
+    public boolean canAttack(String json){
+        boolean success=false;
+        try{
+            String url="http://"+getRemoteIp()+":"+getRemotePort()+"/canAttack";
+            String response = client.post(url,json);
+
+            if(response.equals("Attack allowed")){
+                success=true;
+
+            }else{
+                System.out.println("\t\t\t"+response);
+            }
+        }catch (Exception e){
+            System.out.println("\t\t\tException: "+e.getMessage());
+        }finally {
+            return success;
+        }
+    }
+
     public boolean validDirection(String json){
         boolean success=false;
         try{

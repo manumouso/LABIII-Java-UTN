@@ -37,6 +37,7 @@ public class Server {
     public void startConnection(ServiceManager serviceManager, RuleManager ruleManager, PlayerManager playerManager) throws IOException {
         try {
             getServer().createContext("/attack",new Attack(ruleManager,playerManager));
+            getServer().createContext("/canAttack",new CanAttack(ruleManager));
             getServer().createContext("/canMove",new CanMove(ruleManager));
             getServer().createContext("/deadByTrap",new DeadByTrap(serviceManager,ruleManager));
             getServer().createContext("/invite",new Invite(serviceManager));

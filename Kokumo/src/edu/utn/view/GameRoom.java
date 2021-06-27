@@ -4,7 +4,6 @@ import edu.utn.controller.MovementController;
 import edu.utn.controller.NinjaController;
 import edu.utn.manager.GameConstants;
 import edu.utn.manager.GameManager;
-import edu.utn.model.Board;
 import edu.utn.model.ninja.Direction;
 import edu.utn.model.ninja.Ninja;
 import edu.utn.model.ninja.NinjaPosition;
@@ -34,6 +33,7 @@ public class GameRoom extends Stage{
             do
             {
                 cleanConsoleAndPrintHeader();
+                super.printError(manager);
                 Scanner scanner =new Scanner(System.in);
 
                 if(!manager.getPlayerManager().lose() && !manager.getPlayerManager().win(manager)){
@@ -79,7 +79,11 @@ public class GameRoom extends Stage{
                     case 2:
                         if(manager.getPlayerManager().isMyTurn()) {
                             if (manager.getServiceManager().getCorrectMovement() < manager.getPlayerManager().getAliveNinjasQuantity()) {
-                                ninjaAttacks(manager);
+                                if(manager.isHost()){
+                                    ninjaAttacks(manager);
+                                }else{
+                                    ninjaAttacksClient(manager);
+                                }
                             }
                         }
                         System.out.print("\t\t\tEnter a character to continue-> ");
@@ -271,6 +275,40 @@ public class GameRoom extends Stage{
             }
 
     }
+
+    private void ninjaAttacksClient(GameManager manager){
+        cleanConsoleAndPrintHeader();
+        Scanner scanner = new Scanner(System.in);
+        NinjaPosition ninjaPosition=null;
+        for (Ninja ninja : manager.getPlayerManager().getPlayer().getNinjas()) {
+            if(manager.sendCanAttack(ninja)){
+                gameState(manager);
+                System.out.print("\t\t\tDo you want to attack with-> " + ninja.getName()+ "  [y/n]: ");
+                String answer = scanner.next();
+                System.out.println(" ");
+                if (answer.equals("y") || answer.equals("Y")) {
+                    manager.printBoard(false);
+                    System.out.println(" ");
+                    System.out.println("\t\t\tEnter the attack position:");
+                    ninjaPosition=inputPosition(manager);
+                    if(!manager.getRuleManager().choseRepeatedPosition(ninjaPosition)){
+                        if(manager.sendAttack(ninjaPosition, ninja.getAttackPoints())){
+                            ninja.setAttackCounter(ninja.getAttackCounter()+1);
+                            ninja.setMovedPreviousTurn(false);
+                            manager.getRuleManager().getAttackPositions().add(ninjaPosition);
+                        }
+                    }else{
+                        System.out.println("\t\t\tNinjas can't attack the same position");
+                    }
+                    manager.printBoard(false);
+                    System.out.println(" ");
+
+                }
+            }else{
+                System.out.println("\t\t\tThis ninja can't attack. Ninja: "+ninja.getName());
+            }
+        }
+    }
     private NinjaPosition inputPosition(GameManager manager){
         setWrongPosition(true);
         Scanner scanner =new Scanner(System.in);
@@ -347,5 +385,6 @@ public class GameRoom extends Stage{
         super.header();
         System.out.println(" ");
     }
+
 
 }

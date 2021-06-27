@@ -38,6 +38,14 @@ public abstract class Stage implements View {
             System.out.println("\t\t\t"+e.getMessage());
         }
     }
+
+    public void printError(GameManager manager){
+
+        for(String message : manager.getOpError().getErrors().values()) {
+            System.out.println("\t\t\t"+message);
+        }
+        manager.getOpError().getErrors().clear();
+    }
     protected void exit(){
         footer();
         System.exit(0);

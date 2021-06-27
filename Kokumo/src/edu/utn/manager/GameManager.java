@@ -3,7 +3,9 @@ package edu.utn.manager;
 import edu.utn.connection.client.Client;
 import edu.utn.connection.server.Server;
 import edu.utn.controller.BoardController;
+import edu.utn.enums.ErrorType;
 import edu.utn.enums.NetworkType;
+import edu.utn.error.OperationError;
 import edu.utn.factory.ViewFactory;
 import edu.utn.factory.NetworkFactory;
 import edu.utn.message.Message;
@@ -25,10 +27,18 @@ public class GameManager {
     private Message message;
     private MessagePrinter messagePrinter;
 
+    private OperationError opError;
+
+    public OperationError getOpError() {
+
+        return opError;
+    }
+
     public GameManager(ServiceManager serviceManager, RuleManager ruleManager, PlayerManager playerManager) {
         this.serviceManager = serviceManager;
         this.ruleManager = ruleManager;
         this.playerManager = playerManager;
+        this.opError=new OperationError();
     }
 
     public boolean isHost() {
@@ -124,7 +134,7 @@ public class GameManager {
                 getMessage().getMessageList().add(NetworkType.SERVER.getMessage());
             }
         }catch (Exception e){
-            System.out.println("\t\t\t Exception: "+e.getMessage());
+            opError.add(ErrorType.server.getErrorCode(),ErrorType.server.getErrorMessage()+e.getMessage());
         }finally {
             return server;
         }
@@ -143,7 +153,7 @@ public class GameManager {
             getMessage().getMessageList().add(NetworkType.CLIENT.getMessage());
 
         }catch (Exception e){
-            System.out.println("\t\t\t Exception: "+e.getMessage());
+            opError.add(ErrorType.client.getErrorCode(),ErrorType.client.getErrorMessage()+e.getMessage());
         }finally {
             return client;
         }
@@ -161,7 +171,7 @@ public class GameManager {
             }
 
         }catch (Exception e){
-            System.out.println("\t\t\t Exception: "+e.getMessage());
+            opError.add(ErrorType.join.getErrorCode(),ErrorType.join.getErrorMessage()+e.getMessage());
         }finally {
             return success;
         }
@@ -177,7 +187,7 @@ public class GameManager {
                 }
             }
         }catch (Exception e){
-            System.out.println("\t\t\t Exception: "+e.getMessage());
+            opError.add(ErrorType.invite.getErrorCode(),ErrorType.invite.getErrorMessage()+e.getMessage());
         }finally {
             return success;
         }
@@ -189,11 +199,22 @@ public class GameManager {
             String json="{\"commanderDead\":"+commanderDead+",\"attackCounter\":"+ninja.getAttackCounter()+",\"moveCounter\":"+ninja.getMovementCounter()+",\"movedPreviousTurn\":"+ninja.isMovedPreviousTurn()+",\"ninjaDead\":"+ninja.isDead()+"}";
             success= getServiceManager().canMove(json);
         }catch (Exception e){
-            System.out.println("\t\t\t Exception: "+e.getMessage());
+            opError.add(ErrorType.moveClient.getErrorCode(),ErrorType.moveClient.getErrorMessage()+e.getMessage());
         }finally {
             return success;
         }
 
+    }
+    public boolean sendCanAttack(Ninja ninja){
+        boolean success= false;
+        try{
+            String json="{\"attackCounter\":"+ninja.getAttackCounter()+",\"moveCounter\":"+ninja.getMovementCounter()+",\"ninjaDead\":"+ninja.isDead()+"}";
+            success= getServiceManager().canAttack(json);
+        }catch (Exception e){
+            opError.add(ErrorType.attackClient.getErrorCode(),ErrorType.attackClient.getErrorMessage()+e.getMessage());
+        }finally {
+            return success;
+        }
     }
 
     public boolean sendValidDirection(int i, int j, NinjaPosition[] ninjaPositions){
@@ -210,7 +231,7 @@ public class GameManager {
             String json="{\"nextI\":"+i+",\"nextJ\":"+j+",\"pos1\":"+position1+",\"pos2\":"+position2+",\"pos3\":"+position3+"}";
             success= getServiceManager().validDirection(json);
         }catch (Exception e){
-            System.out.println("\t\t\t Exception: "+e.getMessage());
+            opError.add(ErrorType.validDirection.getErrorCode(),ErrorType.validDirection.getErrorMessage()+e.getMessage());
         }finally {
             return success;
         }
@@ -222,7 +243,7 @@ public class GameManager {
             String json="{\"position\":["+attackPosition.getI()+","+attackPosition.getJ()+"],\"attackPoints\":"+attackPoints+"}";
             success= getServiceManager().attack(attackPosition,json);
         }catch (Exception e){
-            System.out.println("\t\t\t Exception: "+e.getMessage());
+            opError.add(ErrorType.sendAttack.getErrorCode(),ErrorType.sendAttack.getErrorMessage()+e.getMessage());
         }finally {
             return success;
         }
@@ -233,7 +254,7 @@ public class GameManager {
         try{
             getServiceManager().endTurn();
         }catch (Exception e){
-            System.out.println("\t\t\tException: "+e.getMessage());
+            opError.add(ErrorType.sendAttack.getErrorCode(),ErrorType.sendAttack.getErrorMessage()+e.getMessage());
         }
     }
 
@@ -241,9 +262,9 @@ public class GameManager {
         try{
             getServiceManager().getServer().startConnection(getServiceManager(),getRuleManager(),getPlayerManager());
         }catch (IOException e){
-            System.out.println("\t\t\tIO Exception: "+e.getMessage());
+            opError.add(ErrorType.startConnectionIO.getErrorCode(),ErrorType.startConnectionIO.getErrorMessage()+e.getMessage());
         }catch (Exception e){
-            System.out.println("\t\t\tException: "+e.getMessage());
+            opError.add(ErrorType.startConnectionEx.getErrorCode(),ErrorType.startConnectionEx.getErrorMessage()+e.getMessage());
         }
     }
 
@@ -251,9 +272,10 @@ public class GameManager {
         try{
             getServiceManager().getServer().closeConnection();
         }catch (IOException e){
-            System.out.println("\t\t\tIO Exception: "+e.getMessage());
+            opError.add(ErrorType.closeConnectionIO.getErrorCode(),ErrorType.closeConnectionIO.getErrorMessage()+e.getMessage());
+
         }catch (Exception e){
-            System.out.println("\t\t\tException: "+e.getMessage());
+            opError.add(ErrorType.closeConnectionEx.getErrorCode(),ErrorType.closeConnectionEx.getErrorMessage()+e.getMessage());
         }
     }
 
@@ -323,19 +345,40 @@ public class GameManager {
     }
 
     private boolean validIP(String IP){
-        if(NetworkValidator.validIP(IP)){
-            return true;
+        boolean success= false;
+        try{
+            if(NetworkValidator.validIP(IP)){
+                success=true;
+            }else{
+                getMessage().getMessageList().add(NetworkType.IP.getMessage());
+                success= false;
+            }
+        }catch (Exception e){
+            opError.add(ErrorType.validIP.getErrorCode(),ErrorType.validIP.getErrorMessage()+e.getMessage());
+
+        }finally {
+            return success;
         }
-        getMessage().getMessageList().add(NetworkType.IP.getMessage());
-        return false;
+
+
     }
 
     private boolean validPort(int port){
-        if(NetworkValidator.validPort(port)){
-            return true;
+        boolean success= false;
+        try{
+            if(NetworkValidator.validPort(port)){
+                success= true;
+            }else{
+                getMessage().getMessageList().add(NetworkType.PORT.getMessage());
+                success= false;
+            }
+        }catch (Exception e){
+            opError.add(ErrorType.validPort.getErrorCode(),ErrorType.validPort.getErrorMessage()+e.getMessage());
+
+        }finally {
+            return success;
         }
-        getMessage().getMessageList().add(NetworkType.PORT.getMessage());
-        return false;
+
     }
 
     public synchronized void checkReceivedMessages(){
@@ -346,7 +389,7 @@ public class GameManager {
                 getRuleManager().setMessageArrived(0);
             }
         }catch (Exception e){
-            System.out.println("\t\t\tException: "+e.getMessage());
+            opError.add(ErrorType.checkingReceived.getErrorCode(),ErrorType.checkingReceived.getErrorMessage()+e.getMessage());
         }
 
     }

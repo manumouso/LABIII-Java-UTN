@@ -32,6 +32,7 @@ public class PlayerRoom extends Stage{
             {
                 super.cleanConsole();
                 super.header();
+                super.printError(manager);
                 System.out.println("\n\t\t\t\tPLAYER MENU");
                 System.out.println("\n\t\t\t[1].ENTER NAME");
                 System.out.println("\t\t\t[2].PLACE YOUR NINJAS TO ADVANCE");

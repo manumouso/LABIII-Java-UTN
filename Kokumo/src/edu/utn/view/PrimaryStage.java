@@ -16,6 +16,7 @@ public class PrimaryStage extends Stage{
             {
                 super.cleanConsole();
                 super.header();
+                super.printError(manager);
                 System.out.println("\n\t\t\t\tMAIN MENU");
                 System.out.println("\n\t\t\t[1].START GAME");
                 System.out.println("\t\t\t[0].QUIT GAME");

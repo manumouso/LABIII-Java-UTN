@@ -257,6 +257,18 @@ public class RuleManager {
         }
     }
 
+    public synchronized String canAttackClient(int attackCounter, int moveCounter, boolean ninjaDead) {
+        if (!RuleValidator.ninjaDead(ninjaDead)) {
+            if (RuleValidator.canMoveThisTurn(attackCounter, moveCounter)) {
+                return MessageType.ATTACK_ALLOWED.getMessage();
+            } else {
+                return MessageType.ALREADY.getMessage();
+            }
+        }else{
+            return MessageType.DEAD.getMessage();
+        }
+    }
+
 
     public synchronized String validDirectionClient(int nextI,int nextJ,NinjaPosition pos1, NinjaPosition pos2,NinjaPosition pos3){
         if(RuleValidator.withinLimitsBoard(nextI,nextJ)){

@@ -17,6 +17,7 @@ public class ServerRoom extends Stage{
             {
                 super.cleanConsole();
                 super.header();
+                super.printError(manager);
                 System.out.println("\n\t\t\t\tSERVER MENU");
                 System.out.println("\n\t\t\t[1].CREATE SERVER");
                 System.out.println("\t\t\t[2].SERVER MODE: WAIT SOMEONE TO JOIN");
