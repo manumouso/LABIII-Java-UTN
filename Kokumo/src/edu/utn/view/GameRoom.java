@@ -169,14 +169,14 @@ public class GameRoom extends Stage{
                         }
                         manager.printBoard(true);
                         System.out.println(" ");
-                        print(manager);
+                        printMessages(manager);
                     }
                 }else{
-                    print(manager);
+                    printMessages(manager);
                 }
             }
         }else{
-            print(manager);
+            printMessages(manager);
         }
     }
     private void moveNinjasClient(GameManager manager){
@@ -219,7 +219,7 @@ public class GameRoom extends Stage{
 
                         manager.printBoard(true);
                         System.out.println(" ");
-                        print(manager);
+                        printMessages(manager);
                     }
                 }
             }
@@ -262,6 +262,7 @@ public class GameRoom extends Stage{
                                 ninja.setMovedPreviousTurn(false);
                                 manager.getRuleManager().getAttackPositions().add(ninjaPosition);
                             }
+                            printMessages(manager);
                         }else{
                             System.out.println("\t\t\tNinjas can't attack the same position");
                         }
@@ -291,18 +292,13 @@ public class GameRoom extends Stage{
                     System.out.println(" ");
                     System.out.println("\t\t\tEnter the attack position:");
                     ninjaPosition=inputPosition(manager);
-                    if(!manager.getRuleManager().choseRepeatedPosition(ninjaPosition)){
-                        if(manager.sendAttack(ninjaPosition, ninja.getAttackPoints())){
-                            ninja.setAttackCounter(ninja.getAttackCounter()+1);
-                            ninja.setMovedPreviousTurn(false);
-                            manager.getRuleManager().getAttackPositions().add(ninjaPosition);
-                        }
-                    }else{
-                        System.out.println("\t\t\tNinjas can't attack the same position");
+                    if(manager.sendAttack(ninjaPosition, ninja.getAttackPoints())){
+                        ninja.setAttackCounter(ninja.getAttackCounter()+1);
+                        ninja.setMovedPreviousTurn(false);
+                        manager.getRuleManager().getAttackPositions().add(ninjaPosition);
                     }
                     manager.printBoard(false);
                     System.out.println(" ");
-
                 }
             }else{
                 System.out.println("\t\t\tThis ninja can't attack. Ninja: "+ninja.getName());

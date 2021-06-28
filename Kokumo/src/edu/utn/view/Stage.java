@@ -15,7 +15,7 @@ public abstract class Stage implements View {
 
     public abstract void menu(GameManager manager);
 
-    protected void print(GameManager manager){
+    protected void printMessages(GameManager manager){
         manager.printMessages();
         manager.clearMessages();
     }

@@ -149,7 +149,7 @@ public class PlayerRoom extends Stage{
                 setWrongPosition(false);
             }
             System.out.println(" ");
-            print(manager);
+            printMessages(manager);
         }catch (NumberFormatException e){
             System.out.println("\t\t\tRemember only numbers allowed.");
             System.out.println("\t\t\tTry again!!!");

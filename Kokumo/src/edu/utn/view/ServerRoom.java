@@ -117,7 +117,7 @@ public class ServerRoom extends Stage{
                     manager.setServerWasCreated(true);
                     manager.setClient();
                 }
-                print(manager);
+                printMessages(manager);
             }catch (NumberFormatException e){
                 System.out.println("\t\t\tPort must be a number");
             }catch (Exception e){

@@ -289,7 +289,6 @@ public class ServiceManager {
 
     }
 
-
     public boolean invite(String IP, int port, String json){
         boolean success=false;
         try{
