@@ -29,7 +29,7 @@ public class GameRoom extends Stage{
         try {
 
             int option;
-
+            int i;
             do
             {
                 cleanConsoleAndPrintHeader();
@@ -37,23 +37,30 @@ public class GameRoom extends Stage{
                 Scanner scanner =new Scanner(System.in);
 
                 if(!manager.getPlayerManager().lose() && !manager.getPlayerManager().win(manager)){
-                    endTurn(manager);
-                    System.out.println("\n\t\t\t\tGAME ROOM");
-                    gameState(manager);
-                    manager.printBoard(true);
-                    manager.printBoard(false);
-                    System.out.println("\n\t\t\t[1].MOVE");
-                    System.out.println("\t\t\t[2].ATTACK");
-                    System.out.println("\t\t\t[3].VIEW NINJAS DATA");
-                    System.out.println("\t\t\t[0].GO BACK");
-                    System.out.print("\n\t\t\tSelect an option-> ");
-                    String number = scanner.next();
-                    option = Integer.parseInt(number);
+                    i=endTurn(manager);
+                    if(i!=0){
+                        System.out.println("\n\t\t\t\tGAME ROOM");
+                        gameState(manager);
+                        manager.printBoard(true);
+                        manager.printBoard(false);
+                        System.out.println("\n\t\t\t[1].MOVE");
+                        System.out.println("\t\t\t[2].ATTACK");
+                        System.out.println("\t\t\t[3].VIEW NINJAS DATA");
+                        System.out.println("\t\t\t[0].GO BACK");
+                        System.out.print("\n\t\t\tSelect an option-> ");
+                        String number = scanner.next();
+                        option = Integer.parseInt(number);
+                    }else{
+                        option=i;
+                    }
+
                 }else{
                     option=0;
-                    System.out.print("\t\t\tEnter a character to quit the game->");
-                    scanner.next();
-                    super.exit();
+                    System.out.print("\t\t\tDo you want to quit the game? Choose no to go back [Y/n]:");
+                    String answer=scanner.next();
+                    if (answer.equals("y") || answer.equals("Y")){
+                        super.exit();
+                    }
                 }
 
                 switch (option) {
@@ -118,6 +125,10 @@ public class GameRoom extends Stage{
         if(manager.getPlayerManager().getPlayer().getNinjas().size()>0){
             manager.getPlayerManager().clearNinjas();
         }
+        if(manager.isHost()){
+            manager.getRuleManager().getAttackPositions().clear();
+        }
+        manager.getServiceManager().setKilledNinjasCounter(0);
         manager.clearBoards(true);
         manager.clearBoards(false);
     }
@@ -343,7 +354,7 @@ public class GameRoom extends Stage{
         return attackPosition;
     }
 
-    public void endTurn(GameManager manager){
+    public int endTurn(GameManager manager){
 
         if(manager.getPlayerManager().isMyTurn()){
             if(manager.getServiceManager().getCorrectMovement()==manager.getPlayerManager().getAliveNinjasQuantity()) {
@@ -352,24 +363,30 @@ public class GameRoom extends Stage{
                 manager.getRuleManager().resetAttackPositions();
                 manager.getPlayerManager().setMyTurn(false);
                 manager.sendEndTurn();
-                wait(manager);
+                return wait(manager);
             }
+            return 1;
         }else{
             System.out.println("\t\t\tIt's not your turn, wait");
-            wait(manager);
+            return wait(manager);
         }
     }
 
-    private void wait(GameManager manager){
+    private int wait(GameManager manager){
         Scanner scanner= new Scanner(System.in);
         while(!manager.getPlayerManager().isMyTurn()){
             if(manager.getPlayerManager().lose()){
-                System.out.print("\t\t\tEnter a character to close the game->");
-                scanner.next();
-                super.exit();
+
+                System.out.print("\t\t\tDo you want to quit the game? Choose no to go back [Y/n]:");
+                String answer=scanner.next();
+                if (answer.equals("y") || answer.equals("Y")){
+                    super.exit();
+                }
+                return 0;
             }
             manager.checkReceivedMessages();
         }
+        return 1;
     }
     private void gameState(GameManager manager){
         System.out.println(" ");
