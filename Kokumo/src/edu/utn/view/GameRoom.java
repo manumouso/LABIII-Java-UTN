@@ -128,6 +128,7 @@ public class GameRoom extends Stage{
         if(manager.isHost()){
             manager.getRuleManager().getAttackPositions().clear();
         }
+        manager.getServiceManager().setCorrectMovement(0);
         manager.getServiceManager().setKilledNinjasCounter(0);
         manager.clearBoards(true);
         manager.clearBoards(false);
