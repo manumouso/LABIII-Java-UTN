@@ -3,6 +3,7 @@ package edu.utn.manager;
 
 import edu.utn.connection.client.Client;
 import edu.utn.connection.server.Server;
+import edu.utn.enums.ErrorType;
 import edu.utn.error.OperationError;
 import edu.utn.factory.NetworkFactory;
 import edu.utn.model.AttackBoard;
@@ -137,6 +138,12 @@ public class ServiceManager {
     public synchronized void setKilledNinjasCounter(int killedNinjasCounter) {
         this.killedNinjasCounter = killedNinjasCounter;
     }
+    public NetworkFactory getNetworkFactory() {
+        if(networkFactory==null){
+            networkFactory=new NetworkFactory();
+        }
+        return networkFactory;
+    }
 
     public boolean joinGame(String IP, int port, String json){
         boolean success=false;
@@ -153,7 +160,7 @@ public class ServiceManager {
                 System.out.println("\t\t\tTry again");
             }
         }catch (Exception e){
-            System.out.println("\t\t\tException: "+e.getMessage());
+            getOpError().add(ErrorType.join.getErrorCode(),ErrorType.join.getErrorMessage()+e.getMessage());
         }finally {
             return success;
         }
@@ -172,7 +179,7 @@ public class ServiceManager {
                 System.out.println("\t\t\t"+response);
             }
         }catch (Exception e){
-            System.out.println("\t\t\tException: "+e.getMessage());
+            getOpError().add(ErrorType.moveClient.getErrorCode(),ErrorType.moveClient.getErrorMessage()+e.getMessage());
         }finally {
             return success;
         }
@@ -191,7 +198,7 @@ public class ServiceManager {
                 System.out.println("\t\t\t"+response);
             }
         }catch (Exception e){
-            System.out.println("\t\t\tException: "+e.getMessage());
+            getOpError().add(ErrorType.attackClient.getErrorCode(),ErrorType.attackClient.getErrorMessage()+e.getMessage());
         }finally {
             return success;
         }
@@ -210,7 +217,7 @@ public class ServiceManager {
                 System.out.println("\t\t\t"+response);
             }
         }catch (Exception e){
-            System.out.println("\t\t\tException: "+e.getMessage());
+            getOpError().add(ErrorType.validDirection.getErrorCode(),ErrorType.validDirection.getErrorMessage()+e.getMessage());
         }finally {
             return success;
         }
@@ -238,7 +245,7 @@ public class ServiceManager {
                 success= true;
             }
         }catch (Exception e){
-            System.out.println("\t\t\tException: "+e.getMessage());
+            getOpError().add(ErrorType.sendAttack.getErrorCode(),ErrorType.sendAttack.getErrorMessage()+e.getMessage());
         }finally {
             return success;
         }
@@ -251,16 +258,11 @@ public class ServiceManager {
             String response = client.post(url,"{}");
             System.out.println("\t\t\t"+response);
         }catch (Exception e){
-            System.out.println("\t\t\tException: "+e.getMessage());
+            getOpError().add(ErrorType.endTurn.getErrorCode(),ErrorType.endTurn.getErrorMessage()+e.getMessage());
         }
 
     }
-    public NetworkFactory getNetworkFactory() {
-        if(networkFactory==null){
-            networkFactory=new NetworkFactory();
-        }
-        return networkFactory;
-    }
+
 
     public boolean invite(String IP, int port, String json){
         boolean success=false;
@@ -278,7 +280,7 @@ public class ServiceManager {
                 System.out.println("\t\t\tTry again");
             }
         }catch (Exception e){
-            System.out.println("\t\t\tException: "+e.getMessage());
+            getOpError().add(ErrorType.invite.getErrorCode(),ErrorType.invite.getErrorMessage()+e.getMessage());
         }finally {
             return success;
         }
@@ -298,7 +300,7 @@ public class ServiceManager {
                 message= "Connection refused";
             }
         }catch (Exception e){
-            System.out.println("\t\t\tException: "+e.getMessage());
+            getOpError().add(ErrorType.invitationReceived.getErrorCode(),ErrorType.invitationReceived.getErrorMessage()+e.getMessage());
 
         }finally {
             return message;

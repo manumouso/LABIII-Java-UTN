@@ -2,6 +2,8 @@ package edu.utn.manager;
 
 
 import edu.utn.controller.PlayerController;
+import edu.utn.enums.ErrorType;
+import edu.utn.error.OperationError;
 import edu.utn.factory.PlayerFactory;
 import edu.utn.model.Player;
 import edu.utn.model.ninja.Ninja;
@@ -15,6 +17,14 @@ public class PlayerManager {
     private PlayerController playerController;
 
     private boolean myTurn;
+    private OperationError opError;
+
+    public OperationError getOpError() {
+        if(opError==null){
+            opError= new OperationError();
+        }
+        return opError;
+    }
 
     public synchronized boolean isMyTurn() {
         return myTurn;
@@ -67,23 +77,41 @@ public class PlayerManager {
     }
 
     public boolean win(GameManager manager){
-        if(manager.getServiceManager().getKilledNinjasCounter()==GameConstants.MAX_NINJAS) {
+        boolean success=false;
+        try{
+            if(manager.getServiceManager().getKilledNinjasCounter()==GameConstants.MAX_NINJAS) {
 
-            System.out.println("\t\t\tWINNER: "+ getPlayer().getName());
-            return true;
-        }else{
-            return false;
+                System.out.println("\t\t\tWINNER: "+ getPlayer().getName());
+                success= true;
+            }else{
+                success= false;
+            }
+        }catch (Exception e){
+            getOpError().add(ErrorType.win.getErrorCode(),ErrorType.win.getErrorMessage()+e.getMessage());
+        }finally {
+            return success;
         }
+
     }
 
     public boolean lose(){
-        int i;
-        i=getDeadNinjaQuantity();
-        if(i==GameConstants.MAX_NINJAS){
-            System.out.println("\t\t\tLOSER: "+ getPlayer().getName());
-            return true;
+        boolean success=false;
+        try{
+            int i;
+            i=getDeadNinjaQuantity();
+            if(i==GameConstants.MAX_NINJAS){
+                System.out.println("\t\t\tLOSER: "+ getPlayer().getName());
+                success= true;
+            }else{
+                success=false;
+            }
+        }catch (Exception e){
+            getOpError().add(ErrorType.lose.getErrorCode(),ErrorType.lose.getErrorMessage()+e.getMessage());
+        }finally {
+            return success;
         }
-        return false;
+
+
     }
 
     public void resetCounters(){

@@ -22,8 +22,7 @@ public abstract class Stage implements View {
 
     protected void cleanConsole(){
         try{
-            String operatingSystem = System.getProperty("os.name"); //Check the current operating system
-
+            String operatingSystem = System.getProperty("os.name");
             if(operatingSystem.contains("Windows")){
                 ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "cls");
                 Process startProcess = pb.inheritIO().start();

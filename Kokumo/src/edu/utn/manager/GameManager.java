@@ -397,6 +397,8 @@ public class GameManager {
             getRuleManager().getOpError().getErrors().clear();
             getOpError().add(getServiceManager().getOpError());
             getServiceManager().getOpError().getErrors().clear();
+            getOpError().add(getPlayerManager().getOpError());
+            getPlayerManager().getOpError().getErrors().clear();
         }catch (Exception e){
             opError.add(ErrorType.addErrors.getErrorCode(),ErrorType.addErrors.getErrorMessage()+e.getMessage());
         }
