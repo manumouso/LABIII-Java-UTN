@@ -98,24 +98,44 @@ public class GameManager {
     }
 
     public void startGame(){
-        ViewFactory viewFactory = getViewFactory();
-        Introduction intro = viewFactory.createIntro();
-        intro.print();
-        PrimaryStage primaryStage = viewFactory.createPrimaryStage();
-        primaryStage.menu(this);
+        try{
+            ViewFactory viewFactory = getViewFactory();
+            Introduction intro = viewFactory.createIntro();
+            intro.print();
+            PrimaryStage primaryStage = viewFactory.createPrimaryStage();
+            primaryStage.menu(this);
+        }catch (Exception e){
+            opError.add(ErrorType.startGame.getErrorCode(),ErrorType.startGame.getErrorMessage()+e.getMessage());
+        }
+
     }
 
     public void toServerRoom(){
-        ServerRoom serverRoom = viewFactory.createServerRoom();
-        serverRoom.menu(this);
+        try{
+            ServerRoom serverRoom = viewFactory.createServerRoom();
+            serverRoom.menu(this);
+        }catch (Exception e){
+            opError.add(ErrorType.toServer.getErrorCode(),ErrorType.toServer.getErrorMessage()+e.getMessage());
+        }
+
     }
     public void toPlayerRoom(){
-        PlayerRoom playerRoom= viewFactory.createPlayerRoom();
-        playerRoom.menu(this);
+        try{
+            PlayerRoom playerRoom= viewFactory.createPlayerRoom();
+            playerRoom.menu(this);
+        }catch (Exception e){
+            opError.add(ErrorType.toPlayer.getErrorCode(),ErrorType.toPlayer.getErrorMessage()+e.getMessage());
+        }
+
     }
     public void toGameRoom(){
-        GameRoom gameRoom = viewFactory.createGameRoom();
-        gameRoom.menu(this);
+        try{
+            GameRoom gameRoom = viewFactory.createGameRoom();
+            gameRoom.menu(this);
+        }catch (Exception e){
+            opError.add(ErrorType.toGame.getErrorCode(),ErrorType.toGame.getErrorMessage()+e.getMessage());
+        }
+
     }
     public void setServer(int port){
         getServiceManager().setServer(createServer(port));
