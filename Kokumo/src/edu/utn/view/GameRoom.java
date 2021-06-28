@@ -257,7 +257,7 @@ public class GameRoom extends Stage{
                         System.out.println("\t\t\tEnter the attack position:");
                         ninjaPosition=inputPosition(manager);
                         if(!manager.getRuleManager().choseRepeatedPosition(ninjaPosition)){
-                            if(manager.sendAttack(ninjaPosition, ninja.getAttackPoints())){
+                            if(manager.sendAttackServer(ninjaPosition, ninja.getAttackPoints())){
                                 ninja.setAttackCounter(ninja.getAttackCounter()+1);
                                 ninja.setMovedPreviousTurn(false);
                                 manager.getRuleManager().getAttackPositions().add(ninjaPosition);

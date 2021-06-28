@@ -249,8 +249,34 @@ public class ServiceManager {
         }finally {
             return success;
         }
+    }
 
-
+    public boolean serverAttack(NinjaPosition attackPosition,String json){
+        boolean success=false;
+        try{
+            String url="http://"+getRemoteIp()+":"+getRemotePort()+"/serverAttack";
+            String response = client.post(url,json);
+            System.out.println("\t\t\t"+response);
+            if(response.equals("You killed the ninja commander") || response.equals("You killed a ninja warrior")){
+                AttackBoard.getInstance().getSquares()[attackPosition.getI()][attackPosition.getJ()]=new Destroyed();
+                setCorrectMovement(getCorrectMovement()+1);
+                setKilledNinjasCounter(getKilledNinjasCounter()+1);
+                success= true;
+            }
+            if(response.equals("You destroyed a square")){
+                AttackBoard.getInstance().getSquares()[attackPosition.getI()][attackPosition.getJ()]=new Destroyed();
+                setCorrectMovement(getCorrectMovement()+1);
+                success= true;
+            }
+            if(response.equals("You hurt a ninja")){
+                setCorrectMovement(getCorrectMovement()+1);
+                success= true;
+            }
+        }catch (Exception e){
+            getOpError().add(ErrorType.sendAttack.getErrorCode(),ErrorType.sendAttack.getErrorMessage()+e.getMessage());
+        }finally {
+            return success;
+        }
     }
     public void endTurn(){
         try{

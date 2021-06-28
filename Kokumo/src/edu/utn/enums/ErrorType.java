@@ -22,7 +22,7 @@ public enum ErrorType {
     movementAllowed(-31,"Exception occurred when validating if movement allowed: "),squarePassable(-32,"Exception occurred when validating if square was passable: "),
     requiredQuantity(-33,"Exception happened when checking required ninjas quantity: "),lessQuantity(-34,"Exception occurred when checking less than required ninjas quantity: "),
     moveThisTurn(-35,"Exception happened when checking if the ninja can move this turn: "),diedTrap(-36,"Exception occurred when adding message of enemy ninja dying on a trap: "),invitationReceived(-37,"Exception occurred when processing the invitation: "),
-    win(-38,"Exception occurred when processing the winner: "),lose(-39,"Exception occurred when processing the loser: ");
+    win(-38,"Exception occurred when processing the winner: "),lose(-39,"Exception occurred when processing the loser: "),validServerAttack(-40,"Exception occurred when validating the servers attack: ");
 
     private int errorCode;
     private String errorMessage;

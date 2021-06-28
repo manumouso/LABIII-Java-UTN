@@ -4,6 +4,7 @@ import edu.utn.connection.client.Client;
 import edu.utn.connection.server.Server;
 import edu.utn.controller.BoardController;
 import edu.utn.enums.ErrorType;
+import edu.utn.enums.MessageType;
 import edu.utn.enums.NetworkType;
 import edu.utn.error.OperationError;
 import edu.utn.factory.ViewFactory;
@@ -242,7 +243,24 @@ public class GameManager {
         }finally {
             return success;
         }
+    }
 
+    public boolean sendAttackServer(NinjaPosition attackPosition, int attackPoints){
+        boolean success= false;
+        try {
+            if(getRuleManager().validServerAttack(attackPosition)){
+                String json="{\"position\":["+attackPosition.getI()+","+attackPosition.getJ()+"],\"attackPoints\":"+attackPoints+"}";
+                success= getServiceManager().serverAttack(attackPosition,json);
+            }else{
+                getMessage().getMessageList().add(MessageType.WRONG_ATTACK.getMessage());
+                success = false;
+            }
+
+        }catch (Exception e){
+            opError.add(ErrorType.sendAttack.getErrorCode(),ErrorType.sendAttack.getErrorMessage()+e.getMessage());
+        }finally {
+            return success;
+        }
     }
 
     public void sendEndTurn(){

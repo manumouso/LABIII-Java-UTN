@@ -334,6 +334,20 @@ public class RuleManager {
         }
     }
 
+    public synchronized String attackReceivedFromServer(Player player, NinjaPosition attackPosition,int attackPoints){
+        String message=" ";
+        try{
+            message = getAttackController().attackReceived(player, attackPosition,attackPoints);
+            addAll(getAttackController().getAttackMessages());
+            getAttackController().getAttackMessages().clear();
+            setMessageArrived(getMessageArrived()+1);
+        }catch (Exception e){
+            getOpError().add(ErrorType.attackReceived.getErrorCode(),ErrorType.attackReceived.getErrorMessage()+e.getMessage());
+        }finally {
+            return message;
+        }
+    }
+
     private boolean attackAllowed(Player player,NinjaPosition attackPosition){
         boolean success= false;
         try{
@@ -360,7 +374,27 @@ public class RuleManager {
             getOpError().add(ErrorType.diedTrap.getErrorCode(),ErrorType.diedTrap.getErrorMessage()+e.getMessage());
         }
     }
+    public boolean validServerAttack(NinjaPosition attackPosition){
+        boolean success= false;
+        try{
+            if(RuleValidator.withinLimitsBoard(attackPosition.getI(),attackPosition.getJ())){
+                if(!RuleValidator.attackSquareDestroyed(attackPosition.getI(),attackPosition.getJ())){
+                    success= true;
+                }else{
+                    getMessage().getMessageList().add(MessageType.DESTROYED.getMessage());
+                    success=false;
+                }
+            }else{
+                getMessage().getMessageList().add(MessageType.OUTBOUNDARY.getMessage());
+                success= false;
+            }
+        }catch (Exception e){
+            getOpError().add(ErrorType.validServerAttack.getErrorCode(),ErrorType.validServerAttack.getErrorMessage()+e.getMessage());
+        }finally {
+            return success;
+        }
 
+    }
     public boolean choseRepeatedPosition(NinjaPosition attack){
         for(NinjaPosition position:getAttackPositions()){
             if(attack.getI()== position.getI() && attack.getJ()== position.getJ()){

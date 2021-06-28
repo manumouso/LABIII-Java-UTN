@@ -42,6 +42,7 @@ public class Server {
             getServer().createContext("/deadByTrap",new DeadByTrap(serviceManager,ruleManager));
             getServer().createContext("/invite",new Invite(serviceManager));
             getServer().createContext("/join",new Join(serviceManager));
+            getServer().createContext("/serverAttack",new ServerAttack(ruleManager,playerManager));
             getServer().createContext("/validDirection",new ValidDirection(ruleManager));
             getServer().createContext("/yourTurn",new YourTurn(playerManager));
             getServer().setExecutor(null);
